@@ -1,0 +1,44 @@
+.classroom-card-box {
+    display: inline-block;
+    width: calc(20% - 20px);
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.classroom-card__content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    &__subtitle {
+        margin-top: auto !important;
+        flex-shrink: 0;
+    }
+}
+
+.classroom-card {
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.one-line-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* number of lines to show */
+            line-clamp: 1; 
+    -webkit-box-orient: vertical;
+}
+
+.two-line-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+            line-clamp: 2; 
+    -webkit-box-orient: vertical;
+ }
+
+ .modal__form__text-field + .modal__form__text-field {
+    margin-top: 1rem;
+}
