@@ -1,0 +1,23 @@
+.login-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &__element {
+        width: 50%;
+    }
+    &__button {
+        background-color: hsl(239, 81%, 37%) !important;
+        color: white !important;
+    }
+    &__register-text {
+        width: 100%;
+        text-align: center;
+        margin: 0 0 10px 0;
+        font-size: 14px;
+    }
+}
+
+.login-form__element + .login-form__element {
+    margin-top: 20px;
+}

@@ -3,6 +3,7 @@ import ClassroomsList from '../Classroom/ClassroomsList';
 import TopNavBar from '../TopNavBar'
 import classroomAPI from '../../APIs/classroomAPI';
 import useReloadItems from '../../Hook/useReloadItems';
+import LoginForm from '../Login_Register/LoginForm';
 import {
     BrowserRouter,
     Routes,
@@ -39,7 +40,8 @@ export default function App() {
                 <BrowserRouter >
                     <div>
                         <Routes>
-                            <Route path='/' element={<ClassroomsList items={items} />} pattern="/" />
+                            <Route path='/' element={<LoginForm />} pattern="/" />
+                            <Route path='/classrooms' element={<ClassroomsList items={items} />} pattern="/" />
                         </Routes>
                     </div>
                 </BrowserRouter>

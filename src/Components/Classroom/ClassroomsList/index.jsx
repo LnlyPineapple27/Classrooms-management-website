@@ -13,13 +13,14 @@ export default function ClassroomsList ({items}) {
                 padding: '1rem 0'
             }}
         >
-            {items.map(item => (
+            {items.map((item, index) => (
                 <ClassroomCard
                     key={item.id}
                     header={item.description}
                     title={item.name}
                     subTitle={item.section}
                     actionTitle='Detail'
+                    imgHref={`https://picsum.photos/id/${index}/100/200`}
                 />
             ))}
         </div>)
