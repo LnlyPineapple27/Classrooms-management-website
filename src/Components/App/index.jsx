@@ -3,12 +3,18 @@ import ClassroomsList from '../Classroom/ClassroomsList';
 import TopNavBar from '../TopNavBar'
 import classroomAPI from '../../APIs/classroomAPI';
 import useReloadItems from '../../Hook/useReloadItems';
+import {
+    BrowserRouter,
+    Routes,
+    Route
+  } from "react-router-dom";
 
 export default function App() {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [items, setItems] = useState([]);
     const {isReload, toggle} = useReloadItems();
+
     useEffect(() => {
         async function fetchData() {
           let result = await classroomAPI.getAllClassrooms()
@@ -28,9 +34,15 @@ export default function App() {
         return <div>Loading...</div>;
     } else {
         return (
-            <div>
+            <div className='App'>
                 <TopNavBar brandName="My Classrooms" handleReload={toggle}/>
-                <ClassroomsList items={items} />
+                <BrowserRouter >
+                    <div>
+                        <Routes>
+                            <Route path='/' element={<ClassroomsList items={items} />} pattern="/" />
+                        </Routes>
+                    </div>
+                </BrowserRouter>
             </div>
         );
     }
