@@ -17,7 +17,7 @@ const style = {
   p: 4,
 };
 
-export default function FormModal({openStatus, handleClose, header}) {
+export default function FormModal({openStatus, handleClose, header, handleReload}) {
 
   return (
     <div>
@@ -31,7 +31,7 @@ export default function FormModal({openStatus, handleClose, header}) {
           <Typography id="modal-modal-title" variant="h6" component="h2">
             {header}
           </Typography>
-          <AddClassroomForm />
+          <AddClassroomForm openStatus={openStatus} handleClose={handleClose} handleReload={handleReload} />
         </Box>
       </Modal>
     </div>

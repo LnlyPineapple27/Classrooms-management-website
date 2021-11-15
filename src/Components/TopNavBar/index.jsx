@@ -12,14 +12,10 @@ import AddIcon from '@mui/icons-material/Add';
 import FormModal from '../Classroom/FormModal';
 import useModal from '../../Hook/useModal';
 
-export default function TopNavBar({brandName}) {
+export default function TopNavBar({brandName, handleReload}) {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const {isShowing, toggle} = useModal();
-
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -35,6 +31,7 @@ export default function TopNavBar({brandName}) {
         header="Add Class"
         openStatus={isShowing}
         handleClose={toggle}
+        handleReload={handleReload}
       />
       
       <AppBar position="static">

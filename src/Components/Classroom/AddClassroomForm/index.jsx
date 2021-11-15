@@ -18,7 +18,7 @@ const formTextFields = [
     }
 ]
 
-export default function AddClassroomForm () {
+export default function AddClassroomForm ({openStatus, handleClose, handleReload}) {
     const [formData, setFormData] = useState({
         name: '',
         section: '',
@@ -52,10 +52,13 @@ export default function AddClassroomForm () {
             variant="contained" endIcon={<SendIcon />}
             onClick={ async () => {
                 setAddingStatus(true)
-
-                classroomAPI.addClassroom(formData)
                 
-                window.location.reload()
+                let result = await classroomAPI.addClassroom(formData)
+                
+                handleClose()
+                handleReload()
+
+                setAddingStatus(false)
             }}
         >
             Send
