@@ -5,13 +5,14 @@ import { FormControl } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { Link } from 'react-router-dom';
+
 import '../index.scss'
 
 export default function LoginForm() {
     const [formData, setFormData] = useState({
         username: '',
         password: '',
-        keepLogin: '',
+        keepLogin: false,
     })
 
     const handleChange = name => event => {
@@ -20,6 +21,12 @@ export default function LoginForm() {
 
     const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1)
 
+    const handleClick = () => {
+        console.log(formData);
+    }
+    const handleKeepLogin = (event) => {
+        setFormData({ ...formData, keepLogin: event.target.checked });
+    }
     return (
         <FormControl className='login-form' sx={{width: "100%", mt: "2rem"}}>
             <h1 className='text-center login-form__element' style={{width:'100%', textAlign: 'center'}}>Login</h1>
@@ -34,13 +41,13 @@ export default function LoginForm() {
                         onChange={handleChange(key)}
                     />)
             ))}
-            <FormControlLabel className='login-form__element' control={<Checkbox />} label="Keep Login" />
+            <FormControlLabel className='login-form__element' control={<Checkbox onChange={handleKeepLogin}/>} label="Keep Login" />
             <div className="text-center">
                 <p className="login-form__register-text">
                     No account? <Link to='/register'>Register</Link>
                 </p>
             </div>
-            <Button className='login-form__element login-form__button' type="button">Login</Button>
+            <Button className='login-form__element login-form__button' type="button" onClick={handleClick}>Login</Button>
         </FormControl>
     )
 }

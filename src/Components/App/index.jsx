@@ -4,6 +4,8 @@ import TopNavBar from '../TopNavBar'
 import classroomAPI from '../../APIs/classroomAPI';
 import useReloadItems from '../../Hook/useReloadItems';
 import LoginForm from '../Login_Register/LoginForm';
+import RegisterForm from '../Login_Register/RegisterForm';
+
 import {
     BrowserRouter,
     Routes,
@@ -40,8 +42,9 @@ export default function App() {
                 <BrowserRouter >
                     <div>
                         <Routes>
-                            <Route path='/' element={<LoginForm />} pattern="/" />
                             <Route path='/classrooms' element={<ClassroomsList items={items} />} pattern="/" />
+                            <Route path='/register' element={<RegisterForm />} pattern="/" />
+                            <Route path='/' element={<LoginForm />} pattern="/" />
                         </Routes>
                     </div>
                 </BrowserRouter>
