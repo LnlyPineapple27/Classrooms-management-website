@@ -17,7 +17,7 @@ const style = {
   p: 4,
 };
 
-export default function FormModal({openStatus, handleClose, header, formTextFields}) {
+export default function FormModal({openStatus, handleClose, header}) {
 
   return (
     <div>
@@ -31,7 +31,7 @@ export default function FormModal({openStatus, handleClose, header, formTextFiel
           <Typography id="modal-modal-title" variant="h6" component="h2">
             {header}
           </Typography>
-          <AddClassroomForm formTextFields={formTextFields} />
+          <AddClassroomForm />
         </Box>
       </Modal>
     </div>

@@ -1,9 +1,7 @@
 import { React, useState, useEffect } from 'react'
 import ClassroomsList from '../Classroom/ClassroomsList';
 import TopNavBar from '../TopNavBar'
-
-const API_URL = process.env.REACT_APP_API_URL
-
+import classroomAPI from '../../APIs/classroomAPI';
 
 export default function App() {
     const [error, setError] = useState(null);
@@ -11,20 +9,16 @@ export default function App() {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
-        fetch(API_URL)
-          .then(res => { 
-            console.log(res)
-            return res.json()})
-          .then(
-            (result) => {
-              setIsLoaded(true);
-              setItems(result);
-            },
-            (error) => {
-              setIsLoaded(true);
-              setError(error);
-            }
-          )
+        async function fetchData() {
+          let result = await classroomAPI.getAllClassrooms()
+          setIsLoaded(true)
+  
+          if (result.isOk)
+            setItems(result.data)
+          else
+            setError(result)
+        }
+        fetchData()
     }, [])
 
     if (error) {

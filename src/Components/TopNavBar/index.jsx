@@ -29,25 +29,12 @@ export default function TopNavBar({brandName}) {
     setAnchorEl(null);
   };
 
-  const addClassFormFields = [
-    {
-      name: 'Name'
-    },
-    {
-      name: 'Description'
-    },
-    {
-      name: 'Section'
-    }
-  ]
-
   return (
     <Box className='nav-bar' sx={{ flexGrow: 1 }}>
       <FormModal 
         header="Add Class"
         openStatus={isShowing}
-        handleClose={toggle} 
-        formTextFields={addClassFormFields}
+        handleClose={toggle}
       />
       
       <AppBar position="static">

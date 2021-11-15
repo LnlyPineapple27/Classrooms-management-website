@@ -4,12 +4,25 @@ import { TextField } from '@mui/material';
 import { FormControl } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import LoadingButton from '@mui/lab/LoadingButton';
+import classroomAPI from '../../../APIs/classroomAPI';
 
-export default function AddClassroomForm ({formTextFields}) {
+const formTextFields = [
+    {
+      name: 'Name'
+    },
+    {
+      name: 'Description'
+    },
+    {
+      name: 'Section'
+    }
+]
+
+export default function AddClassroomForm () {
     const [formData, setFormData] = useState({
         name: '',
-        theme: '',
-        part: '',
+        section: '',
+        description: '',
     });
     const [addingStatus, setAddingStatus] = useState(null);
 
@@ -40,13 +53,7 @@ export default function AddClassroomForm ({formTextFields}) {
             onClick={ async () => {
                 setAddingStatus(true)
 
-                const response = await fetch(process.env.REACT_APP_API_URL, {
-                    method: 'POST', // *GET, POST, PUT, DELETE, etc.
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData) // body data type must match "Content-Type" header
-                });
+                classroomAPI.addClassroom(formData)
                 
                 window.location.reload()
             }}
