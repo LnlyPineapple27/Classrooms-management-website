@@ -27,21 +27,57 @@ export default function LoginForm() {
     const handleKeepLogin = (event) => {
         setFormData({ ...formData, keepLogin: event.target.checked });
     }
+    const renderItems = (keyitem) => {
+        switch (keyitem) {
+            case 'username':
+                return <TextField required
+                    className='login-form__text-field login-form__element'
+                    key={keyitem}
+                    id={`tf_${keyitem}`}
+                    label={capitalize(keyitem)}
+                    type="Text"
+                    autoComplete={`Enter ${capitalize(keyitem)}`}
+                    value={formData[keyitem]}
+                    onChange={handleChange(keyitem)}
+                />;
+            case 'password':
+                return <TextField required
+                    className='login-form__text-field login-form__element'
+                    key={keyitem}
+                    id={`tf_${keyitem}`}
+                    label={capitalize(keyitem)}
+                    type="password"
+                    autoComplete="current-password"
+                    value={formData[keyitem]}
+                    onChange={handleChange(keyitem)}
+                />;
+
+            case 'keepLogin':
+                return <FormControlLabel className='login-form__element' 
+                    control={<Checkbox onChange={handleKeepLogin}/>} label="Keep Login" 
+                    />;
+            default:
+                return {};
+            
+        }
+    }
     return (
         <FormControl className='login-form' sx={{width: "100%", mt: "2rem"}}>
             <h1 className='text-center login-form__element' style={{width:'100%', textAlign: 'center'}}>Login</h1>
-            {Object.keys(formData).map(key => (
-                    key !== 'keepLogin' && (<TextField
+            {/* {Object.keys(formData).map(key => (
+                    key !== 'password' && key !== 'keepLogin' && (
+                    <TextField required
+                        className='login-form__text-field login-form__element'
                         key={key}
                         id={`tf_${key}`}
                         label={capitalize(key)}
                         type="Text"
                         autoComplete={`Enter ${capitalize(key)}`}
-                        className='login-form__text-field login-form__element'
                         onChange={handleChange(key)}
                     />)
-            ))}
-            <FormControlLabel className='login-form__element' control={<Checkbox onChange={handleKeepLogin}/>} label="Keep Login" />
+            ))} */}
+            {Object.keys(formData).map(key => (renderItems(key)))}
+
             <div className="text-center">
                 <p className="login-form__register-text">
                     No account? <Link to='/register'>Register</Link>
