@@ -18,7 +18,21 @@ let accountAPI = {
         const response = await fetch(fetchURL, {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer'+btoa(localStorage.getItem('token')),
+                'Authorization': 'Bearer '+localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data) // body data type must match "Content-Type" header
+        });
+
+        let result = await getResultFromResponse(response)
+        return result
+    },
+    register : async (data) => {
+        let fetchURL = API_URL + `/register`
+        const response = await fetch(fetchURL, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer '+localStorage.getItem('token'),
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data) // body data type must match "Content-Type" header

@@ -7,6 +7,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { Link } from 'react-router-dom';
 import accountAPI from '../../../APIs/accountAPI'
 import '../index.scss'
+import { useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
     const [formData, setFormData] = useState({
@@ -14,6 +15,8 @@ export default function LoginForm() {
         password: '',
         keepLogin: false,
     })
+    
+    let navigate = useNavigate()
 
     const handleChange = name => event => {
         setFormData({ ...formData, [name]: event.target.value });
@@ -30,7 +33,7 @@ export default function LoginForm() {
                 localStorage.setItem('token', resultAttempt.data.token);
                 localStorage.setItem('account', JSON.stringify(resultAttempt.data.account));
                 window.location.href = '/';
-                alert('Login Success');
+                navigate("../classrooms", { replace: true });
             }
             else if(resultAttempt.status === 401) {
                 alert('Invalid username or password');

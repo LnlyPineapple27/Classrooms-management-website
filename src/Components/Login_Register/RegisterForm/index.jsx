@@ -7,6 +7,9 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import '../index.scss'
+import accountAPI from '../../../APIs/accountAPI'
+
+import { useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
     const [formData, setFormData] = useState({
@@ -17,7 +20,7 @@ export default function LoginForm() {
         email: '',
         dob: new Date().toJSON().slice(0,10),
     })
-
+    let navigate = useNavigate()
     const handleChange = name => event => {
         setFormData({ ...formData, [name]: event.target.value });
     }
@@ -32,15 +35,30 @@ export default function LoginForm() {
     }
    
     
-    const handleRegister = () => {
+    const handleRegister = async () =>{
         if (formData.username.length > 0 && formData.password.length > 0 && formData.confirmedPassword.length > 0 && formData.name.length > 0 && formData.email.length > 0 && formData.dob.length > 0) {
             if (formData.password === formData.confirmedPassword) {
-               // Proceed to register
-                console.log(formData);
+                // Proceed to register
+                //console.log(formData);
+                let resultAttempt = await accountAPI.register(formData);
+                if (resultAttempt.status === 200) {
+                    //console.log(resultAttempt.data);
+                    alert("Register Successful");
+                    navigate("../login", { replace: true });
+                }
+                else if(resultAttempt.status === 401) {
+                    alert('Invalid username or password');
+                }
+                else if(resultAttempt.status === 404) {
+                    alert('Some thing went wrong');
+                }
+                console.log('token is:' + localStorage.getItem('token'));
             }
             else alert('Password is not match');
         }
         else alert('All fields must be filled');
+
+       
     }
 
     const renderItems = (keyitem) => {
