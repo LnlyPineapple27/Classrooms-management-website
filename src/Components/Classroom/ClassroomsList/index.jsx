@@ -12,9 +12,10 @@ export default function ClassroomsList ({isReload}) {
         async function fetchData() {
           let result = await classroomAPI.getAllClassrooms()
           setIsLoaded(true)
-  
+          console.log(result)
+            
           if (result.isOk)
-            setItems(result.data)
+            setItems(result.data.classrooms)
           else
             setError(result)
         }

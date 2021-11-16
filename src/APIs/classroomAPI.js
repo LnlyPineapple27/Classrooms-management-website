@@ -14,13 +14,23 @@ let getResultFromResponse = async response => {
 
 let classroomAPI = {
     getAllClassrooms: async () => {
+        let userId = JSON.parse(localStorage.getItem('account')).userID
+        
+        if(!userId) return {
+            isOk: false,
+            data: null,
+            status: 409,
+            message: 'Unauthorize'} // not have get out
+
         let token = localStorage.getItem('token')
-        let response = await fetch(API_URL, {
+        let fetchURL = API_URL + `?userID=${userId}`
+        let response = await fetch(fetchURL, {
             method: 'GET',
             headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem('token'),
-        }})
-        return  getResultFromResponse(response)
+                'Authorization': 'Bearer ' + token,
+            },
+        })
+        return getResultFromResponse(response)
     },
 
     addClassroom: async classroomDetail => {

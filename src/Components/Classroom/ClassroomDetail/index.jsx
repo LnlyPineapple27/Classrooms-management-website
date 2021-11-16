@@ -2,22 +2,34 @@ import { React, useState, useEffect } from "react";
 import { useParams } from "react-router-dom"
 import classroomAPI from "../../../APIs/classroomAPI";
 import { Button } from "@mui/material";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 import '../index.scss'
 
+
 export default function ClassroomDetail() {
+    const columns = ['Name', 'Role', 'Dob', 'Email']
+    const codeToRole = ['Teacher', 'Teacher', 'Student']
     const [detail, setDetail] = useState({
         name: '',
         section:'',
         description:''
     })
+    const [rows, setRows] = useState([])
     let params = useParams()
     useEffect(() => {
         let fetchData = async () => {
             let result = await classroomAPI.getClassroomDetail(params.classroomId)
-            setDetail(result.data && result.data.length > 0 ? result.data[0] : detail)
+            console.log(result)
+            setDetail(result.data.classroomDetail)
+            setRows(result.data.userList)
         }
         fetchData()
-        console.log(detail)
     },[])
 
 
@@ -44,7 +56,32 @@ export default function ClassroomDetail() {
                 <Button className="page-container__button-group__button bg-primary">Invite by Email</Button>
                 <Button className="page-container__button-group__button bg-primary">Create Invite Link</Button>
             </div>
-        </div>
-        
+            <div className="page-container__users-list">
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 650 }} aria-label="users table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>ID</TableCell>
+                                {columns.map(item => <TableCell align="right">{item}</TableCell>)}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                        {rows.map((row, index) => (
+                            <TableRow
+                            key={index}
+                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                            >
+                            <TableCell >{index}</TableCell>
+                            <TableCell component="th" scope="row" align="right"><strong>{row.Users.name}    </strong></TableCell>
+                            <TableCell align="right">{codeToRole[row.Users.UserClassroom.role]}</TableCell>
+                            <TableCell align="right">{row.Users.dob}</TableCell>
+                            <TableCell align="right">{row.Users.email}</TableCell>
+                            </TableRow>
+                        ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </div>    
+        </div> 
     )    
 }
