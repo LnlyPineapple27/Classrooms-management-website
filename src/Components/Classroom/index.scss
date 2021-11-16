@@ -66,6 +66,7 @@
 }
 
 .page-container {
+    position: relative;
     padding: 20px 10%;
     &__classroom-detail {
         width: 100%;
@@ -79,6 +80,33 @@
         #fffdc2 85%
         );
         background-size: 100%;
+    }
+    &__button-group {
+
+        color: white;
+        padding: 20px;
+        width: 50%;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        justify-content: center;
+
+        &__button {
+            color:inherit !important;
+            &:hover {
+                box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+            }
+            &:active {
+                background-color: hsl(0, 0%, 0%, 0.3);
+                transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+                box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 30%), 0px 4px 5px 0px rgb(0 0 0 / 24%), 0px 1px 10px 0px rgb(0 0 0 / 22%);
+            }
+        }
+        
+        &__button + &__button {
+            margin-left: 10px;
+        }
     }
 }
 

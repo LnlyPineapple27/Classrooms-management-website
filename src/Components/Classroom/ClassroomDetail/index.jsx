@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from "react";
 import { useParams } from "react-router-dom"
 import classroomAPI from "../../../APIs/classroomAPI";
+import { Button } from "@mui/material";
 import '../index.scss'
 
 export default function ClassroomDetail() {
@@ -13,8 +14,7 @@ export default function ClassroomDetail() {
     useEffect(() => {
         let fetchData = async () => {
             let result = await classroomAPI.getClassroomDetail(params.classroomId)
-            console.log(result.data && result.data.length > 0 ? result.data[0] : detail)
-            setDetail(result.data[0])
+            setDetail(result.data && result.data.length > 0 ? result.data[0] : detail)
         }
         fetchData()
         console.log(detail)
@@ -39,6 +39,10 @@ export default function ClassroomDetail() {
                         <span className="classroom-detail__element__content">{detail.description}</span>
                     </p>
                 </div>
+            </div>
+            <div className="page-container__button-group">
+                <Button className="page-container__button-group__button bg-primary">Invite by Email</Button>
+                <Button className="page-container__button-group__button bg-primary">Create Invite Link</Button>
             </div>
         </div>
         
