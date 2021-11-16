@@ -15,7 +15,12 @@ let getResultFromResponse = async response => {
 let classroomAPI = {
 
     getAllClassrooms: async () => {
-        let response = await fetch(API_URL)
+        let token = localStorage.getItem('token')
+        let response = await fetch(API_URL, {
+            method: 'GET',
+            headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token'),
+        }})
         return  getResultFromResponse(response)
     },
 
@@ -23,7 +28,7 @@ let classroomAPI = {
         const response = await fetch(API_URL, {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer'+btoa(localStorage.getItem('token')),
+                'Authorization': 'Bearer '+ localStorage.getItem('token'),
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(classroomDetail) // body data type must match "Content-Type" header
@@ -34,7 +39,11 @@ let classroomAPI = {
 
     getClassroomDetail: async id => {
         let fetchURL = API_URL + `/${id}`
-        const response = await fetch(fetchURL)
+        const response = await fetch(fetchURL, {
+            method: 'GET',
+            headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token'),
+        }})
         let result = await getResultFromResponse(response)
         return result
     }
