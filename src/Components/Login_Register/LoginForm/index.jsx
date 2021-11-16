@@ -5,7 +5,7 @@ import { FormControl } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { Link } from 'react-router-dom';
-
+import accountAPI from '../../../APIs/accountAPI'
 import '../index.scss'
 
 export default function LoginForm() {
@@ -21,8 +21,26 @@ export default function LoginForm() {
 
     const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1)
 
-    const handleClick = () => {
-        console.log(formData);
+    const handleClick = async () => {
+        //console.log(formData);
+        if(formData.username.length > 0 && formData.password.length > 0){
+            let resultAttempt = await accountAPI.login(formData);
+            if (resultAttempt.status === 200) {
+                //console.log(resultAttempt.data);
+                localStorage.setItem('token', resultAttempt.data.token);
+                localStorage.setItem('account', JSON.stringify(resultAttempt.data.account));
+                window.location.href = '/';
+                alert('Login Success');
+            }
+            else if(resultAttempt.status === 401) {
+                alert('Invalid username or password');
+            }
+            else if(resultAttempt.status === 404) {
+                alert('Some thing went wrong');
+            }
+            console.log('token is:' + localStorage.getItem('token'));
+        }
+        else alert('All fields must be filled');
     }
     const handleKeepLogin = (event) => {
         setFormData({ ...formData, keepLogin: event.target.checked });
@@ -65,18 +83,7 @@ export default function LoginForm() {
         <div className="form-container">
             <FormControl className='login-form'>
                 <h1 className='text-center login-form__element' style={{width:'100%', textAlign: 'center'}}>Login</h1>
-                {/* {Object.keys(formData).map(key => (
-                        key !== 'password' && key !== 'keepLogin' && (
-                        <TextField required
-                            className='login-form__text-field login-form__element'
-                            key={key}
-                            id={`tf_${key}`}
-                            label={capitalize(key)}
-                            type="Text"
-                            autoComplete={`Enter ${capitalize(key)}`}
-                            onChange={handleChange(key)}
-                        />)
-                ))} */}
+            
                 {Object.keys(formData).map(key => (renderItems(key)))}
 
                 <div className="text-center">

@@ -33,7 +33,14 @@ export default function LoginForm() {
    
     
     const handleRegister = () => {
-        console.log(formData);
+        if (formData.username.length > 0 && formData.password.length > 0 && formData.confirmedPassword.length > 0 && formData.name.length > 0 && formData.email.length > 0 && formData.dob.length > 0) {
+            if (formData.password === formData.confirmedPassword) {
+               // Proceed to register
+                console.log(formData);
+            }
+            else alert('Password is not match');
+        }
+        else alert('All fields must be filled');
     }
 
     const renderItems = (keyitem) => {
