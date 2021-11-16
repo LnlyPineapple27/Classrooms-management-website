@@ -39,9 +39,9 @@ export default function App() {
     } else {
         return (
             <div className='App'>
-                <TopNavBar brandName="My Classrooms" handleReload={toggle}/>
                 <BrowserRouter >
                     <div>
+                        <TopNavBar brandName="My Classrooms" handleReload={toggle}/>
                         <Routes>
                             <Route path='/classrooms/:classroomId' element={<ClassroomDetail />} />
                             <Route path='/classrooms' element={<ClassroomsList items={items} />} />

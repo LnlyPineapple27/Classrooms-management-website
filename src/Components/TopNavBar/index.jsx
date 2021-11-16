@@ -2,7 +2,6 @@ import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -11,6 +10,8 @@ import Menu from '@mui/material/Menu';
 import AddIcon from '@mui/icons-material/Add';
 import FormModal from '../Classroom/FormModal';
 import useModal from '../../Hook/useModal';
+import { Link } from 'react-router-dom';
+import './index.scss'
 
 export default function TopNavBar({brandName, handleReload}) {
   const [auth, setAuth] = React.useState(true);
@@ -26,7 +27,7 @@ export default function TopNavBar({brandName, handleReload}) {
   };
 
   return (
-    <Box className='nav-bar' sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1 }}>
       <FormModal 
         header="Add Class"
         openStatus={isShowing}
@@ -34,7 +35,7 @@ export default function TopNavBar({brandName, handleReload}) {
         handleReload={handleReload}
       />
       
-      <AppBar position="static">
+      <AppBar className='nav-bar' position="static">
         <Toolbar>
           <IconButton
             size="large"
@@ -45,9 +46,10 @@ export default function TopNavBar({brandName, handleReload}) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {brandName}
-          </Typography>
+          <Link to='/'>
+            <img className='brand-logo' src='/brand_logo.png' alt="logo" style={{maxWidth:60}}/>
+          </Link>
+          <Box sx={{ flexGrow: 1 }} />
           {auth && (
             <div>
               <IconButton
