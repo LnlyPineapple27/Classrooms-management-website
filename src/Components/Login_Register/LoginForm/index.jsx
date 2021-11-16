@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import accountAPI from '../../../APIs/accountAPI'
 import '../index.scss'
 import { useNavigate } from "react-router-dom";
-
+import GoogleLogin from '../GoogleLogin'
 export default function LoginForm() {
     const [formData, setFormData] = useState({
         username: '',
@@ -95,6 +95,7 @@ export default function LoginForm() {
                     </p>
                 </div>
                 <Button className='login-form__element login-form__button' type="button" onClick={handleClick}>Login</Button>
+                <GoogleLogin />
             </FormControl>
         </div>
     )

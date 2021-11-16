@@ -21,6 +21,9 @@
         background-color: hsl(239, 81%, 37%) !important;
         color: white !important;
     }
+    &__googlebutton{
+        background-color: white !important;
+    }
     &__register-text {
         width: 100%;
         text-align: center;
@@ -31,4 +34,18 @@
 
 .login-form__element + .login-form__element {
     margin-top: 20px;
+}
+
+
+.buttonText {
+    color: #4285f4;
+    font-weight: bolder;
+}
+
+.icon {
+    height: 25px;
+    width: 25px;
+    margin-right: 0px;
+    position: absolute;
+    align-items: center;
 }
