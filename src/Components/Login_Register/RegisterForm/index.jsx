@@ -82,17 +82,20 @@ export default function LoginForm() {
     }
 
     return (
-        <FormControl className='login-form' sx={{width: "100%", mt: "2rem"}}>
-            <h1 className='text-center login-form__element' style={{width:'100%', textAlign: 'center'}}>Register</h1>
-            
-            {Object.keys(formData).map(key => (renderItems(key)))}
-            
-            <div className="text-center">
-                <p className="login-form__register-text">
-                    Have account? <Link to='/'>Login</Link>
-                </p>
-            </div>
-            <Button className='login-form__element login-form__button' type="button" onClick={handleRegister}>Register</Button>
-        </FormControl>
+        <div className="form-container">
+            <FormControl className='login-form'>
+                <h1 className='text-center login-form__element' style={{width:'100%', textAlign: 'center'}}>Register</h1>
+                
+                {Object.keys(formData).map(key => (renderItems(key)))}
+                
+                <div className="text-center">
+                    <p className="login-form__register-text">
+                        Have account? <Link to='/'>Login</Link>
+                    </p>
+                </div>
+                <Button className='login-form__element login-form__button' type="button" onClick={handleRegister}>Register</Button>
+            </FormControl>
+        </div>
+        
     )
 }

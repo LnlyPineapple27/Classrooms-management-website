@@ -62,28 +62,30 @@ export default function LoginForm() {
         }
     }
     return (
-        <FormControl className='login-form' sx={{width: "100%", mt: "2rem"}}>
-            <h1 className='text-center login-form__element' style={{width:'100%', textAlign: 'center'}}>Login</h1>
-            {/* {Object.keys(formData).map(key => (
-                    key !== 'password' && key !== 'keepLogin' && (
-                    <TextField required
-                        className='login-form__text-field login-form__element'
-                        key={key}
-                        id={`tf_${key}`}
-                        label={capitalize(key)}
-                        type="Text"
-                        autoComplete={`Enter ${capitalize(key)}`}
-                        onChange={handleChange(key)}
-                    />)
-            ))} */}
-            {Object.keys(formData).map(key => (renderItems(key)))}
+        <div className="form-container">
+            <FormControl className='login-form'>
+                <h1 className='text-center login-form__element' style={{width:'100%', textAlign: 'center'}}>Login</h1>
+                {/* {Object.keys(formData).map(key => (
+                        key !== 'password' && key !== 'keepLogin' && (
+                        <TextField required
+                            className='login-form__text-field login-form__element'
+                            key={key}
+                            id={`tf_${key}`}
+                            label={capitalize(key)}
+                            type="Text"
+                            autoComplete={`Enter ${capitalize(key)}`}
+                            onChange={handleChange(key)}
+                        />)
+                ))} */}
+                {Object.keys(formData).map(key => (renderItems(key)))}
 
-            <div className="text-center">
-                <p className="login-form__register-text">
-                    No account? <Link to='/register'>Register</Link>
-                </p>
-            </div>
-            <Button className='login-form__element login-form__button' type="button" onClick={handleClick}>Login</Button>
-        </FormControl>
+                <div className="text-center">
+                    <p className="login-form__register-text">
+                        No account? <Link to='/register'>Register</Link>
+                    </p>
+                </div>
+                <Button className='login-form__element login-form__button' type="button" onClick={handleClick}>Login</Button>
+            </FormControl>
+        </div>
     )
 }
