@@ -4,8 +4,7 @@ const useLoginStatus = () => {
     const [isLogin, setIsLogin] = useState(false);
 
     function toggleLoginStatus() {
-        setIsLogin(!isLogin);
-        console.log('a')
+        setIsLogin(!!localStorage.getItem('token'));
     }
 
     return {

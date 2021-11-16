@@ -14,7 +14,7 @@ let getResultFromResponse = async response => {
 
 let classroomAPI = {
     getAllClassrooms: async () => {
-        let userId = JSON.parse(localStorage.getItem('account')).userID
+        let userId = localStorage.getItem('account') ? JSON.parse(localStorage.getItem('account')).userID : null
         
         if(!userId) return {
             isOk: false,

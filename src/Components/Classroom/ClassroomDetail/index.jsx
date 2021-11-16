@@ -26,8 +26,8 @@ export default function ClassroomDetail() {
         let fetchData = async () => {
             let result = await classroomAPI.getClassroomDetail(params.classroomId)
             console.log(result)
-            setDetail(result.data.classroomDetail)
-            setRows(result.data.userList)
+            setDetail(result.data.classroomDetail ? result.data.classroomDetail : {})
+            setRows(result.data.userList ? result.data.userList : [])
         }
         fetchData()
     },[])
