@@ -9,7 +9,9 @@ import accountAPI from '../../../APIs/accountAPI'
 import '../index.scss'
 import { useNavigate } from "react-router-dom";
 import GoogleLogin from '../GoogleLogin'
-export default function LoginForm() {
+import LoginIcon from '@mui/icons-material/Login';
+
+export default function LoginForm({handleLogin}) {
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -32,7 +34,7 @@ export default function LoginForm() {
                 //console.log(resultAttempt.data);
                 localStorage.setItem('token', resultAttempt.data.token);
                 localStorage.setItem('account', JSON.stringify(resultAttempt.data.account));
-                window.location.href = '/';
+                handleLogin()
                 navigate("../classrooms", { replace: true });
             }
             else if(resultAttempt.status === 401) {
@@ -94,7 +96,7 @@ export default function LoginForm() {
                         No account? <Link to='/register'>Register</Link>
                     </p>
                 </div>
-                <Button className='login-form__element login-form__button' type="button" onClick={handleClick}>Login</Button>
+                <Button startIcon={<LoginIcon />} className='login-form__element login-form__button' type="button" onClick={handleClick}>Login</Button>
                 <GoogleLogin />
             </FormControl>
         </div>

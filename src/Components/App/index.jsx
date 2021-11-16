@@ -11,20 +11,26 @@ import {
     Route
   } from "react-router-dom";
 import ClassroomDetail from '../Classroom/ClassroomDetail';
+import useLoginStatus from '../../Hook/useLoginStatus';
 
 export default function App() {
     const {isReload, toggle} = useReloadItems();
+    const {isLogin, toggleLoginStatus} = useLoginStatus()
         return (
             <div className='App'>
                 <BrowserRouter >
                     <div>
-                        <TopNavBar brandName="My Classrooms" handleReload={toggle}/>
+                        <TopNavBar
+                            brandName="My Classrooms" 
+                            handleLogin={toggleLoginStatus} 
+                            handleReload={toggle} isLogin={isLogin}
+                        />
                         <Routes> 
-                            <Route path='/login' element={<LoginForm />} />
+                            <Route path='/login' element={<LoginForm handleLogin={toggleLoginStatus}/>} />
                             <Route path='/classrooms/:classroomId' element={<ClassroomDetail />} />
                             <Route path='/classrooms' element={<ClassroomsList isReload={isReload} />} />
                             <Route path='/register' element={<RegisterForm />} />
-                            <Route path='/' element={<LoginForm />} />
+                            <Route path='/' element={<LoginForm handleLogin={toggleLoginStatus}/>} />
                         </Routes>
                     </div>
                 </BrowserRouter>
