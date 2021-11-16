@@ -1,5 +1,8 @@
 import React from 'react';
 import { useGoogleLogin } from 'react-google-login';
+import GoogleIcon from '@mui/icons-material/Google';
+import { Button } from '@mui/material';
+import '../index.scss'
 
 // refresh token
 import { refreshTokenSetup } from '../utils/refreshToken';
@@ -33,11 +36,18 @@ function GoogleLogin() {
   });
 
   return (
-    <button onClick={signIn} className="login-form__element login-form__googlebutton">
-      <img src="icons/google.svg" alt="google login" className="icon"></img>
+    // <button onClick={signIn} className="login-form__element login-form__googlebutton">
+    //   <img src="icons/google.svg" alt="google login" className="icon"></img>
 
-      <span className="buttonText">Sign in with Google</span>
-    </button>
+    //   <span className="buttonText">Sign in with Google</span>
+    // </button>
+      <Button 
+        startIcon={<GoogleIcon />}
+        className='login-form__element login-form__button--google'
+        onClick={signIn}
+      >
+        Login with Google
+      </Button>
   );
 }
 

@@ -18,11 +18,12 @@
         width: 100%;
     }
     &__button {
-        background-color: hsl(239, 81%, 37%) !important;
+        background-color: hsl(162, 48%, 46%) !important;
         color: white !important;
     }
-    &__googlebutton{
-        background-color: white !important;
+    &__button--google {
+        background-color: hsl(12, 75%, 52%) !important;
+        color: white !important;
     }
     &__register-text {
         width: 100%;
