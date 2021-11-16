@@ -15,6 +15,7 @@ export default function ClassroomsList ({items}) {
         >
             {items.map((item, index) => (
                 <ClassroomCard
+                    id={item.id}
                     key={item.id}
                     header={item.description}
                     title={item.name}

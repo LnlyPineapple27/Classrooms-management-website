@@ -3,21 +3,19 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import { CardActionArea } from '@mui/material';
 import { CardMedia } from '@mui/material';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { Link } from 'react-router-dom';
 import '../index.scss'
 
-export default function ClassroomCard({header, title, subTitle, content, actionTitle, actionCallback}) {
+export default function ClassroomCard({id, header, title, subTitle, content, actionTitle, actionCallback}) {
   return (
     <Box 
       className='classroom-card-box'
-      
     >
       <Card className='classroom-card' variant="outlined" sx={{height:1, width:1}}>
         <React.Fragment>
-          <CardActionArea>
+          <CardActionArea component={Link} to={`/classrooms/${id}`}>
             <CardMedia
               height="100"
               component="img"
@@ -28,8 +26,8 @@ export default function ClassroomCard({header, title, subTitle, content, actionT
                 <Typography className='one-line-text' sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                   {header}
                 </Typography>
-                <Typography className='two-line-text' variant="h5" component="div">
-                  {title}
+                <Typography className='two-line-text classroom-card__content__title' variant="h5" component="div">
+                  <Link to={`/classrooms/${id}`}>{title}</Link>
                 </Typography>
                 <Typography className='classroom-card__content__subtitle' sx={{ mb: 1.5 }} color="text.secondary">
                   {subTitle}
@@ -38,9 +36,6 @@ export default function ClassroomCard({header, title, subTitle, content, actionT
                   {content}
                 </Typography>
               </CardContent>
-              <CardActions>
-                <Button sx={{ml: 'auto'}} size="small" onClick={actionCallback}>{actionTitle}</Button>
-              </CardActions>
         </React.Fragment>
       </Card>
     </Box>

@@ -11,6 +11,7 @@ import {
     Routes,
     Route
   } from "react-router-dom";
+import ClassroomDetail from '../Classroom/ClassroomDetail';
 
 export default function App() {
     const [error, setError] = useState(null);
@@ -42,9 +43,11 @@ export default function App() {
                 <BrowserRouter >
                     <div>
                         <Routes>
-                            <Route path='/classrooms' element={<ClassroomsList items={items} />} pattern="/" />
-                            <Route path='/register' element={<RegisterForm />} pattern="/" />
-                            <Route path='/' element={<LoginForm />} pattern="/" />
+                            <Route path='/classrooms/:classroomId' element={<ClassroomDetail />} />
+                            <Route path='/classrooms' element={<ClassroomsList items={items} />} />
+                            <Route path='/register' element={<RegisterForm />} />
+                            <Route path='/login' element={<LoginForm />} />
+                            <Route path='/' element={<LoginForm />} />
                         </Routes>
                     </div>
                 </BrowserRouter>
