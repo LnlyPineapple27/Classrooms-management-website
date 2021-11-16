@@ -13,7 +13,6 @@ let getResultFromResponse = async response => {
 }
 
 let classroomAPI = {
-
     getAllClassrooms: async () => {
         let token = localStorage.getItem('token')
         let response = await fetch(API_URL, {
