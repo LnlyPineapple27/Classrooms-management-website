@@ -8,6 +8,9 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import '../index.scss'
 import accountAPI from '../../../APIs/accountAPI'
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
 
 import { useNavigate } from "react-router-dom";
 
@@ -18,6 +21,7 @@ export default function LoginForm() {
         confirmedPassword: '',
         name: '',
         email: '',
+        sex: 0,
         dob: new Date().toJSON().slice(0,10),
     })
     let navigate = useNavigate()
@@ -26,6 +30,9 @@ export default function LoginForm() {
     }
     const handleChangeDate = date => {
         setFormData({ ...formData, dob: convertDate(date) });
+    }
+    const handleChangeSex = event => {
+        setFormData({ ...formData, sex: event.target.value });
     }
     const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1)
 
@@ -41,13 +48,13 @@ export default function LoginForm() {
                 // Proceed to register
                 //console.log(formData);
                 let resultAttempt = await accountAPI.register(formData);
-                if (resultAttempt.status === 200) {
+                if (resultAttempt.status === 201) {
                     //console.log(resultAttempt.data);
                     alert("Register Successful");
                     navigate("../login", { replace: true });
                 }
-                else if(resultAttempt.status === 401) {
-                    alert('Invalid username or password');
+                else if(resultAttempt.status === 409) {
+                    alert('Account exist');
                 }
                 else if(resultAttempt.status === 404) {
                     alert('Some thing went wrong');
@@ -93,6 +100,17 @@ export default function LoginForm() {
                                                     {...params} />}
                     />
                 </LocalizationProvider>;
+            case 'sex':
+                return <Select className='login-form__text-field login-form__element'
+                                id="tf_sex"
+                                value={formData.sex}
+                                label={capitalize(keyitem)}
+                                key={keyitem}
+                                onChange={handleChangeSex}>
+                            <MenuItem value={2}>Others</MenuItem>
+                            <MenuItem value={1}>Female</MenuItem>
+                            <MenuItem value={0}>Male</MenuItem>
+                        </Select>
             default:
                 return <TextField required
                         className='login-form__text-field login-form__element'
