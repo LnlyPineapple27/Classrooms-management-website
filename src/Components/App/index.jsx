@@ -42,11 +42,11 @@ export default function App() {
                 <BrowserRouter >
                     <div>
                         <TopNavBar brandName="My Classrooms" handleReload={toggle}/>
-                        <Routes>
+                        <Routes> 
+                            <Route path='/login' element={<LoginForm />} />
                             <Route path='/classrooms/:classroomId' element={<ClassroomDetail />} />
                             <Route path='/classrooms' element={<ClassroomsList items={items} />} />
                             <Route path='/register' element={<RegisterForm />} />
-                            <Route path='/login' element={<LoginForm />} />
                             <Route path='/' element={<LoginForm />} />
                         </Routes>
                     </div>

@@ -23,6 +23,7 @@ let classroomAPI = {
         const response = await fetch(API_URL, {
             method: 'POST',
             headers: {
+                'Authorization': 'Bearer'+btoa(localStorage.getItem('token')),
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(classroomDetail) // body data type must match "Content-Type" header

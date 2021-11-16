@@ -18,6 +18,7 @@ let accountAPI = {
         const response = await fetch(fetchURL, {
             method: 'POST',
             headers: {
+                'Authorization': 'Bearer'+btoa(localStorage.getItem('token')),
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data) // body data type must match "Content-Type" header
