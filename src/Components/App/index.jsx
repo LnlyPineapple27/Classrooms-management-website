@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import useReloadItems from '../../Hook/useReloadItems';
 import LoginForm from '../Login_Register/LoginForm';
 import RegisterForm from '../Login_Register/RegisterForm';
-
+import Profile from '../Profile';
 import {
     BrowserRouter,
     Routes,
@@ -34,6 +34,7 @@ export default function App() {
                             <Route path='/classrooms/:classroomId' element={<ClassroomDetail />} />
                             <Route path='/classrooms' element={<ClassroomsList isReload={isReload} />} />
                             <Route path='/register' element={<RegisterForm />} />
+                            <Route path='/profile' element={<Profile />}></Route>
                             {!auth ? 
                             (<Route path='/' element={<LoginForm handleLogin={toggleLoginStatus}/>} />) : 
                             (<Route path='/' element={<ClassroomsList isReload={isReload} />} />)}

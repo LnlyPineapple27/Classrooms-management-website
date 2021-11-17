@@ -8,6 +8,7 @@ let getResultFromResponse = async response => {
         message: null
     }
     result.data = result.isOk && await response.json()
+    console.log(result)
     result.message = result.isOk ? 'Request success' : `An error has occurred: ${response.status}`
     return result
 }
@@ -41,5 +42,23 @@ let accountAPI = {
         let result = await getResultFromResponse(response)
         return result
     },
+    userProfile: async () => {
+        let account = JSON.parse(localStorage.getItem('account')) ?? {}
+        let id = account ? account.userID : 'undefined'
+        let fetchURL = API_URL + `?id=${id}`
+        const response = await fetch(fetchURL, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer '+ localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+        });
+
+        let result = await getResultFromResponse(response)
+        
+        console.log(result)
+
+        return result
+    }
 }
 export default accountAPI
