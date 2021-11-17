@@ -10,13 +10,17 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
+import { LoadingButton } from '@mui/lab';
 import SaveIcon from '@mui/icons-material/Save';
+import RestoreIcon from '@mui/icons-material/Restore';
 import './index.scss'
 
 export default function Profile() {
     const [profileInfo, setProfileInfo] = useState({})
     const [visibleInfo, setVisibleInfo] = useState({'name':'', 'sex':'', 'dob':'', 'email':''})
     const [isInfoChanged, setIsInfoChanged] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+
     useEffect(() => {
         const fetchData = async () => {
             let result = await accountAPI.userProfile()
@@ -42,6 +46,15 @@ export default function Profile() {
             if(!trigger) break
         }
         return trigger
+    }
+
+    const handleResetInfo = () => {
+        setVisibleInfo({
+            name:profileInfo.name,
+            sex:profileInfo.sex,
+            dob:profileInfo.dob,
+            email:profileInfo.email
+        })
     }
 
     const handleSaveInfo = () => {
@@ -126,16 +139,29 @@ export default function Profile() {
                     }
 
                 })}
-                <Button 
-                className='info-container__element--button'
-                variant="contained" 
-                color="success" 
-                disabled={!isInfoChanged} 
-                endIcon={<SaveIcon />}
-                onClick={handleSaveInfo}
-                >
-                    Save
-                </Button>
+                <div className="info-container__element button-group">
+                    <Button
+                    className='info-container__element button-group__button'
+                    variant="contained" 
+                    color="primary" 
+                    endIcon={<RestoreIcon />}
+                    onClick={handleResetInfo}
+                    >
+                        Restore
+                    </Button>
+                    <LoadingButton
+                    className='info-container__element button-group__button'
+                    variant="contained" 
+                    color="success" 
+                    disabled={!isInfoChanged}
+                    endIcon={<SaveIcon />}
+                    onClick={handleSaveInfo}
+                    loading={isLoading}
+                    loadingPosition="end"
+                    >
+                        Save
+                    </LoadingButton>
+                </div>
             </div>
         </Box>
     )

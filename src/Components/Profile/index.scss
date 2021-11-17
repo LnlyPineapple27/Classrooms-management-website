@@ -11,7 +11,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 50%;
+    max-width: 900px;
     position: relative;
     left: 50%;
     transform: translateX(-50%);
@@ -20,8 +20,17 @@
     box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
     &__element {
         width: 100% !important;
-        &--button {
-            margin-top: 20px !important;
+        &.button-group {
+            display: flex;
+            justify-content: end;
+            margin-top: 30px;
+            &__button {
+                min-width: 100px;
+                width: 15% !important;
+            }
+            &__button + &__button {
+                margin-left: 10px;
+            }
         }
     }
     

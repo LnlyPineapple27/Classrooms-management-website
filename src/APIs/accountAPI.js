@@ -8,7 +8,6 @@ let getResultFromResponse = async response => {
         message: null
     }
     result.data = result.isOk && await response.json()
-    console.log(result)
     result.message = result.isOk ? 'Request success' : `An error has occurred: ${response.status}`
     return result
 }
