@@ -12,13 +12,23 @@ import Paper from '@mui/material/Paper';
 import '../index.scss'
 
 
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 export default function ClassroomDetail() {
     const columns = ['Name', 'Role', 'Dob', 'Email']
     const codeToRole = ['Teacher', 'Teacher', 'Student']
     const [detail, setDetail] = useState({
         name: '',
         section:'',
-        description:''
+        description:'',
+        open: false,
+        emailToInvite: '',
+        invitationURL: '',
     })
     const [rows, setRows] = useState([])
     let params = useParams()
@@ -32,6 +42,20 @@ export default function ClassroomDetail() {
         fetchData()
     },[])
 
+    const handleClickOpen = () => {
+        setDetail({ ...detail, open: true })
+    };
+
+    const handleClose = () => {
+        setDetail({ ...detail, open: false })
+    };
+    const handleSendEmail = () => {
+        console.log('Submitted email: ' + detail.emailToInvite)
+    }
+
+    const handleGetInvitationURL = () => {
+        alert('Invite URL copied to clipboard')
+    }
 
     return (
         <div className="page-container">
@@ -52,9 +76,38 @@ export default function ClassroomDetail() {
                     </p>
                 </div>
             </div>
+            {/* <div className="page-container__button-group">
+                <Button className="page-container__button-group__button bg-primary" onClick={handleClickOpen}>Create Invite by Email</Button>
+                <Button className="page-container__button-group__button bg-primary" onClick={handleGetInvitationURL}>Create Invite Link</Button>
+            </div> */}
             <div className="page-container__button-group">
-                <Button className="page-container__button-group__button bg-primary">Invite by Email</Button>
-                <Button className="page-container__button-group__button bg-primary">Create Invite Link</Button>
+                <Button className="page-container__button-group__button bg-primary" onClick={handleClickOpen}>
+                    Create Invite by Email
+                </Button>
+                <Button className="page-container__button-group__button bg-primary" onClick={handleGetInvitationURL}>Create Invite Link</Button>
+
+                <Dialog open={detail.open} onClose={handleClose}>
+                    <DialogTitle>Send Invitation</DialogTitle>
+                    <DialogContent>
+                    <DialogContentText>
+                        Enter an email to send invitation!
+                    </DialogContentText>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="Email Address"
+                        type="email"
+                        fullWidth
+                        variant="standard"
+                        onChange={(e) => setDetail({ ...detail, emailToInvite: e.target.value })}
+                    />
+                    </DialogContent>
+                    <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleSendEmail}>Send</Button>
+                    </DialogActions>
+                </Dialog>
             </div>
             <div className="page-container__users-list">
                 <TableContainer component={Paper}>
