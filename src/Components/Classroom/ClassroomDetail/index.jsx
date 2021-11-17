@@ -26,11 +26,11 @@ export default function ClassroomDetail() {
         name: '',
         section:'',
         description:'',
-        open: false,
-        emailToInvite: '',
-        invitationURL: 'unknown',
     })
-    const [rows, setRows] = useState([])
+    const [openform, setOpenform] = useState(false);
+    const [emailToInvite, setEmailToInvite] = useState('');
+    const [invitationURL, setInvitationURL] = useState('https://blog.prototypr.io/how-to-build-google-login-into-a-react-app-and-node-express-api-821d049ee670');
+    const [rows, setRows] = useState([]);
     let params = useParams()
     useEffect(() => {
         let fetchData = async () => {
@@ -43,25 +43,25 @@ export default function ClassroomDetail() {
     },[])
 
     const handleClickOpen = () => {
-        setDetail({ ...detail, open: true })
+        setOpenform(true);
     };
 
     const handleClose = () => {
-        setDetail({ ...detail, open: false })
+        setOpenform(false);
     };
     const handleSendEmail = () => {
-        console.log('Submitted email: ' + detail.emailToInvite)
+        console.log('Submitted email: ' + emailToInvite)
         let templatedEmail = {
-            to_email: detail.emailToInvite,
+            to_email: emailToInvite,
             classroom_name: detail.name,
-            invitation_link: detail.invitationURL,
+            invitation_link: invitationURL,
             message: "Cheer! :>",
         }
         sendEmail(templatedEmail);
     }
 
     const handleGetInvitationURL = () => {
-        alert('Invite link: ' + detail.invitationURL)
+        alert('Invite link: ' + invitationURL)
     }
 
     return (
@@ -93,7 +93,7 @@ export default function ClassroomDetail() {
                 </Button>
                 <Button className="page-container__button-group__button bg-primary" onClick={handleGetInvitationURL}>Create Invite Link</Button>
 
-                <Dialog open={detail.open} onClose={handleClose}>
+                <Dialog open={openform} onClose={handleClose}>
                     <DialogTitle>Send Invitation</DialogTitle>
                     <DialogContent>
                     <DialogContentText>
@@ -107,7 +107,7 @@ export default function ClassroomDetail() {
                         type="email"
                         fullWidth
                         variant="standard"
-                        onChange={(e) => setDetail({ ...detail, emailToInvite: e.target.value })}
+                        onChange={(e) => setEmailToInvite(e.target.value)}
                     />
                     </DialogContent>
                     <DialogActions>

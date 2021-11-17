@@ -7,7 +7,7 @@ const clientId =
 function GoogleLogout() {
   const onLogoutSuccess = (res) => {
     console.log('Logged out Success');
-    alert('Logged out Successfully ✌');
+    alert('Logged out Successfully');
   };
 
   const onFailure = () => {
