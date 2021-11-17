@@ -30,6 +30,7 @@ export default function ClassroomDetail() {
         name: '',
         section:'',
         description:'',
+
         inviteLink:'',
         invitationURL: 'unknown',
     })
@@ -39,6 +40,7 @@ export default function ClassroomDetail() {
     const [rows, setRows] = useState([])
     const [select, setSelect] = useState(2)
     const [inviteLink, setInviteLink] = useState('')
+
     let params = useParams()
     useEffect(() => {
         let fetchData = async () => {
@@ -62,6 +64,7 @@ export default function ClassroomDetail() {
 
     const handleClickOpenSendEmail = () => {
         setOpenSendEmail(true)
+
     };
 
     const handleCloseSendEmail = () => {
@@ -77,15 +80,18 @@ export default function ClassroomDetail() {
     };
 
     const handleSendEmail = () => {
+
         console.log('Submitted email: ' + email)
         let templatedEmail = {
             to_email: email,
             classroom_name: detail.name,
             invitation_link: detail.inviteLink,
+
             message: "Cheer! :>",
         }
         sendEmail(templatedEmail);
     }
+
 
 
     return (
@@ -126,6 +132,7 @@ export default function ClassroomDetail() {
                 </Button>
 
                 <Dialog open={openSendEmail} onClose={handleCloseSendEmail}>
+
                     <DialogTitle>Send Invitation</DialogTitle>
                     <DialogContent>
                     <DialogContentText>
@@ -140,6 +147,7 @@ export default function ClassroomDetail() {
                         fullWidth
                         variant="standard"
                         onChange={e => setEmail(e.target.value)}
+
                     />
                     </DialogContent>
                     <DialogActions>

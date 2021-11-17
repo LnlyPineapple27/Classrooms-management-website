@@ -13,7 +13,7 @@ function GoogleLogin() {
   const onSuccess = (res) => {
     console.log('Login Success: currentUser:', res.profileObj);
     alert(
-      `Logged in successfully welcome ${res.profileObj.name} 😍.`
+      `Logged in successfully welcome ${res.profileObj.name}.`
     );
     refreshTokenSetup(res);
   };
