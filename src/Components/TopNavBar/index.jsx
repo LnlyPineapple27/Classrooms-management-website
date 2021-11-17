@@ -37,11 +37,11 @@ export default function TopNavBar({handleReload, handleLogin, isLogin}) {
       case 'logout':
         let loginLocalInfoKeys = ['token', 'account']
         for(let key of loginLocalInfoKeys) localStorage.removeItem(key)
-        navigate('/', { replace: true })
+        navigate('/login', { replace: true })
         handleLogin()
         break
       case 'profile':
-        
+        navigate('/profile', { replace: true })
         break
       default: break
     }
