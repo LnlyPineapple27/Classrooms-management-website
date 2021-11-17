@@ -13,31 +13,42 @@ import Button from '@mui/material/Button';
 import { LoadingButton } from '@mui/lab';
 import SaveIcon from '@mui/icons-material/Save';
 import RestoreIcon from '@mui/icons-material/Restore';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 import './index.scss'
 
 export default function Profile() {
-    const [profileInfo, setProfileInfo] = useState({})
+    const [profileInfo, setProfileInfo] = useState({'name':'', 'sex':'', 'dob':'', 'email':''})
     const [visibleInfo, setVisibleInfo] = useState({'name':'', 'sex':'', 'dob':'', 'email':''})
     const [isInfoChanged, setIsInfoChanged] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [isSaved, setIsSaved] = useState(false)
+    const [error, setError] = useState(null)
+    const [success, setSuccess] = useState(false)
 
     useEffect(() => {
         const fetchData = async () => {
             let result = await accountAPI.userProfile()
             let profileInfoResult = result.data ?? {}
-            setProfileInfo(profileInfoResult)
+            setProfileInfo({...profileInfoResult, dob: profileInfoResult.dob.split('T')[0]})
             setVisibleInfo({
                 name:profileInfoResult.name,
                 sex:profileInfoResult.sex,
-                dob:profileInfoResult.dob,
+                dob:profileInfoResult.dob.split('T')[0],
                 email:profileInfoResult.email
             })
         }
         fetchData()
-    },[])
+        return () => setIsSaved(false)
+    },[isSaved])
+    
     useEffect(() => {
         setIsInfoChanged(!checkChangeInfo())
     }, [visibleInfo])
+
+    useEffect(() => {
+        setIsLoading(false)
+    }, [profileInfo])
 
     const checkChangeInfo = () => {
         let trigger = true
@@ -57,8 +68,13 @@ export default function Profile() {
         })
     }
 
-    const handleSaveInfo = () => {
-        console.log(visibleInfo)
+    const handleSaveInfo = async () => {
+        setIsLoading(true)
+        let result = await accountAPI.updateProfile(visibleInfo)
+        console.log(result)
+        setError(result.isOk ? null : result.message)
+        setSuccess(!!result.isOk)
+        setIsSaved(true)
     }
 
     const convertDate = (str) => {
@@ -88,8 +104,23 @@ export default function Profile() {
         autoComplete="off"
         >
             <div className='info-container'>
-            <h1 className='page-title'>Personal Information</h1>
-
+                <h1 className='page-title'>Personal Information</h1>
+                {error && 
+                <Alert 
+                    className='info-container__element info-container__element--alert' 
+                    severity="error"
+                >
+                    <AlertTitle>Error</AlertTitle>
+                    {error}
+                </Alert>}
+                {success && 
+                <Alert 
+                    className='info-container__element info-container__element--alert' 
+                    severity="success"
+                >
+                    <AlertTitle>Update Information Successfully</AlertTitle>
+                    {success}
+                </Alert>}
                 {Object.keys(visibleInfo).map((key, index) => {
                     switch(key) {
                         default:
@@ -111,24 +142,24 @@ export default function Profile() {
                                         label="Date of birth"
                                         type="date"   
                                         value={visibleInfo[key]}
-                                        inputFormat="MM/dd/yyyy"
+                                        inputFormat="yyyy-MM-dd"
                                         onChange={handleChangeDate}
                                         renderInput={(params) => <TextField
                                                                     className='info-container__element'
                                                                     label="Date of birth"
                                                                     id="tf_dob"
+                                                                    onChange={handleChangeDate}
                                                                     {...params} />}
                                     />
                                 </LocalizationProvider>;
                             case 'sex':
                                 return (
-                                    <FormControl className='info-container__element'>
+                                    <FormControl key={index} className='info-container__element'>
                                         <InputLabel >SEX</InputLabel>
                                         <Select className='info-container__element'
                                                         id="sl_sex"
                                                         value={visibleInfo[key]}
                                                         label={key.slice().toUpperCase()}
-                                                        key={index}
                                                         onChange={handleChangeSex}>
                                                     <MenuItem value={2}>Others</MenuItem>
                                                     <MenuItem value={1}>Female</MenuItem>
@@ -136,9 +167,8 @@ export default function Profile() {
                                                 </Select>
                                     </FormControl>
                                 )
-                    }
-
-                })}
+                    }})
+                }
                 <div className="info-container__element button-group">
                     <Button
                     className='info-container__element button-group__button'

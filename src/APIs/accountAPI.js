@@ -1,6 +1,6 @@
 let API_URL = process.env.REACT_APP_API_URL + '/account'
 
-let getResultFromResponse = async response => {
+const getResultFromResponse = async response => {
     let result = {
         isOk: response.ok,
         data: null,
@@ -9,6 +9,55 @@ let getResultFromResponse = async response => {
     }
     result.data = result.isOk && await response.json()
     result.message = result.isOk ? 'Request success' : `An error has occurred: ${response.status}`
+    return result
+}
+
+const validateEmail = email=> {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+const validateProfileData = profileData => {
+    let result = {
+        isOk: false,
+        data: {},
+        status: 0,
+        message: 'An error occurred: Invalid properties'
+    }
+    const profileValidValueOf = {
+        sex: [1, 2, 0],
+        dob: /^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/,
+        email: validateEmail
+    }
+    const profileValidProps = ['name', 'dob', 'sex', 'email']
+    
+    if (!Object.keys(profileData).every(prop => profileValidProps.includes(prop))) return result
+    
+    let isOk = true
+    for(let prop of profileValidProps) {
+        switch(prop) {
+            case 'sex':
+                console.log(profileValidValueOf[prop], profileData[prop])
+                isOk = profileValidValueOf[prop].includes(profileData[prop])
+                break
+            case 'dob':
+                isOk = profileValidValueOf[prop].test(profileData[prop])
+                break
+            case 'email':
+                isOk = profileValidValueOf[prop](profileData.email.toLowerCase())
+                break
+            default:
+                isOk = !!profileData[prop]
+                break
+        }
+        if(!isOk) {
+            result.message = `An error occurred: Invalid ${prop.toUpperCase()} value`
+            break
+        }
+    }
+
+    result.isOk = isOk
+
     return result
 }
 
@@ -55,6 +104,28 @@ let accountAPI = {
 
         let result = await getResultFromResponse(response)
         
+
+        return result
+    },
+    updateProfile: async profileData => {
+        let validateData = validateProfileData(profileData)
+        console.log(validateData)
+        if(!validateData.isOk) return validateData
+
+        let account = JSON.parse(localStorage.getItem('account')) ?? {}
+        let putData = {...profileData, id:account ? account.userID : 'undefined'}
+        let fetchURL = API_URL + `/${putData.id}`
+        const response = await fetch(fetchURL, {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer '+ localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(putData)
+        });
+
+        let result = await getResultFromResponse(response)
+
         console.log(result)
 
         return result
