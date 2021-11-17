@@ -12,6 +12,7 @@ import {
   } from "react-router-dom";
 import ClassroomDetail from '../Classroom/ClassroomDetail';
 import useLoginStatus from '../../Hook/useLoginStatus';
+import ClassroomDetailCard from '../Classroom/ClassroomDetailCard';
 
 export default function App() {
     const {isReload, toggle} = useReloadItems();
@@ -35,9 +36,14 @@ export default function App() {
                             <Route path='/classrooms' element={<ClassroomsList isReload={isReload} />} />
                             <Route path='/register' element={<RegisterForm />} />
                             <Route path='/profile' element={<Profile />}></Route>
-                            {!auth ? 
-                            (<Route path='/' element={<LoginForm handleLogin={toggleLoginStatus}/>} />) : 
-                            (<Route path='/' element={<ClassroomsList isReload={isReload} />} />)}
+                            <Route path='/invite/:inviteCode' element={<ClassroomDetailCard loginStatus={isLogin} />}></Route>                            
+                            <Route 
+                            path='/' 
+                            element={
+                                auth ? 
+                                <ClassroomsList isReload={isReload} /> : 
+                                <LoginForm handleLogin={toggleLoginStatus}/>
+                            }/> 
                         </Routes>
                     </div>
                 </BrowserRouter>

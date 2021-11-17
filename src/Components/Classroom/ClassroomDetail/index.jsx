@@ -11,13 +11,17 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import '../index.scss'
 import sendEmail from '../../sendEmail'
-
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import { set } from "date-fns";
 
 export default function ClassroomDetail() {
     const columns = ['Name', 'Role', 'Dob', 'Email']
@@ -26,43 +30,63 @@ export default function ClassroomDetail() {
         name: '',
         section:'',
         description:'',
-        open: false,
-        emailToInvite: '',
+        inviteLink:'',
         invitationURL: 'unknown',
     })
+    const [email, setEmail] = useState('')
+    const [openSendEmail, setOpenSendEmail] = useState(false)
+    const [openInviteLink, setOpenInviteLink] = useState('initialState')
     const [rows, setRows] = useState([])
+    const [select, setSelect] = useState(2)
+    const [inviteLink, setInviteLink] = useState('')
     let params = useParams()
     useEffect(() => {
         let fetchData = async () => {
             let result = await classroomAPI.getClassroomDetail(params.classroomId)
             console.log(result)
             setDetail(result.data.classroomDetail ? result.data.classroomDetail : {})
+            setInviteLink('2'+result.data.classroomDetail.inviteLink)
             setRows(result.data.userList ? result.data.userList : [])
+            console.log(result.data.classroomDetail)
         }
         fetchData()
     },[])
 
-    const handleClickOpen = () => {
-        setDetail({ ...detail, open: true })
+    useEffect(() => {
+        setInviteLink(`${select}${detail.inviteLink}`)
+    }, [select])
+
+    const handleChange = (event) => {
+        setSelect(event.target.value);
     };
 
-    const handleClose = () => {
-        setDetail({ ...detail, open: false })
+    const handleClickOpenSendEmail = () => {
+        setOpenSendEmail(true)
     };
+
+    const handleCloseSendEmail = () => {
+        setOpenSendEmail(false)
+    };
+
+    const handleClickOpenInviteLink = () => {
+        setOpenInviteLink(true)
+    };
+
+    const handleCloseInviteLink = () => {
+        setOpenInviteLink(false)
+    };
+
     const handleSendEmail = () => {
-        console.log('Submitted email: ' + detail.emailToInvite)
+        console.log('Submitted email: ' + email)
         let templatedEmail = {
-            to_email: detail.emailToInvite,
+            to_email: email,
             classroom_name: detail.name,
-            invitation_link: detail.invitationURL,
+            invitation_link: detail.inviteLink,
             message: "Cheer! :>",
         }
         sendEmail(templatedEmail);
     }
 
-    const handleGetInvitationURL = () => {
-        alert('Invite link: ' + detail.invitationURL)
-    }
 
     return (
         <div className="page-container">
@@ -88,12 +112,20 @@ export default function ClassroomDetail() {
                 <Button className="page-container__button-group__button bg-primary" onClick={handleGetInvitationURL}>Create Invite Link</Button>
             </div> */}
             <div className="page-container__button-group">
-                <Button className="page-container__button-group__button bg-primary" onClick={handleClickOpen}>
+                <Button
+                className="page-container__button-group__button bg-primary" 
+                onClick={handleClickOpenSendEmail}
+                >
                     Create Invite by Email
                 </Button>
-                <Button className="page-container__button-group__button bg-primary" onClick={handleGetInvitationURL}>Create Invite Link</Button>
+                <Button 
+                className="page-container__button-group__button bg-primary" 
+                onClick={handleClickOpenInviteLink}
+                >
+                    Invite Link
+                </Button>
 
-                <Dialog open={detail.open} onClose={handleClose}>
+                <Dialog open={openSendEmail} onClose={handleCloseSendEmail}>
                     <DialogTitle>Send Invitation</DialogTitle>
                     <DialogContent>
                     <DialogContentText>
@@ -107,12 +139,36 @@ export default function ClassroomDetail() {
                         type="email"
                         fullWidth
                         variant="standard"
-                        onChange={(e) => setDetail({ ...detail, emailToInvite: e.target.value })}
+                        onChange={e => setEmail(e.target.value)}
                     />
                     </DialogContent>
                     <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleCloseSendEmail}>Cancel</Button>
                     <Button onClick={handleSendEmail}>Send</Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog open={openInviteLink} onClose={handleCloseInviteLink}>
+                    <DialogTitle>Send Invitation</DialogTitle>
+                    <DialogContent>
+                    <FormControl fullWidth style={{marginTop:10,marginBottom:10}}>
+                        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                        <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={select}
+                        label="Role"
+                        onChange={handleChange}
+                        >
+                        <MenuItem value={1}>Teacher</MenuItem>
+                        <MenuItem value={2}>Student</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <DialogContentText>
+                        Invite Link: {inviteLink}
+                    </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                    <Button onClick={handleCloseInviteLink}>Cancel</Button>
                     </DialogActions>
                 </Dialog>
             </div>
@@ -134,7 +190,7 @@ export default function ClassroomDetail() {
                             <TableCell >{index}</TableCell>
                             <TableCell component="th" scope="row" align="right"><strong>{row.Users.name}    </strong></TableCell>
                             <TableCell align="right">{codeToRole[row.Users.UserClassroom.role]}</TableCell>
-                            <TableCell align="right">{row.Users.dob}</TableCell>
+                            <TableCell align="right">{row.Users.dob.split('T')[0]}</TableCell>
                             <TableCell align="right">{row.Users.email}</TableCell>
                             </TableRow>
                         ))}

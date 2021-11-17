@@ -8,6 +8,7 @@ const getResultFromResponse = async response => {
         message: null
     }
     result.data = result.isOk && await response.json()
+    console.log('a', result)
     result.message = result.isOk ? 'Request success' : `An error has occurred: ${response.status}`
     return result
 }
@@ -129,6 +130,30 @@ let accountAPI = {
         console.log(result)
 
         return result
+    },
+    joinClassroom: async (inviteLink, classroomId) => {
+        let data = {
+            role: parseInt(inviteLink[0]),
+            inviteLink: inviteLink.slice(1),
+            userID: localStorage.getItem('account') ? JSON.parse(localStorage.getItem('account')).userID : 'a',
+            classroomID: classroomId
+        }
+        console.log('data', data)
+        let fetchURL = process.env.REACT_APP_API_URL + '/classrooms/invite/join'
+        const response = await fetch(fetchURL, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer '+localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data) // body data type must match "Content-Type" header
+        });
+        let result = await getResultFromResponse(response)
+
+        console.log(result)
+
+        return result
+
     }
 }
 export default accountAPI
