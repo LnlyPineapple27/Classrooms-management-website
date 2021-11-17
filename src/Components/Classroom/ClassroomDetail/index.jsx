@@ -10,7 +10,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import '../index.scss'
-
+import sendEmail from '../../sendEmail'
 
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -28,7 +28,7 @@ export default function ClassroomDetail() {
         description:'',
         open: false,
         emailToInvite: '',
-        invitationURL: '',
+        invitationURL: 'unknown',
     })
     const [rows, setRows] = useState([])
     let params = useParams()
@@ -51,10 +51,17 @@ export default function ClassroomDetail() {
     };
     const handleSendEmail = () => {
         console.log('Submitted email: ' + detail.emailToInvite)
+        let templatedEmail = {
+            to_email: detail.emailToInvite,
+            classroom_name: detail.name,
+            invitation_link: detail.invitationURL,
+            message: "Cheer! :>",
+        }
+        sendEmail(templatedEmail);
     }
 
     const handleGetInvitationURL = () => {
-        alert('Invite URL copied to clipboard')
+        alert('Invite link: ' + detail.invitationURL)
     }
 
     return (
