@@ -1,4 +1,4 @@
-import {React,useEffect,useState} from 'react'
+import {React,useEffect,useState,useContext} from 'react'
 import classroomAPI from '../../../APIs/classroomAPI'
 import { useParams } from 'react-router-dom'
 import { Button } from '@mui/material'
@@ -9,13 +9,14 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useNavigate } from 'react-router-dom';
 import accountAPI from '../../../APIs/accountAPI';
+import { AuthContext } from '../../../Context/GlobalContext';
 
-export default function ClassroomDetailCard({isLogin}) {
+export default function ClassroomDetailCard() {
     const [detail, setDetail] = useState({})
     const params = useParams()
     const [open, setOpen] = useState(false)
     const navigate = useNavigate()
-    const [auth, setAuth] = useState(false)
+    const [auth, setAuth] = useContext(AuthContext)
 
     useEffect(()=>{
         const fetchData = async () => {
@@ -24,10 +25,6 @@ export default function ClassroomDetailCard({isLogin}) {
         }
         fetchData()
     },[])
-
-    useEffect(()=>{
-        setAuth(localStorage.getItem('token'))
-    }, [isLogin])
 
     const handleOpen = () => {
 

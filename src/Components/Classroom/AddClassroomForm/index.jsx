@@ -1,10 +1,11 @@
-import {React, useState} from 'react'
-import Button from '@mui/material/Button';
+import { React, useState, useContext } from 'react'
 import { TextField } from '@mui/material';
 import { FormControl } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import LoadingButton from '@mui/lab/LoadingButton';
 import classroomAPI from '../../../APIs/classroomAPI';
+import { AddClassroomModalContext } from '../../../Context/AddClassroomModalContext';
+import { NewClassroomAddedContext } from '../../../Context/NewClassroomAddedContext';
 
 const formTextFields = [
     {
@@ -18,7 +19,7 @@ const formTextFields = [
     }
 ]
 
-export default function AddClassroomForm ({openStatus, handleClose, handleReload}) {
+export default function AddClassroomForm () {
     const [formData, setFormData] = useState({
         name: '',
         section: '',
@@ -26,45 +27,22 @@ export default function AddClassroomForm ({openStatus, handleClose, handleReload
     });
     const [addingStatus, setAddingStatus] = useState(null);
 
+    const [, setOpen] = useContext(AddClassroomModalContext)
+
+    const [add, setAdd] = useContext(NewClassroomAddedContext)
+
     const handleChange = name => event => {
         setFormData({ ...formData, [name]: event.target.value });
     };
-
-    const addBtn = addingStatus ? (
-        <LoadingButton
-            sx={{
-                width: "100px",
-                margin: "2rem 0 0 auto"
-            }} 
-            endIcon={<SendIcon />}
-            loading={addingStatus}
-            loadingPosition="end"
-            variant="contained"
-        >
-            Send
-        </LoadingButton>
-    ) : (
-        <Button 
-            sx={{
-                width: "100px",
-                margin: "2rem 0 0 auto"
-            }} 
-            variant="contained" endIcon={<SendIcon />}
-            onClick={ async () => {
-                setAddingStatus(true)
-                
-                let result = await classroomAPI.addClassroom(formData)
-                
-                handleClose()
-                handleReload()
-
-                setAddingStatus(false)
-            }}
-        >
-            Send
-        </Button>
-    )
     
+    const handleAdd = async () => {
+        setAddingStatus(true)
+        let result = await classroomAPI.addClassroom(formData)
+        setAdd(!add)
+        setAddingStatus(false)
+        setOpen(false)
+    }
+
     return (
         <FormControl sx={{width: "100%", mt: "2rem"}}>
             {formTextFields.map(field => (
@@ -79,7 +57,20 @@ export default function AddClassroomForm ({openStatus, handleClose, handleReload
                 />
             ))}
             
-            {addBtn}
+                <LoadingButton
+                sx={{
+                    width: "100px",
+                    margin: "2rem 0 0 auto"
+                }} 
+                endIcon={<SendIcon />}
+                loading={addingStatus}
+                loadingPosition="end"
+                variant="contained"
+                onClick={ handleAdd }
+            >
+                Send
+            </LoadingButton>
+
         </FormControl>
     )
 } 

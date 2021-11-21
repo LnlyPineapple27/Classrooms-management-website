@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import AddClassroomForm from '../AddClassroomForm';
 import '../index.scss'
+import { AddClassroomModalContext } from '../../../Context/AddClassroomModalContext';
 
 const style = {
   position: 'absolute',
@@ -17,21 +18,22 @@ const style = {
   p: 4,
 };
 
-export default function FormModal({openStatus, handleClose, header, handleReload}) {
+export default function FormModal() {
+  const [open, setOpen] = React.useContext(AddClassroomModalContext)
 
   return (
     <div>
       <Modal
-        open={openStatus}
-        onClose={handleClose}
+        open={open}
+        onClose={() => setOpen(false)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            {header}
+            Create A New Classroom
           </Typography>
-          <AddClassroomForm openStatus={openStatus} handleClose={handleClose} handleReload={handleReload} />
+          <AddClassroomForm />
         </Box>
       </Modal>
     </div>

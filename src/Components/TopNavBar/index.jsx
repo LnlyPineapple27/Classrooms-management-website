@@ -9,23 +9,20 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import AddIcon from '@mui/icons-material/Add';
 import FormModal from '../Classroom/FormModal';
-import useModal from '../../Hook/useModal';
 import { Link, useNavigate } from 'react-router-dom';
 import LoginIcon from '@mui/icons-material/Login';
 import { Button } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import './index.scss'
+import { AuthContext } from '../../Context/GlobalContext';
+import { AddClassroomModalContext } from '../../Context/AddClassroomModalContext'
 
-export default function TopNavBar({handleReload, handleLogin, isLogin}) {
-  const [auth, setAuth] = React.useState(!!localStorage.getItem('token'));
+export default function TopNavBar() {
+  const [auth, setAuth] = React.useContext(AuthContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const {isShowing, toggle} = useModal();
+  const [open, setOpen] = React.useContext(AddClassroomModalContext);
   const navigate = useNavigate()
-
-  React.useEffect(() => {
-    setAuth(!!localStorage.getItem('token'))
-  }, [isLogin])
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -38,7 +35,7 @@ export default function TopNavBar({handleReload, handleLogin, isLogin}) {
         let loginLocalInfoKeys = ['token', 'account']
         for(let key of loginLocalInfoKeys) localStorage.removeItem(key)
         navigate('/login', { replace: true })
-        handleLogin()
+        setAuth(false)
         break
       case 'profile':
         navigate('/profile', { replace: true })
@@ -51,9 +48,8 @@ export default function TopNavBar({handleReload, handleLogin, isLogin}) {
     <Box sx={{ flexGrow: 1 }}>
       <FormModal 
         header="Add Class"
-        openStatus={isShowing}
-        handleClose={toggle}
-        handleReload={handleReload}
+        openStatus={open}
+        handleClose={() => setOpen(false)}
       />
       
       <AppBar className='nav-bar' position="static">
@@ -79,7 +75,7 @@ export default function TopNavBar({handleReload, handleLogin, isLogin}) {
                   aria-controls="menu-appbar"
                   aria-haspopup="true"
                   color="inherit"
-                  onClick={toggle}
+                  onClick={() => setOpen(true)}
                 >
                   <AddIcon />
                 </IconButton>

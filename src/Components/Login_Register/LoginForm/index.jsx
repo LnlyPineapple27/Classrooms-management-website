@@ -1,4 +1,4 @@
-import { React, useState } from 'react'
+import { React, useContext, useState } from 'react'
 import Button from '@mui/material/Button';
 import { TextField } from '@mui/material';
 import { FormControl } from '@mui/material';
@@ -10,15 +10,19 @@ import '../index.scss'
 import { useNavigate } from "react-router-dom";
 import GoogleLogin from '../GoogleLogin'
 import LoginIcon from '@mui/icons-material/Login';
+import { AuthContext } from '../../../Context/GlobalContext';
 
-export default function LoginForm({handleLogin}) {
+
+export default function LoginForm() {
     const [formData, setFormData] = useState({
         username: '',
         password: '',
         keepLogin: false,
     })
+
+    const [, setAuth] = useContext(AuthContext)
     
-    let navigate = useNavigate()
+    const navigate = useNavigate()
 
     const handleChange = name => event => {
         setFormData({ ...formData, [name]: event.target.value });
@@ -34,7 +38,7 @@ export default function LoginForm({handleLogin}) {
                 //console.log(resultAttempt.data);
                 localStorage.setItem('token', resultAttempt.data.token);
                 localStorage.setItem('account', JSON.stringify(resultAttempt.data.account));
-                handleLogin()
+                setAuth(true)
                 navigate("../classrooms", { replace: true });
             }
             else if(resultAttempt.status === 401) {
@@ -76,7 +80,7 @@ export default function LoginForm({handleLogin}) {
                 />;
 
             case 'keepLogin':
-                return <FormControlLabel className='login-form__element' 
+                return <FormControlLabel key={keyitem} className='login-form__element' 
                     control={<Checkbox onChange={handleKeepLogin}/>} label="Keep Login" 
                     />;
             default:

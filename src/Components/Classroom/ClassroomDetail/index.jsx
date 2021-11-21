@@ -21,7 +21,6 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { set } from "date-fns";
 
 export default function ClassroomDetail() {
     const columns = ['Name', 'Role', 'Dob', 'Email']
@@ -36,7 +35,7 @@ export default function ClassroomDetail() {
     })
     const [email, setEmail] = useState('')
     const [openSendEmail, setOpenSendEmail] = useState(false)
-    const [openInviteLink, setOpenInviteLink] = useState('initialState')
+    const [openInviteLink, setOpenInviteLink] = useState(false)
     const [rows, setRows] = useState([])
     const [select, setSelect] = useState(2)
     const [inviteLink, setInviteLink] = useState('')
@@ -118,11 +117,17 @@ export default function ClassroomDetail() {
                 <Button className="page-container__button-group__button bg-primary" onClick={handleGetInvitationURL}>Create Invite Link</Button>
             </div> */}
             <div className="page-container__button-group">
+                <Button 
+                className="page-container__button-group__button bg-primary" 
+                onClick={()=>{}}
+                >
+                    Change Student Code
+                </Button>
                 <Button
                 className="page-container__button-group__button bg-primary" 
                 onClick={handleClickOpenSendEmail}
                 >
-                    Create Invite by Email
+                    Send Invite by Email
                 </Button>
                 <Button 
                 className="page-container__button-group__button bg-primary" 

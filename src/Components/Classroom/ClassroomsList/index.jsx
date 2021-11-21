@@ -1,12 +1,14 @@
-import { React, useState, useEffect } from 'react'
+import { React, useState, useEffect, useContext } from 'react'
 import ClassroomCard from '../ClassroomCard'
 import classroomAPI from '../../../APIs/classroomAPI';
 import '../index.scss'
+import { NewClassroomAddedContext } from '../../../Context/NewClassroomAddedContext';
 
-export default function ClassroomsList ({isReload}) {
+export default function ClassroomsList () {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [items, setItems] = useState([]);
+    const [add,] = useContext(NewClassroomAddedContext)
 
     useEffect(() => {
         async function fetchData() {
@@ -20,7 +22,9 @@ export default function ClassroomsList ({isReload}) {
             setError(result)
         }
         fetchData()
-    }, [isReload])
+        
+    }, [add])
+
 
     if (error) {
         return <div>Error: {error.message}</div>;
