@@ -37,7 +37,7 @@ export default function AddClassroomForm () {
     
     const handleAdd = async () => {
         setAddingStatus(true)
-        let result = await classroomAPI.addClassroom(formData)
+        await classroomAPI.addClassroom(formData)
         setAdd(!add)
         setAddingStatus(false)
         setOpen(false)

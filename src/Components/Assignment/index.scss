@@ -1,0 +1,22 @@
+.container {
+    &>* {
+        width: 90%;
+    }
+    &__page-title {
+        text-align: start;
+        font-weight: normal;
+        color: rgb(0, 95, 95);
+        border-bottom: 1px solid rgb(0, 95, 95);
+        padding-bottom: 20px;
+        padding-left: 20px;
+        font-size: 35px;
+    }
+}
+
+.item {
+    &__item-button {
+        &__item-text.item-text--deadline {
+            text-align: end;
+        }
+    }
+}

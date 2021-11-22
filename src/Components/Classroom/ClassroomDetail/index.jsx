@@ -51,11 +51,11 @@ export default function ClassroomDetail() {
             console.log(result.data.classroomDetail)
         }
         fetchData()
-    },[])
+    },[params.classroomId])
 
     useEffect(() => {
         setInviteLink(`${select}${detail.inviteLink}`)
-    }, [select])
+    }, [select, detail.inviteLink])
 
     const handleChange = (event) => {
         setSelect(event.target.value);

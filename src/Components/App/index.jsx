@@ -14,37 +14,32 @@ import ClassroomDetailCard from '../Classroom/ClassroomDetailCard';
 import { AuthProvider, AuthContext } from '../../Context/GlobalContext'
 import { NewClassroomAddedProvider} from '../../Context/NewClassroomAddedContext';
 import { AddClassroomModalProvider } from '../../Context/AddClassroomModalContext'
+import ListAssignment from '../Assignment/ListAssignment'
 
 export default function App() {
     const [auth,] = useContext(AuthContext)
-        console.log(auth)
 
-        return (
-            <div className='App'>
-                <BrowserRouter >
-                    <AuthProvider>
-                        <NewClassroomAddedProvider>
-                            <AddClassroomModalProvider>
-                                <TopNavBar />
-                            </AddClassroomModalProvider>
-                            <Routes> 
-                                <Route path='/login' element={<LoginForm />} />
-                                <Route path='/classrooms/:classroomId' element={<ClassroomDetail />} />
-                                <Route path='/classrooms' element={<ClassroomsList />} />
-                                <Route path='/register' element={<RegisterForm />} />
-                                <Route path='/profile' element={<Profile />}></Route>
-                                <Route path='/invite/:inviteCode' element={<ClassroomDetailCard />}></Route>                            
-                                <Route 
-                                path='/' 
-                                element={
-                                    auth ? 
-                                    <ClassroomsList /> : 
-                                    <LoginForm />
-                                }/> 
-                            </Routes>
-                        </NewClassroomAddedProvider>
-                    </AuthProvider>
-                </BrowserRouter>
-            </div>
-        );
+    return (
+        <div className='App'>
+            <BrowserRouter >
+                <AuthProvider>
+                    <NewClassroomAddedProvider>
+                        <AddClassroomModalProvider>
+                            <TopNavBar />
+                        </AddClassroomModalProvider>
+                        <Routes> 
+                            <Route path='/classrooms/:classroomId/assignments' element={<ListAssignment />}/>
+                            <Route path='/login' element={<LoginForm />} />
+                            <Route path='/classrooms/:classroomId' element={<ClassroomDetail />} />
+                            <Route path='/classrooms' element={<ClassroomsList />} />
+                            <Route path='/register' element={<RegisterForm />} />
+                            <Route path='/profile' element={<Profile />} />
+                            <Route path='/invite/:inviteCode' element={<ClassroomDetailCard />} />                            
+                            <Route path='/' element={ auth ? <ClassroomsList /> : <LoginForm />} /> 
+                        </Routes>
+                    </NewClassroomAddedProvider>
+                </AuthProvider>
+            </BrowserRouter>
+        </div>
+    );
 }

@@ -16,7 +16,7 @@ export default function ClassroomDetailCard() {
     const params = useParams()
     const [open, setOpen] = useState(false)
     const navigate = useNavigate()
-    const [auth, setAuth] = useContext(AuthContext)
+    const [auth,] = useContext(AuthContext)
 
     useEffect(()=>{
         const fetchData = async () => {
@@ -24,7 +24,7 @@ export default function ClassroomDetailCard() {
             setDetail(result.data)
         }
         fetchData()
-    },[])
+    },[params.inviteCode])
 
     const handleOpen = () => {
 
