@@ -1,4 +1,4 @@
-let API_URL = process.env.REACT_APP_API_URL + '/account'
+let API_URL = process.env.REACT_APP_API_URL + '/accounts'
 
 const getResultFromResponse = async response => {
     let result = {
@@ -8,8 +8,8 @@ const getResultFromResponse = async response => {
         message: null
     }
     result.data = result.isOk && await response.json()
-    console.log('a', result)
     result.message = result.isOk ? 'Request success' : `An error has occurred: ${response.status}`
+    console.log('response:', result)
     return result
 }
 
@@ -26,8 +26,8 @@ const validateProfileData = profileData => {
         message: 'An error occurred: Invalid properties'
     }
     const profileValidValueOf = {
-        sex: [1, 2, 0],
-        dob: /^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/,
+        sex: [0, 1, 2],
+        dob: /^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/,
         email: validateEmail
     }
     const profileValidProps = ['name', 'dob', 'sex', 'email']
@@ -38,7 +38,6 @@ const validateProfileData = profileData => {
     for(let prop of profileValidProps) {
         switch(prop) {
             case 'sex':
-                console.log(profileValidValueOf[prop], profileData[prop])
                 isOk = profileValidValueOf[prop].includes(profileData[prop])
                 break
             case 'dob':
@@ -110,12 +109,11 @@ let accountAPI = {
     },
     updateProfile: async profileData => {
         let validateData = validateProfileData(profileData)
-        console.log(validateData)
         if(!validateData.isOk) return validateData
 
         let account = JSON.parse(localStorage.getItem('account')) ?? {}
         let putData = {...profileData, id:account ? account.userID : 'undefined'}
-        let fetchURL = API_URL + `/${putData.id}`
+        let fetchURL = API_URL + `/update-user-info/${putData.id}`
         const response = await fetch(fetchURL, {
             method: 'PUT',
             headers: {
@@ -124,6 +122,8 @@ let accountAPI = {
             },
             body: JSON.stringify(putData)
         });
+
+        console.log(response)
 
         let result = await getResultFromResponse(response)
 

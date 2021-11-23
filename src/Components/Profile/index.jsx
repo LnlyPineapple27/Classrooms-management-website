@@ -29,6 +29,7 @@ export default function Profile() {
     useEffect(() => {
         const fetchData = async () => {
             let result = await accountAPI.userProfile()
+            console.log(result)
             let profileInfoResult = result.data ?? {}
             setProfileInfo({...profileInfoResult, dob: profileInfoResult.dob.split('T')[0]})
             setVisibleInfo({
@@ -41,14 +42,6 @@ export default function Profile() {
         fetchData()
         return () => setIsSaved(false)
     },[isSaved])
-    
-    useEffect(() => {
-        setIsInfoChanged(!checkChangeInfo())
-    }, [visibleInfo])
-
-    useEffect(() => {
-        setIsLoading(false)
-    }, [profileInfo])
 
     const checkChangeInfo = () => {
         let trigger = true
@@ -58,6 +51,14 @@ export default function Profile() {
         }
         return trigger
     }
+    
+    useEffect(() => {
+        setIsInfoChanged(!checkChangeInfo())
+    }, [visibleInfo])
+
+    useEffect(() => {
+        setIsLoading(false)
+    }, [profileInfo])
 
     const handleResetInfo = () => {
         setVisibleInfo({
@@ -142,7 +143,7 @@ export default function Profile() {
                                         label="Date of birth"
                                         type="date"   
                                         value={visibleInfo[key]}
-                                        inputFormat="yyyy-MM-dd"
+                                        format="yyyy-MM-dd"
                                         onChange={handleChangeDate}
                                         renderInput={(params) => <TextField
                                                                     className='info-container__element'

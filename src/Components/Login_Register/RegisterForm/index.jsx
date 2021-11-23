@@ -10,7 +10,6 @@ import '../index.scss'
 import accountAPI from '../../../APIs/accountAPI'
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
 
 import { useNavigate } from "react-router-dom";
 
@@ -48,7 +47,7 @@ export default function LoginForm() {
                 // Proceed to register
                 //console.log(formData);
                 let resultAttempt = await accountAPI.register(formData);
-                if (resultAttempt.status === 201) {
+                if (resultAttempt.status === 200) {
                     //console.log(resultAttempt.data);
                     alert("Register Successful");
                     navigate("../login", { replace: true });
