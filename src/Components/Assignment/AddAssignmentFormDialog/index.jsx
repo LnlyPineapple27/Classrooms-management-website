@@ -9,7 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { Box, height, width } from '@mui/system';
+import { Box } from '@mui/system';
 import assignmentAPI from '../../../APIs/assignmentAPI';
 import { useParams } from 'react-router';
 import { LoadingButton } from '@mui/lab';

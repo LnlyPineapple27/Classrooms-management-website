@@ -30,6 +30,22 @@ const assignmentAPI = {
         const response = await fetch(fetchURL, fetchOption)
 
         return response
+    },
+    update: async (classroomId, assignmentId, formData) => {
+        const fetchURL = API_URL + `/${classroomId}/assignments/${assignmentId}`
+        
+        const fetchOption = {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        }
+        
+        const response = await fetch(fetchURL, fetchOption)
+
+        return response
     }
 }
 

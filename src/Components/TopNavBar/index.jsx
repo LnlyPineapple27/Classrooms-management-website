@@ -89,8 +89,8 @@ export default function TopNavBar() {
                   open={Boolean(anchorEl)}
                   onClose={handleCloseMenu}
                 >
-                  <MenuItem onClick={handleCloseMenu} data-action='profile'><AccountCircleOutlinedIcon /> Profile</MenuItem>
-                  <MenuItem onClick={handleCloseMenu} data-action='logout'><LogoutIcon />Logout</MenuItem>
+                  <MenuItem onClick={handleCloseMenu} data-action='profile'><AccountCircleOutlinedIcon />&nbsp;Profile</MenuItem>
+                  <MenuItem onClick={handleCloseMenu} data-action='logout'><LogoutIcon />&nbsp;Logout</MenuItem>
                 </Menu>
               </div>
             ) :

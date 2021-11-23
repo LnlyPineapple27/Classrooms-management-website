@@ -6,7 +6,7 @@
         text-align: start;
         font-weight: normal;
         color: rgb(0, 95, 95);
-        border-bottom: 1px solid rgb(0, 95, 95);
+        border-bottom: 1.5px solid rgb(0, 95, 95);
         padding-bottom: 20px;
         padding-left: 20px;
         font-size: 35px;
@@ -15,10 +15,25 @@
 
 .item {
     &__item-button {
-        &__item-text.item-text--deadline {
-            text-align: end;
+        &__item-text {
+            &.item-text {
+                &--deadline {
+                    text-align: end;
+                }
+                &--point {
+                    text-align: end;
+                }
+            }
+        }
+        &__item-text + &__item-text {
+            margin-left: 50px;
         }
     }
+}
+
+.Mui-disabled {
+    opacity: 1 !important;
+    -webkit-text-fill-color:hsl(0, 0, 0, 1) !important;
 }
 
 .add-assignment-form {
@@ -32,4 +47,34 @@
     padding: 10px !important;
   }
 
+}
+
+.item {
+    margin-top: 5px;
+    position: relative;
+}
+
+.divider {
+    border-bottom: 1px solid rgba(0, 95, 95, 0.5);
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95%;
+}
+
+.update-button-group {
+    margin: 0 0 0 15px;
+    display: flex;
+    justify-content: flex-end;
+    flex-grow: 1;
+}
+
+.update-button {
+    &--save {
+        color: rgba(0, 95, 95);
+    }
+    &--cancel {
+        color: hsl(0, 60%, 45%);
+    }
 }

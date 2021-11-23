@@ -168,7 +168,7 @@ export default function ClassroomDetail() {
                     <DialogTitle>Send Invitation</DialogTitle>
                     <DialogContent>
                     <FormControl fullWidth style={{marginTop:10,marginBottom:10}}>
-                        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                        <InputLabel id="demo-simple-select-label">Role</InputLabel>
                         <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
