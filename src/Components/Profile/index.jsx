@@ -43,20 +43,21 @@ export default function Profile() {
         }
         fetchData()
         return () => setIsSaved(false)
-    },[isSaved])
+    },[isSaved, setNavbarEl])
 
-    const checkChangeInfo = () => {
-        let trigger = true
-        for(let prop in visibleInfo) {
-            trigger = visibleInfo[prop] === profileInfo[prop]
-            if(!trigger) break
-        }
-        return trigger
-    }
-    
     useEffect(() => {
+        const checkChangeInfo = () => {
+            let trigger = true
+            for(let prop in visibleInfo) {
+                trigger = visibleInfo[prop] === profileInfo[prop]
+                if(!trigger) break
+            }
+            return trigger
+        }
+        
         setIsInfoChanged(!checkChangeInfo())
-    }, [visibleInfo])
+
+    }, [visibleInfo, profileInfo])
 
     useEffect(() => {
         setIsLoading(false)

@@ -18,6 +18,7 @@ export default function ListAssignment() {
     const [,setNavbarEl] = useContext(NavbarElContext)
 
     useEffect(() => {
+        
         async function fetchData() {
             const response = await assignmentAPI.getAllAssignments(params.classroomId)
             
@@ -34,7 +35,7 @@ export default function ListAssignment() {
         }
         setNavbarEl({classroomTabs: (<ClassroomTabs value={1} classroomId={params.classroomId} />)})
         fetchData()
-    }, [params.classroomId])
+    }, [params.classroomId, setNavbarEl])
 
     if (error)
         return <ErrorPage status={error}/>

@@ -29,7 +29,7 @@ export default function ClassroomsList () {
         setNavbarEl({addClassroom: (<AddClassroomButton handleOpen={() => setOpenAddModal(true)} />)})
         fetchData()
         
-    }, [add])
+    }, [add, setNavbarEl])
 
 
     if (error) {

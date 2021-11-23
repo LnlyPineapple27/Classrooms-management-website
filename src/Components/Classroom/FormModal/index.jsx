@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import AddClassroomForm from '../AddClassroomForm';
 import '../index.scss'
-import { AddClassroomModalContext } from '../../../Context/AddClassroomModalContext';
 
 const style = {
   position: 'absolute',

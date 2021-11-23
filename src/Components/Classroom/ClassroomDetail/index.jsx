@@ -55,7 +55,7 @@ export default function ClassroomDetail() {
         }
         setNavbarEl({classroomTabs: (<ClassroomTabs value={0} classroomId={params.classroomId} />)})
         fetchData()
-    },[params.classroomId])
+    },[params.classroomId, setNavbarEl])
 
     useEffect(() => {
         setInviteLink(`${select}${detail.inviteLink}`)
