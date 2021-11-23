@@ -3,12 +3,14 @@ import ClassroomCard from '../ClassroomCard'
 import classroomAPI from '../../../APIs/classroomAPI';
 import '../index.scss'
 import { NewClassroomAddedContext } from '../../../Context/NewClassroomAddedContext';
+import { NavbarElContext } from '../../../Context/GlobalContext';
 
 export default function ClassroomsList () {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [items, setItems] = useState([]);
     const [add,] = useContext(NewClassroomAddedContext)
+    const [,setNavbarEl] = useContext(NavbarElContext)
 
     useEffect(() => {
         async function fetchData() {
@@ -21,6 +23,7 @@ export default function ClassroomsList () {
           else
             setError(result)
         }
+        setNavbarEl({addClassroom: true})
         fetchData()
         
     }, [add])

@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react'
+import { React, useState, useEffect, useContext } from 'react'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import accountAPI from '../../APIs/accountAPI';
@@ -15,9 +15,11 @@ import SaveIcon from '@mui/icons-material/Save';
 import RestoreIcon from '@mui/icons-material/Restore';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import { NavbarElContext } from '../../Context/GlobalContext';
 import './index.scss'
 
 export default function Profile() {
+    const [,setNavbarEl] = useContext(NavbarElContext)
     const [profileInfo, setProfileInfo] = useState({'name':'', 'sex':'', 'dob':'', 'email':''})
     const [visibleInfo, setVisibleInfo] = useState({'name':'', 'sex':'', 'dob':'', 'email':''})
     const [isInfoChanged, setIsInfoChanged] = useState(false)
@@ -29,7 +31,6 @@ export default function Profile() {
     useEffect(() => {
         const fetchData = async () => {
             let result = await accountAPI.userProfile()
-            console.log(result)
             let profileInfoResult = result.data ?? {}
             setProfileInfo({...profileInfoResult, dob: profileInfoResult.dob.split('T')[0]})
             setVisibleInfo({
@@ -38,6 +39,7 @@ export default function Profile() {
                 dob:profileInfoResult.dob.split('T')[0],
                 email:profileInfoResult.email
             })
+            setNavbarEl({})
         }
         fetchData()
         return () => setIsSaved(false)

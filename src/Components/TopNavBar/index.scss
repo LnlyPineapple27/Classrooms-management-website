@@ -15,4 +15,9 @@
 .nav-bar {
     background: rgb(255, 255, 255) !important;
     color: black !important;
+    &__tabs-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }

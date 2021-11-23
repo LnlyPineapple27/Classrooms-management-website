@@ -12,4 +12,20 @@ const AuthProvider = ({children}) => {
     )
 }
 
-export { AuthContext, AuthProvider }
+const NavbarElContext = createContext([{
+    classroomTabs: false,
+    addClassroom: false,
+}, () => {}])
+
+const NavbarElProvider = ({children}) => {
+    const [navbarEl, setNavbarEl] = useState({
+        classroomTabs: false,
+        addClassroom: false,
+    })
+
+    return <NavbarElContext.Provider value={[navbarEl, setNavbarEl]}>
+        {children}
+    </NavbarElContext.Provider>
+}
+
+export { AuthContext, AuthProvider, NavbarElContext, NavbarElProvider }

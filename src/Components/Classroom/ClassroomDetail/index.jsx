@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom"
 import classroomAPI from "../../../APIs/classroomAPI";
 import { Button } from "@mui/material";
@@ -21,8 +21,10 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { NavbarElContext } from "../../../Context/GlobalContext";
 
 export default function ClassroomDetail() {
+    const [,setNavbarEl] = useContext(NavbarElContext)
     const columns = ['Name', 'Role', 'Dob', 'Email']
     const codeToRole = ['Teacher', 'Teacher', 'Student']
     const [detail, setDetail] = useState({
@@ -50,6 +52,8 @@ export default function ClassroomDetail() {
             setRows(result.data.userList ? result.data.userList : [])
             console.log(result.data.classroomDetail)
         }
+        setNavbarEl({classroomTabs:true})
+        localStorage.setItem('classroomId', '1')
         fetchData()
     },[params.classroomId])
 

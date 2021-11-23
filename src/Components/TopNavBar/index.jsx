@@ -17,12 +17,20 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import './index.scss'
 import { AuthContext } from '../../Context/GlobalContext';
 import { AddClassroomModalContext } from '../../Context/AddClassroomModalContext'
+import Tabs from '@mui/material/Tabs';
+import LinkTab from '../LinkTab';
+import { NavbarElContext } from '../../Context/GlobalContext';
 
 export default function TopNavBar() {
+  const [navbarEl,] = React.useContext(NavbarElContext)
   const [auth, setAuth] = React.useContext(AuthContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open, setOpen] = React.useContext(AddClassroomModalContext);
   const navigate = useNavigate()
+  const [tab, setTab] = React.useState(0)
+
+  const handleTabs = (e, newTab) => setTab(newTab)
+
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -66,9 +74,16 @@ export default function TopNavBar() {
           <Link to='/'>
             <img className='brand-logo' src='/brand_logo.png' alt="logo" style={{maxWidth:60}}/>
           </Link>
-          <Box sx={{ flexGrow: 1 }} />
+          <Box className='nav-bar__tabs-container' sx={{ flexGrow: 1 }} >
+            {navbarEl.classroomTabs && 
+            <Tabs value={tab} onChange={handleTabs} aria-label="nav tabs example">
+              <LinkTab label="detail" href={`/classrooms/${localStorage.getItem('classroomId') ?? ''}`} />
+              <LinkTab label="assignments" href={`/classrooms/${localStorage.getItem('classroomId') ?? ''}/assignments`} />
+            </Tabs>}
+          </Box>
           {auth ? (
               <div>
+                {navbarEl.addClassroom && 
                 <IconButton
                   size="large"
                   aria-label="add classroom"
@@ -78,7 +93,7 @@ export default function TopNavBar() {
                   onClick={() => setOpen(true)}
                 >
                   <AddIcon />
-                </IconButton>
+                </IconButton>}
                 <IconButton
                   size="large"
                   aria-label="account of current user"
