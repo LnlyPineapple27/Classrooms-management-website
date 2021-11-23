@@ -4,7 +4,7 @@ import classroomAPI from '../../../APIs/classroomAPI';
 import '../index.scss'
 import { NewClassroomAddedContext } from '../../../Context/NewClassroomAddedContext';
 import { NavbarElContext } from '../../../Context/GlobalContext';
-import AddClassroomButton from '../../AddClassroomButton';
+import NavbarAddButton from '../../NavbarAddButton';
 import FormModal from '../FormModal';
 
 export default function ClassroomsList () {
@@ -26,7 +26,7 @@ export default function ClassroomsList () {
           else
             setError(result)
         }
-        setNavbarEl({addClassroom: (<AddClassroomButton handleOpen={() => setOpenAddModal(true)} />)})
+        setNavbarEl({addButton: (<NavbarAddButton ariaLabel='Add Classroom' onClick={() => setOpenAddModal(true)} />)})
         fetchData()
         
     }, [add, setNavbarEl])

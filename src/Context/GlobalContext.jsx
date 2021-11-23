@@ -13,14 +13,14 @@ const AuthProvider = ({children}) => {
 }
 
 const NavbarElContext = createContext([{
-    classroomTabs: false,
-    addClassroom: false,
+    classroomTabs: null,
+    addButton: null,
 }, () => {}])
 
 const NavbarElProvider = ({children}) => {
     const [navbarEl, setNavbarEl] = useState({
-        classroomTabs: false,
-        addClassroom: false,
+        classroomTabs: null,
+        addButton: null,
     })
 
     return <NavbarElContext.Provider value={[navbarEl, setNavbarEl]}>

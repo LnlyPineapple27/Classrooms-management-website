@@ -14,6 +14,22 @@ const assignmentAPI = {
         const response = await fetch(fetchURL, fetchOption)
 
         return response
+    },
+    createAssignment: async (bodyData) => {
+        const fetchURL = API_URL + `/${bodyData.classroomID}/assignments`
+        
+        const fetchOption = {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(bodyData)
+        }
+        
+        const response = await fetch(fetchURL, fetchOption)
+
+        return response
     }
 }
 

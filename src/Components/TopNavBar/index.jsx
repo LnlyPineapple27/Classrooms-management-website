@@ -63,7 +63,7 @@ export default function TopNavBar() {
           </Box>
           {auth ? (
               <div>
-                {navbarEl.addClassroom}
+                {navbarEl.addButton}
                 <IconButton
                   size="large"
                   aria-label="account of current user"

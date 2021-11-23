@@ -20,3 +20,16 @@
         }
     }
 }
+
+.add-assignment-form {
+  &__element {
+    margin-top: 20px !important;
+    &__datetime-picker + &__datetime-picker {
+        margin-top: 20px;
+    }
+  }
+  &__action {
+    padding: 10px !important;
+  }
+
+}

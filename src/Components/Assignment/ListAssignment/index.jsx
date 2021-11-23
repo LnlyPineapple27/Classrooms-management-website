@@ -8,7 +8,8 @@ import Box from '@mui/material/Box'
 import '../index.scss'
 import { NavbarElContext } from '../../../Context/GlobalContext';
 import ClassroomTabs from '../../ClassroomTabs'
-
+import NavbarAddButton from '../../NavbarAddButton'
+import AddAssignmentFormDialog from '../AddAssignmentFormDialog'
 
 export default function ListAssignment() {
     const [error, setError] = useState(null)
@@ -16,6 +17,8 @@ export default function ListAssignment() {
     const [loading, setLoading] = useState(true)
     const params = useParams()
     const [,setNavbarEl] = useContext(NavbarElContext)
+    const [openAddDialog, setOpenAddDialog] = useState(false)
+    const [toggleAddNew, setToggleAddNew] = useState(false)
 
     useEffect(() => {
         
@@ -33,9 +36,12 @@ export default function ListAssignment() {
                 setLoading(false)
             }
         }
-        setNavbarEl({classroomTabs: (<ClassroomTabs value={1} classroomId={params.classroomId} />)})
+        setNavbarEl({
+            classroomTabs: (<ClassroomTabs value={1} classroomId={params.classroomId} />),
+            addButton: (<NavbarAddButton onClick={() => setOpenAddDialog(true)} />)
+        })
         fetchData()
-    }, [params.classroomId, setNavbarEl])
+    }, [params.classroomId, setNavbarEl, toggleAddNew])
 
     if (error)
         return <ErrorPage status={error}/>
@@ -44,6 +50,7 @@ export default function ListAssignment() {
     else
         return (
             <Box className='container'>
+                <AddAssignmentFormDialog handleAdded={() => setToggleAddNew(!toggleAddNew)} status={openAddDialog} handleClose={() => setOpenAddDialog(false)} />
                 <h1 className="container__page-title">Assignments</h1>
                 <List className='container__assignment-list'>{
                     items.map((item, index) => (<ItemAssignment key={index} assignment={item} />))
