@@ -18,7 +18,7 @@ import assignmentAPI from '../../../APIs/assignmentAPI'
 import '../index.scss'
 
 
-export default function ItemAssignment({ assignment }) {
+export default function ItemAssignment({ assignment, toggleChangeItem }) {
     const navigate = useNavigate()
     const params = useParams()
     const [anchorEl, setAnchorEl] = useState(null)
@@ -41,11 +41,20 @@ export default function ItemAssignment({ assignment }) {
         setAnchorEl(event.currentTarget);
     };
     
+    const removeAssignment = async () => {
+        const response = await assignmentAPI.remove(params.classroomId, assignment.id)
+        toggleChangeItem()
+    }
+
     const handleCloseMenu = event => {
         setAnchorEl(null);
         switch(event.target.dataset.action) {
             case 'update':
                 setUpdating(true)
+                break
+            case 'remove':
+                break
+            default: 
                 break
         }
     };
@@ -68,7 +77,7 @@ export default function ItemAssignment({ assignment }) {
                 <IconButton onClick={handleMenu} edge="end" aria-label="more">
                     <MoreVertIcon />
                 </IconButton>
-                <MoreMenu anchorEl={anchorEl} handleCloseMenu={handleCloseMenu} />
+                <MoreMenu anchorEl={anchorEl} handleCloseMenu={handleCloseMenu} handleConfirm={removeAssignment} />
             </Box>
         } 
         disablePadding

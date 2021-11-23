@@ -31,7 +31,6 @@ export default function ListAssignment() {
             }
             else {
                 const response_data = await response.json()
-                console.log(response_data)
                 setItems(response_data)
                 setLoading(false)
             }
@@ -53,7 +52,11 @@ export default function ListAssignment() {
                 <AddAssignmentFormDialog handleAdded={() => setToggleAddNew(!toggleAddNew)} status={openAddDialog} handleClose={() => setOpenAddDialog(false)} />
                 <h1 className="container__page-title">Assignments</h1>
                 <List className='container__assignment-list'>{
-                    items.map((item, index) => (<ItemAssignment key={index} assignment={item} />))
+                    items.map((item, index) => {
+                        const cloneItem = {...item}
+                        console.log(cloneItem, index)
+                        return (<ItemAssignment key={index} assignment={cloneItem} toggleChangeItem={() => setToggleAddNew(!toggleAddNew)}/>)
+                    })
                 }</List>
             </Box>
         )

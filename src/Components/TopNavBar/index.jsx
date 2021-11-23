@@ -17,7 +17,7 @@ import { AuthContext } from '../../Context/GlobalContext';
 import { NavbarElContext } from '../../Context/GlobalContext';
 
 export default function TopNavBar() {
-  const [navbarEl,] = React.useContext(NavbarElContext)
+  const [navbarEl, setNavbarEl] = React.useContext(NavbarElContext)
   const [auth, setAuth] = React.useContext(AuthContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate()
@@ -32,6 +32,7 @@ export default function TopNavBar() {
       case 'logout':
         let loginLocalInfoKeys = ['token', 'account']
         for(let key of loginLocalInfoKeys) localStorage.removeItem(key)
+        setNavbarEl({})
         navigate('/login', { replace: true })
         setAuth(false)
         break

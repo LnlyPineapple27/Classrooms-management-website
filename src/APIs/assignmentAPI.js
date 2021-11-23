@@ -46,6 +46,21 @@ const assignmentAPI = {
         const response = await fetch(fetchURL, fetchOption)
 
         return response
+    },
+    remove: async (classroomId, assignmentId) => {
+        const fetchURL = API_URL + `/${classroomId}/assignments/${assignmentId}`
+        
+        const fetchOption = {
+            method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-Type': 'application/json',
+            },
+        }
+        
+        const response = await fetch(fetchURL, fetchOption)
+
+        return response
     }
 }
 
