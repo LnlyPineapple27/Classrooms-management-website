@@ -4,6 +4,8 @@ import classroomAPI from '../../../APIs/classroomAPI';
 import '../index.scss'
 import { NewClassroomAddedContext } from '../../../Context/NewClassroomAddedContext';
 import { NavbarElContext } from '../../../Context/GlobalContext';
+import AddClassroomButton from '../../AddClassroomButton';
+import FormModal from '../FormModal';
 
 export default function ClassroomsList () {
     const [error, setError] = useState(null);
@@ -11,6 +13,7 @@ export default function ClassroomsList () {
     const [items, setItems] = useState([]);
     const [add,] = useContext(NewClassroomAddedContext)
     const [,setNavbarEl] = useContext(NavbarElContext)
+    const [openAddModal, setOpenAddModal] = useState(false)
 
     useEffect(() => {
         async function fetchData() {
@@ -23,7 +26,7 @@ export default function ClassroomsList () {
           else
             setError(result)
         }
-        setNavbarEl({addClassroom: true})
+        setNavbarEl({addClassroom: (<AddClassroomButton handleOpen={() => setOpenAddModal(true)} />)})
         fetchData()
         
     }, [add])
@@ -45,6 +48,11 @@ export default function ClassroomsList () {
                     padding: '1rem 0'
                 }}
             >
+                <FormModal 
+                    header="Add Class"
+                    openStatus={openAddModal}
+                    handleClose={() => setOpenAddModal(false)}
+                />
                 {items.map((item, index) => (
                     <ClassroomCard
                         id={item.id}

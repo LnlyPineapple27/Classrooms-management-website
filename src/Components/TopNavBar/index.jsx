@@ -7,8 +7,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import AddIcon from '@mui/icons-material/Add';
-import FormModal from '../Classroom/FormModal';
 import { Link, useNavigate } from 'react-router-dom';
 import LoginIcon from '@mui/icons-material/Login';
 import { Button } from '@mui/material';
@@ -16,27 +14,19 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import './index.scss'
 import { AuthContext } from '../../Context/GlobalContext';
-import { AddClassroomModalContext } from '../../Context/AddClassroomModalContext'
-import Tabs from '@mui/material/Tabs';
-import LinkTab from '../LinkTab';
 import { NavbarElContext } from '../../Context/GlobalContext';
 
 export default function TopNavBar() {
   const [navbarEl,] = React.useContext(NavbarElContext)
   const [auth, setAuth] = React.useContext(AuthContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [open, setOpen] = React.useContext(AddClassroomModalContext);
   const navigate = useNavigate()
-  const [tab, setTab] = React.useState(0)
-
-  const handleTabs = (e, newTab) => setTab(newTab)
-
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = event => {
+  const handleCloseMenu = event => {
     setAnchorEl(null);
     switch(event.target.dataset.action) {
       case 'logout':
@@ -53,13 +43,7 @@ export default function TopNavBar() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <FormModal 
-        header="Add Class"
-        openStatus={open}
-        handleClose={() => setOpen(false)}
-      />
-      
+    <Box sx={{ flexGrow: 1 }}>      
       <AppBar className='nav-bar' position="static">
         <Toolbar>
           <IconButton
@@ -75,25 +59,11 @@ export default function TopNavBar() {
             <img className='brand-logo' src='/brand_logo.png' alt="logo" style={{maxWidth:60}}/>
           </Link>
           <Box className='nav-bar__tabs-container' sx={{ flexGrow: 1 }} >
-            {navbarEl.classroomTabs && 
-            <Tabs value={tab} onChange={handleTabs} aria-label="nav tabs example">
-              <LinkTab label="detail" href={`/classrooms/${localStorage.getItem('classroomId') ?? ''}`} />
-              <LinkTab label="assignments" href={`/classrooms/${localStorage.getItem('classroomId') ?? ''}/assignments`} />
-            </Tabs>}
+            {navbarEl.classroomTabs}
           </Box>
           {auth ? (
               <div>
-                {navbarEl.addClassroom && 
-                <IconButton
-                  size="large"
-                  aria-label="add classroom"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  color="inherit"
-                  onClick={() => setOpen(true)}
-                >
-                  <AddIcon />
-                </IconButton>}
+                {navbarEl.addClassroom}
                 <IconButton
                   size="large"
                   aria-label="account of current user"
@@ -117,10 +87,10 @@ export default function TopNavBar() {
                     horizontal: 'right',
                   }}
                   open={Boolean(anchorEl)}
-                  onClose={handleClose}
+                  onClose={handleCloseMenu}
                 >
-                  <MenuItem onClick={handleClose} data-action='profile'><AccountCircleOutlinedIcon /> Profile</MenuItem>
-                  <MenuItem onClick={handleClose} data-action='logout'><LogoutIcon />Logout</MenuItem>
+                  <MenuItem onClick={handleCloseMenu} data-action='profile'><AccountCircleOutlinedIcon /> Profile</MenuItem>
+                  <MenuItem onClick={handleCloseMenu} data-action='logout'><LogoutIcon />Logout</MenuItem>
                 </Menu>
               </div>
             ) :

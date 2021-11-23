@@ -18,14 +18,13 @@ const style = {
   p: 4,
 };
 
-export default function FormModal() {
-  const [open, setOpen] = React.useContext(AddClassroomModalContext)
+export default function FormModal({ openStatus, handleClose }) {
 
   return (
     <div>
       <Modal
-        open={open}
-        onClose={() => setOpen(false)}
+        open={openStatus}
+        onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >

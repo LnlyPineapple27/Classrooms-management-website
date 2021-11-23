@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react'
+import { React, useEffect, useState, useContext } from 'react'
 import ItemAssignment from '../ItemAssignment'
 import assignmentAPI from '../../../APIs/assignmentAPI'
 import { useParams } from 'react-router-dom'
@@ -6,12 +6,16 @@ import ErrorPage from '../../ErrorPage'
 import List from '@mui/material/List'
 import Box from '@mui/material/Box'
 import '../index.scss'
+import { NavbarElContext } from '../../../Context/GlobalContext';
+import ClassroomTabs from '../../ClassroomTabs'
+
 
 export default function ListAssignment() {
     const [error, setError] = useState(null)
     const [items, setItems] = useState([])
     const [loading, setLoading] = useState(true)
     const params = useParams()
+    const [,setNavbarEl] = useContext(NavbarElContext)
 
     useEffect(() => {
         async function fetchData() {
@@ -28,6 +32,7 @@ export default function ListAssignment() {
                 setLoading(false)
             }
         }
+        setNavbarEl({classroomTabs: (<ClassroomTabs value={1} classroomId={params.classroomId} />)})
         fetchData()
     }, [params.classroomId])
 
