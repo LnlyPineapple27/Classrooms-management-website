@@ -60,11 +60,11 @@ export default function ItemAssignment({ assignment, toggleChangeItem }) {
     };
 
     const saveUpdateAssignment = async () => {
-        console.log(value)
+        // console.log(value)
         const classroomId = params.classroomId
         const response = await assignmentAPI.update(classroomId, assignment.id, value)
         setUpdating(false)
-        console.log(response)
+        // console.log(response)
     }
 
     const deadline = getDeadlineTime(assignment.end_time)

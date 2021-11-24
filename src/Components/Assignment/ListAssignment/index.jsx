@@ -21,14 +21,26 @@ export default function ListAssignment() {
     const [openAddDialog, setOpenAddDialog] = useState(false)
     const [toggleAddNew, setToggleAddNew] = useState(false)
 
+    function array_move(arr, old_index, new_index) {
+        if (new_index >= arr.length) {
+            var k = new_index - arr.length + 1;
+            while (k--) {
+                arr.push(undefined);
+            }
+        }
+        arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+        return arr; // for testing
+    };
     function handleOnDragEnd(result){
+        console.log(result);
         if (!result.destination) return;
-        const items_list = Array.from(items);
-        console.log('Before:\n',items_list);
-        const [reorderedItem] = items_list.splice(result.source.index, 1);
-        items_list.splice(result.destination.index, 0, reorderedItem);
+        if(result.destination.index === result.source.index) return;
+        console.log('Before:\n',items);
+        let items_list = Array.from(items); 
+        items_list = array_move(items_list, result.source.index, result.destination.index);
+        console.log('After:\n', items_list);
         setItems(items_list);
-        console.log('After:\n',items_list);
+        console.log('After-items:\n', items);
     }
     useEffect(() => {
         
@@ -79,7 +91,7 @@ export default function ListAssignment() {
                                 <List className='container__assignment-list'ref={provided.innerRef} {...provided.droppableProps}>{
                                     items.map((item, index) => {
                                         const cloneItem = {...item}
-                                        console.log(cloneItem, index)
+                                        // console.log(cloneItem, index)
                                         return (<Draggable key={index} draggableId={index.toString()} index={index}>
                                                     {(provided) => {
                                                         return (<div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
