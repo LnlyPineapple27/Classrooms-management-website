@@ -31,7 +31,7 @@ export default function ListAssignment() {
         arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
         return arr; // for testing
     };
-    function handleOnDragEnd(result){
+    async function handleOnDragEnd(result){
         console.log(result);
         if (!result.destination) return;
         if(result.destination.index === result.source.index) return;
@@ -44,7 +44,7 @@ export default function ListAssignment() {
 
 
         //Sending changed data to APIs
-        const response = awaitassignmentAPI.rearrangeAssignments(params.classroomId, items_list);
+        const response = await assignmentAPI.rearrangeAssignments(params.classroomId, items_list);
         if (!response.ok) 
             console.log('Can not update assignments positions');
         else
