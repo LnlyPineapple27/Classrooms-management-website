@@ -11,7 +11,7 @@ import ClassroomTabs from '../../ClassroomTabs'
 import NavbarAddButton from '../../NavbarAddButton'
 import AddAssignmentFormDialog from '../AddAssignmentFormDialog'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { set } from 'date-fns'
+import classroomAPI from '../../../APIs/classroomAPI'
 
 export default function ListAssignment() {
     const [error, setError] = useState(null)
@@ -21,6 +21,7 @@ export default function ListAssignment() {
     const [,setNavbarEl] = useContext(NavbarElContext)
     const [openAddDialog, setOpenAddDialog] = useState(false)
     const [toggleAddNew, setToggleAddNew] = useState(false)
+    const [role, setRole] = useState(2)
 
     function array_move(arr, old_index, new_index) {
         if (new_index >= arr.length) {
@@ -66,14 +67,20 @@ export default function ListAssignment() {
                 console.log(response_data)
                 setItems(response_data)
                 setLoading(false)
+                const userId = JSON.parse(localStorage.getItem('account')) ? JSON.parse(localStorage.getItem('account')).userID : 'a'
+                const fetchRole = await classroomAPI.getRole(params.classroomId, userId)
+                if (fetchRole.ok) {
+                    const userRole = await fetchRole.json()
+                    setRole(userRole)
+                    setNavbarEl({
+                        classroomTabs: (<ClassroomTabs value={1} classroomId={params.classroomId} />),
+                        addButton: userRole < 2 ? (<NavbarAddButton onClick={() => setOpenAddDialog(true)} />) : null,
+                    })
+                }
             }
         }
-        setNavbarEl({
-            classroomTabs: (<ClassroomTabs value={1} classroomId={params.classroomId} />),
-            addButton: (<NavbarAddButton onClick={() => setOpenAddDialog(true)} />)
-        })
         fetchData()
-    }, [params.classroomId, setNavbarEl, toggleAddNew])
+    }, [params.classroomId, setNavbarEl, toggleAddNew, role])
 
     if (error)
         return <ErrorPage status={error}/>
@@ -109,7 +116,9 @@ export default function ListAssignment() {
                                                                     <ItemAssignment 
                                                                         key={index} 
                                                                         assignment={cloneItem} 
-                                                                        toggleChangeItem={() => setToggleAddNew(!toggleAddNew)}/>
+                                                                        toggleChangeItem={() => setToggleAddNew(!toggleAddNew)}
+                                                                        isManager={role < 2 && role >= 0}
+                                                                        />
                                                                 </div>)
                                                     }}
                                                 </Draggable>)

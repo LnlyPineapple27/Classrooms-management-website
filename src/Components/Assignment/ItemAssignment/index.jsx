@@ -18,7 +18,7 @@ import assignmentAPI from '../../../APIs/assignmentAPI'
 import '../index.scss'
 
 
-export default function ItemAssignment({ assignment, toggleChangeItem }) {
+export default function ItemAssignment({ isManager, assignment, toggleChangeItem }) {
     const navigate = useNavigate()
     const params = useParams()
     const [anchorEl, setAnchorEl] = useState(null)
@@ -73,6 +73,7 @@ export default function ItemAssignment({ assignment, toggleChangeItem }) {
         <ListItem
         className='item' 
         secondaryAction={
+            isManager &&
             <Box>
                 <IconButton onClick={handleMenu} edge="end" aria-label="more">
                     <MoreVertIcon />

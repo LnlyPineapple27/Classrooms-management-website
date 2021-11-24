@@ -42,6 +42,7 @@ export default function ClassroomDetail() {
     const [rows, setRows] = useState([])
     const [select, setSelect] = useState(2)
     const [inviteLink, setInviteLink] = useState('')
+    const [role, setRole] = useState(2)
 
     let params = useParams()
     useEffect(() => {
@@ -52,8 +53,16 @@ export default function ClassroomDetail() {
             setInviteLink(`${window.document.location.hostname}/invite/2`+result.data.classroomDetail.inviteLink)
             setRows(result.data.userList ? result.data.userList : [])
             console.log(result.data.classroomDetail)
+            const userId = JSON.parse(localStorage.getItem('account')) ? JSON.parse(localStorage.getItem('account')).userID : 'a'
+            const fetchRole = await classroomAPI.getRole(params.classroomId, userId)
+            if (fetchRole.ok) {
+                const userRole = await fetchRole.json()
+                setRole(userRole)
+            }
         }
-        setNavbarEl({classroomTabs: (<ClassroomTabs value={0} classroomId={params.classroomId} />)})
+        setNavbarEl({
+            classroomTabs: (<ClassroomTabs value={0} classroomId={params.classroomId} />),
+        })
         fetchData()
     },[params.classroomId, setNavbarEl])
 
@@ -127,18 +136,21 @@ export default function ClassroomDetail() {
                 >
                     Change Student Code
                 </Button>
-                <Button
-                className="page-container__button-group__button bg-primary" 
-                onClick={handleClickOpenSendEmail}
-                >
-                    Send Invite by Email
-                </Button>
-                <Button 
-                className="page-container__button-group__button bg-primary" 
-                onClick={handleClickOpenInviteLink}
-                >
-                    Invite Link
-                </Button>
+                {role < 2 && (
+                <div className="page-container__button-group__button">
+                    <Button
+                    className="page-container__button-group__button bg-primary" 
+                    onClick={handleClickOpenSendEmail}
+                    >
+                        Send Invite by Email
+                    </Button>
+                    <Button 
+                    className="page-container__button-group__button bg-primary" 
+                    onClick={handleClickOpenInviteLink}
+                    >
+                        Invite Link
+                    </Button>
+                </div> )}
 
                 <Dialog open={openSendEmail} onClose={handleCloseSendEmail}>
 

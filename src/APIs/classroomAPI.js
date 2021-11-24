@@ -73,10 +73,15 @@ let classroomAPI = {
         let result = await getResultFromResponse(response)
         return result
     },
-
-    updateUserCode: async userCode => {
-        
-    } 
+    getRole: async (classroomId, userId) => {
+        let fetchURL = process.env.REACT_APP_API_URL + `/classrooms/${classroomId}/users/${userId}/role`
+        const response = await fetch(fetchURL, {
+            method: 'GET',
+            headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token'),
+        }})
+        return response
+    }
 }
 
 export default classroomAPI
