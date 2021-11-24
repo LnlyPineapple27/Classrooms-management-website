@@ -1,16 +1,18 @@
-import React from 'react';
+import {React, useContext} from 'react';
 import { useGoogleLogin } from 'react-google-login';
 import GoogleIcon from '@mui/icons-material/Google';
 import { Button } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import '../index.scss'
 import socialAuthentication from '../../../APIs/socialAuthentication'
+import { AuthContext } from '../../../Context/GlobalContext';
 // refresh token
 //import { refreshTokenSetup } from '../utils/refreshToken';
 const clientId = '757213109795-g8fjmjfue5p2h6ehsobv7fc6t3ovc4o3.apps.googleusercontent.com';
 
 function GoogleLogin() {
   const navigate = useNavigate();
+  const [, setAuth] = useContext(AuthContext)
   const onSuccess = async (res) => {
     //console.log('Login Success: currentUser:', res.profileObj);
     console.log(res.profileObj);
@@ -23,6 +25,7 @@ function GoogleLogin() {
         //console.log(resultAttempt.data);
         localStorage.setItem('token', resultAttempt.data.token);
         localStorage.setItem('account', JSON.stringify(resultAttempt.data.account));
+        setAuth(true)
         navigate("../classrooms", { replace: true });
     }
     else if(resultAttempt.status === 401) {
