@@ -24,9 +24,11 @@ export default function ListAssignment() {
     function handleOnDragEnd(result){
         if (!result.destination) return;
         const items_list = Array.from(items);
+        console.log('Before:\n',items_list);
         const [reorderedItem] = items_list.splice(result.source.index, 1);
         items_list.splice(result.destination.index, 0, reorderedItem);
         setItems(items_list);
+        console.log('After:\n',items_list);
     }
     useEffect(() => {
         
@@ -79,18 +81,17 @@ export default function ListAssignment() {
                                         const cloneItem = {...item}
                                         console.log(cloneItem, index)
                                         return (<Draggable key={index} draggableId={index.toString()} index={index}>
-                                            {(provided) => {
-                                                return (<div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                                            <ItemAssignment 
-                                                                key={index} 
-                                                                assignment={cloneItem} 
-                                                                toggleChangeItem={() => setToggleAddNew(!toggleAddNew)}/>
-                                                        </div>)
-                                            }}
-                                        </Draggable>)
-                                    }  
-                                    )}
-                                {provided.placeholder}
+                                                    {(provided) => {
+                                                        return (<div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                                                    <ItemAssignment 
+                                                                        key={index} 
+                                                                        assignment={cloneItem} 
+                                                                        toggleChangeItem={() => setToggleAddNew(!toggleAddNew)}/>
+                                                                </div>)
+                                                    }}
+                                                </Draggable>)
+                                    })}
+                                    {provided.placeholder}
                                 </List>
                         )}
                     </Droppable>
