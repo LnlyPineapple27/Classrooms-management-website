@@ -62,7 +62,6 @@ export default function ListAssignment() {
             }
             else {
                 setItems([])
-                console.log('reload')
                 const response_data = await response.json()
                 console.log(response_data)
                 setItems(response_data)

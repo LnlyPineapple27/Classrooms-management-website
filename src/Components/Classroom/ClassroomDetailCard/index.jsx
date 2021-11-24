@@ -22,6 +22,7 @@ export default function ClassroomDetailCard() {
         const fetchData = async () => {
             let result = await classroomAPI.getClassroomDetailGuest(params.inviteCode)
             setDetail(result.data)
+            console.log(result.data)
         }
         fetchData()
     },[params.inviteCode])

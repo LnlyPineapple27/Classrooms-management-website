@@ -49,7 +49,7 @@ export default function ClassroomDetail() {
             let result = await classroomAPI.getClassroomDetail(params.classroomId)
             console.log(result)
             setDetail(result.data.classroomDetail ? result.data.classroomDetail : {})
-            setInviteLink('2'+result.data.classroomDetail.inviteLink)
+            setInviteLink(`${window.document.location.hostname}/invite/2`+result.data.classroomDetail.inviteLink)
             setRows(result.data.userList ? result.data.userList : [])
             console.log(result.data.classroomDetail)
         }
@@ -58,7 +58,7 @@ export default function ClassroomDetail() {
     },[params.classroomId, setNavbarEl])
 
     useEffect(() => {
-        setInviteLink(`${select}${detail.inviteLink}`)
+        setInviteLink(`${window.document.location.hostname}/invite/${select}${detail.inviteLink}`)
     }, [select, detail.inviteLink])
 
     const handleChange = (event) => {
@@ -88,7 +88,7 @@ export default function ClassroomDetail() {
         let templatedEmail = {
             to_email: email,
             classroom_name: detail.name,
-            invitation_link: detail.inviteLink,
+            invitation_link: inviteLink,
 
             message: "Cheer! :>",
         }
