@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import '../index.scss'
 import socialAuthentication from '../../../APIs/socialAuthentication'
 // refresh token
-import { refreshTokenSetup } from '../utils/refreshToken';
+//import { refreshTokenSetup } from '../utils/refreshToken';
 const clientId = '757213109795-g8fjmjfue5p2h6ehsobv7fc6t3ovc4o3.apps.googleusercontent.com';
 
 function GoogleLogin() {
