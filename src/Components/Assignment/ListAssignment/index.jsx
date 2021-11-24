@@ -41,6 +41,14 @@ export default function ListAssignment() {
         console.log('After:\n', items_list);
         setItems(items_list);
         console.log('After-items:\n', items);
+
+
+        //Sending changed data to APIs
+        const response = awaitassignmentAPI.rearrangeAssignments(params.classroomId, items_list);
+        if (!response.ok) 
+            console.log('Can not update assignments positions');
+        else
+            console.log('Assignments positions updated');	
     }
     useEffect(() => {
         

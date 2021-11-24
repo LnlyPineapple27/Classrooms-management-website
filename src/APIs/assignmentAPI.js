@@ -61,7 +61,24 @@ const assignmentAPI = {
         const response = await fetch(fetchURL, fetchOption)
 
         return response
-    }
+    },
+    rearrangeAssignments: async (classroomId, assignments) => {
+        const fetchURL = API_URL + `/${classroomId}/assignments`;
+        
+        const fetchOption = {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(assignments)
+        }
+        
+        const response = await fetch(fetchURL, fetchOption)
+
+        return response
+    },
+
 }
 
 export default assignmentAPI
