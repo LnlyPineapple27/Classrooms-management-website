@@ -14,4 +14,5 @@
 ## Notification
 
 + `midterm-backup` will be the backup branch for the midterm assignment deployment at the link <https://classrooms-management-website.vercel.app/>
-+ Please do NOT touch it!!!
++ `btn01-backup` will be the backup branch for the btn01 deployment at the link <https://classrooms-management-website-btn01.vercel.app/>
++ Please do NOT touch them!!!
