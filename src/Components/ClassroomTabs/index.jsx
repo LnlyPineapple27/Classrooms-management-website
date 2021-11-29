@@ -6,6 +6,7 @@ export default function ClassroomTabs({ value, classroomId }) {
         <Tabs value={value} aria-label="nav tabs example">
             <LinkTab label="detail" href={`/classrooms/${classroomId ?? ''}`} />
             <LinkTab label="assignments" href={`/classrooms/${classroomId ?? ''}/assignments`} />
+            <LinkTab label="scoreboard" href={`/classrooms/${classroomId ?? ''}/scoreboard`} />
         </Tabs>
     )
 }

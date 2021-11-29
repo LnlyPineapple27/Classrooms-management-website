@@ -81,6 +81,25 @@ let classroomAPI = {
             'Authorization': 'Bearer ' + localStorage.getItem('token'),
         }})
         return response
+    },
+    changeSid: async ({sid, userId, classroomId, name}) => {
+        const fetchURL = API_URL + `/${classroomId}/sids`
+        const fetchBody = JSON.stringify({
+            name: name,
+            sid: sid,
+            classroomId: classroomId,
+            userId: userId
+        })
+        const response = await fetch(fetchURL, {
+            method: 'POST',
+            headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json'
+            },
+            body: fetchBody
+
+        })
+        return response
     }
 }
 

@@ -62,9 +62,8 @@ export default function ListAssignment() {
                 setItems([])
             }
             else {
-                setItems([])
                 const response_data = await response.json()
-                console.log(response_data)
+                setItems([])
                 setItems(response_data)
                 setLoading(false)
                 const userId = JSON.parse(localStorage.getItem('account')) ? JSON.parse(localStorage.getItem('account')).userID : 'a'

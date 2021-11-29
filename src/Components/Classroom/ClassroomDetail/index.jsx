@@ -43,6 +43,8 @@ export default function ClassroomDetail() {
     const [select, setSelect] = useState(2)
     const [inviteLink, setInviteLink] = useState('')
     const [role, setRole] = useState(2)
+    const [openSid, setOpenSid] = useState(false)
+    const [sid, setSid] = useState(null)
 
     let params = useParams()
     useEffect(() => {
@@ -104,7 +106,17 @@ export default function ClassroomDetail() {
         sendEmail(templatedEmail);
     }
 
-
+    const handleChangeSI = async () => {
+        const profile = JSON.parse(localStorage.getItem('account'))
+        const data = {
+            classroomId: params.classroomI,
+            userId: profile.userId,
+            sid: sid,
+            name: profile.name
+        }
+        const res = await classroomAPI.changeSid(data)
+        setOpenSid(false);
+    }
 
     return (
         <div className="page-container">
@@ -130,27 +142,53 @@ export default function ClassroomDetail() {
                 <Button className="page-container__button-group__button bg-primary" onClick={handleGetInvitationURL}>Create Invite Link</Button>
             </div> */}
             <div className="page-container__button-group">
-                <Button 
+                {role === 2 && 
+                (<Button 
                 className="page-container__button-group__button bg-primary" 
-                onClick={()=>{}}
+                onClick={() => setOpenSid(true)}
                 >
-                    Change Student Code
-                </Button>
+                    Change Student ID
+                </Button>)}
+                
                 {role < 2 && (
-                <div className="page-container__button-group__button">
                     <Button
                     className="page-container__button-group__button bg-primary" 
                     onClick={handleClickOpenSendEmail}
                     >
                         Send Invite by Email
                     </Button>
+                )}
+                {role < 2 && (
                     <Button 
                     className="page-container__button-group__button bg-primary" 
                     onClick={handleClickOpenInviteLink}
                     >
                         Invite Link
                     </Button>
-                </div> )}
+                )}
+
+                <Dialog open={openSid} onClose={() => setOpenSid(false)}>
+                    <DialogTitle>Change SID</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                Enter SID to set or change SID
+                            </DialogContentText>
+                            <TextField
+                                autoFocus
+                                id="sid"
+                                label="SID"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                onChange={e => setSid(e.target.value)}
+                                placeholder="SID..."
+                            />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => setOpenSid(false)}>Cancel</Button>
+                            <Button onClick={handleChangeSI}>Change</Button>
+                        </DialogActions>
+                </Dialog>
 
                 <Dialog open={openSendEmail} onClose={handleCloseSendEmail}>
 

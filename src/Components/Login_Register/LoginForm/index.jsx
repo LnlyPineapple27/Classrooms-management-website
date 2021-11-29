@@ -35,7 +35,7 @@ export default function LoginForm() {
         if(formData.username.length > 0 && formData.password.length > 0){
             let resultAttempt = await accountAPI.login(formData);
             if (resultAttempt.status === 200) {
-                //console.log(resultAttempt.data);
+                console.log(resultAttempt.data);
                 localStorage.setItem('token', resultAttempt.data.token);
                 localStorage.setItem('account', JSON.stringify(resultAttempt.data.account));
                 setAuth(true)
