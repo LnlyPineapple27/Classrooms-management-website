@@ -1,0 +1,40 @@
+.tab-panel {
+    display: flex;
+    flex-direction: column;
+    &__header {
+        font-size: 30px;
+        font-weight: 600;
+        margin-top: -20px !important;
+    }
+    &__alert {
+        margin-bottom: 10px;
+    }
+    &__content {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        &__select-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &__label {
+                margin-top: -20px;
+                font-size: 20px;
+                font-weight: 400;
+                margin-right: 20px;
+            }
+            &__select {
+                flex-shrink: 1;
+            }
+        }
+    }
+    &__action {
+        margin-top: 20px;
+        display: flex;
+        justify-content: flex-end;
+        &__button + &__button {
+            margin-left: 5%;
+        }
+    }
+}

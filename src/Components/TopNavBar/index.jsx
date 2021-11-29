@@ -15,12 +15,20 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import './index.scss'
 import { AuthContext } from '../../Context/GlobalContext';
 import { NavbarElContext } from '../../Context/GlobalContext';
+import AppsIcon from '@mui/icons-material/Apps';
+import MoreMenu from './MoreMenu';
+import ImportDialog from './MoreMenu/ImportDialog'
+
 
 export default function TopNavBar() {
   const [navbarEl, setNavbarEl] = React.useContext(NavbarElContext)
   const [auth, setAuth] = React.useContext(AuthContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate()
+  const [moreMenuAnchorEl, setMoreMenuAnchorEl] = React.useState(null);
+  const [openImport, setOpenImport] = React.useState(false)
+
+
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -64,6 +72,19 @@ export default function TopNavBar() {
           </Box>
           {auth ? (
               <div>
+                <IconButton
+                  size="large"
+                  aria-label="More features"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={ e => setMoreMenuAnchorEl(e.currentTarget)}
+                  color="inherit"
+                >
+                  <AppsIcon />
+                </IconButton>
+                <ImportDialog open={openImport} handleClose={() => setOpenImport(false)} />   
+                <MoreMenu handleOpenImport={() => {console.log('a')
+                setOpenImport(true)}} handleClose={() => setMoreMenuAnchorEl(null)} anchorEl={moreMenuAnchorEl} />
                 {navbarEl.addButton}
                 <IconButton
                   size="large"
