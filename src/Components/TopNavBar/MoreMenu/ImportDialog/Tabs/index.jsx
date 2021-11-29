@@ -13,6 +13,9 @@ import UploadIcon from '@mui/icons-material/Upload';
 import DownloadIcon from '@mui/icons-material/Download';
 import Alert from '@mui/material/Alert';
 import './index.scss'
+import classroomAPI from '../../../../../APIs/classroomAPI';
+import SelectClassroom from './SelectClassroom';
+import assignmentAPI from '../../../../../APIs/assignmentAPI';
 
 
 
@@ -29,7 +32,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          <Typography component={'span'}>{children}</Typography>
         </Box>
       )}
     </div>
@@ -49,14 +52,53 @@ function a11yProps(index) {
   };
 }
 
+
 export default function VerticalTabs() {
   const [value, setValue] = React.useState(0);
   const [severity, setSeverity] = React.useState(null);
   const [message, setMessage] = React.useState(null);
+  const [classrooms, setClassrooms] = React.useState([])
+  const [assignments, setAssignments] = React.useState([])
+  const [slClassroom, setSlClassroom] = React.useState(-1)
+  const [slAssignment, setSlAssignment] = React.useState(-1)
+  
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const handleClassroomSelected = e => {
+      setSlClassroom(e.target.value)
+  }
+
+  const handleAssignmentSelected = e => {
+      setSlAssignment(e.target.value)
+  }
+  
   const ariaLabel = { 'aria-label': 'description' };
+  
+  React.useEffect(() => {
+      const fetchData = async () => {
+        const response = await classroomAPI.getAllClassrooms()
+        if (response.isOk) {
+            setClassrooms(response.data.classrooms)
+        }
+      }
+      fetchData()
+  },[])
+  
+  React.useEffect(() => {
+    const fetchData = async () => {
+        const response = await assignmentAPI.getAllAssignments(slClassroom)
+        if (response.ok) {
+            const data = await response.json()
+            setAssignments(data)
+        }
+      }
+      
+      if(slClassroom !== -1) fetchData()
+
+  }, [slClassroom])
+
   return (
         <Box
         sx={{bgcolor: 'background.paper', display: 'flex', height: 300, marginTop:5 }}
@@ -75,25 +117,7 @@ export default function VerticalTabs() {
             <TabPanel value={value} index={0}>
                 {message && severity && (<Alert className="tab-panel__alert" severity={severity}>{message}</Alert>)}
                 <div className="tab-panel__content">
-                    <div className="tab-panel__content__select-control">
-                        <span className="tab-panel__content__select-control__label">Classroom:</span>
-                        <FormControl className="tab-panel__content__select-control__select">
-                            <Select
-                            value={0}
-                            onChange={handleChange}
-                            displayEmpty
-                            inputProps={{ 'aria-label': 'Without label' }}
-                            >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
-                            </Select>
-                            <FormHelperText>Select Classroom</FormHelperText>
-                        </FormControl>
-                    </div>
+                    <SelectClassroom classrooms={classrooms} onChange={handleClassroomSelected} value={slClassroom} />
                 </div>
                 <div className="tab-panel__action">
                     <Button
@@ -127,39 +151,19 @@ export default function VerticalTabs() {
                 {message && severity && (<Alert className="tab-panel__alert" severity={severity}>{message}</Alert>)}
                 <div className="tab-panel__content">
                     <div className="tab-panel__content__select-control">
-                        <span className="tab-panel__content__select-control__label">Classroom:</span>
-                        <FormControl className="tab-panel__content__select-control__select">
-                            <Select
-                            value={0}
-                            onChange={handleChange}
-                            displayEmpty
-                            inputProps={{ 'aria-label': 'Without label' }}
-                            >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
-                            </Select>
-                            <FormHelperText>Select Classroom</FormHelperText>
-                        </FormControl>
+                        <SelectClassroom classrooms={classrooms} onChange={handleClassroomSelected} value={slClassroom} />
                     </div>
                     <div className="tab-panel__content__select-control">
                         <span className="tab-panel__content__select-control__label">Assignment:</span>
                         <FormControl className="tab-panel__content__select-control__select">
                             <Select
-                            value={0}
-                            onChange={handleChange}
+                            value={slAssignment}
+                            onChange={handleAssignmentSelected}
                             displayEmpty
                             inputProps={{ 'aria-label': 'Without label' }}
-                            >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
+                            >   
+                                <MenuItem value={-1}>None</MenuItem>
+                                {assignments.map(assignment => <MenuItem key={`assignment_${assignment.id}`} value={assignment.id}>{assignment.name}</MenuItem>)}
                             </Select>
                             <FormHelperText>Select Assignment</FormHelperText>
                         </FormControl>
