@@ -78,9 +78,11 @@ export default function VerticalTabs() {
   
   React.useEffect(() => {
       const fetchData = async () => {
-        const response = await classroomAPI.getAllClassrooms()
-        if (response.isOk) {
-            setClassrooms(response.data.classrooms)
+        const userId = JSON.parse(localStorage.getItem('account')).userID
+        const response = await classroomAPI.getClassroomsThatUserHasRoleTeacher(userId)
+        if (response.ok) {
+            const data = await response.json()
+            setClassrooms(data)
         }
       }
       fetchData()

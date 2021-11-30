@@ -1,4 +1,7 @@
-let API_URL = process.env.REACT_APP_API_URL + '/classrooms'
+let originURL = process.env.REACT_APP_API_URL
+let API_URL = originURL + '/classrooms'
+const queryHelpers = require('./queryHelpers')
+
 
 let getResultFromResponse = async response => {
     let result = {
@@ -99,6 +102,17 @@ let classroomAPI = {
             body: fetchBody
 
         })
+        return response
+    },
+    getClassroomsThatUserHasRoleTeacher: async userId => {
+        const teacherRoleList = [0, 1]
+        const query = queryHelpers.parseArray("roles", teacherRoleList)
+        const fetchURL = `${originURL}/users/${userId}/classrooms?${query}`
+        const response = await fetch(fetchURL, {
+            method: 'GET',
+            headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token'),
+        }})
         return response
     }
 }
