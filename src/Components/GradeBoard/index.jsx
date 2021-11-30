@@ -42,9 +42,7 @@ const columns = [
     { name: "James Houston", assignment1: 100, assignment2: 67 },
    ];
    
-   const options = {
-     filterType: 'checkbox',
-   };
+   
    
     let params = useParams();
     return (
@@ -53,7 +51,14 @@ const columns = [
                 title={"Grades of students in class id =" + params.classroomId}
                 data={data}
                 columns={columns}
-                //options={options}
+                options={{
+                    search: true,
+                    fixedHeader: true,
+                    selectableRows: false,  
+                    filter: true,
+                    filterType: "dropdown",
+                    resizableColumns: true
+                }}
             />
         </ThemeProvider>
     );
