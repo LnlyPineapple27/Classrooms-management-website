@@ -16,7 +16,7 @@ import './index.scss'
 import classroomAPI from '../../../../../APIs/classroomAPI';
 import SelectClassroom from './SelectClassroom';
 import assignmentAPI from '../../../../../APIs/assignmentAPI';
-
+import * as XLSX from 'xlsx';
 
 
 function TabPanel(props) {
@@ -61,6 +61,8 @@ export default function VerticalTabs() {
   const [assignments, setAssignments] = React.useState([])
   const [slClassroom, setSlClassroom] = React.useState(-1)
   const [slAssignment, setSlAssignment] = React.useState(-1)
+  const [selectedFile, setSelectedFile] = React.useState("None")
+  const [fileData, setFileData] = React.useState([])
   
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -80,6 +82,44 @@ export default function VerticalTabs() {
   }
   const handleDownloadTemplate = e => { 
     window.open(`${window.location.origin}/template/${templateMap[e.target.dataset.template]}`)
+  }
+  const handleSelectImportFile = e => {
+    let f = e.target.files[0]
+    setSelectedFile(f.name)
+    const reader = new FileReader();
+    reader.onload = (evt) => { // evt = on_file_select event
+        /* Parse data */
+        const bstr = evt.target.result;
+        const wb = XLSX.read(bstr, {type:'binary'});
+        /* Get first worksheet */
+        const wsname = wb.SheetNames[0];
+        const ws = wb.Sheets[wsname];
+        /* Convert array of arrays */
+        let headers = {};
+        let data = [];
+
+        for(let z in ws) {
+            if(z[0] === '!') continue;
+            //parse out the column, row, and value
+            let col = z.substring(0,1);
+            let row = parseInt(z.substring(1));
+            let value = ws[z].v;
+            //store header names
+            if(row == 1) {
+                headers[col] = value === "Student ID" ? "sid" : value.toLowerCase();
+                continue;
+            }
+
+            if(!data[row]) data[row]={};
+            data[row][headers[col]] = value;
+            }
+            //drop those first two rows which are empty
+            data.shift();
+            data.shift();
+            /* Update state */
+            setFileData(Array.from(data))
+    };
+    reader.readAsBinaryString(f);
   }
 
   const ariaLabel = { 'aria-label': 'description' };
@@ -115,7 +155,7 @@ export default function VerticalTabs() {
         >
             <Tabs
                 orientation="vertical"
-                variant="scrollable"
+                letiant="scrollable"
                 value={value}
                 onChange={handleChange}
                 aria-label="Vertical tabs example"
@@ -129,9 +169,14 @@ export default function VerticalTabs() {
                 <div className="tab-panel__content">
                     <SelectClassroom classrooms={classrooms} onChange={handleClassroomSelected} value={slClassroom} />
                 </div>
+                <div className="tab-panel__filename">
+                    <p className="tab-panel__filename__text">
+                        File: {selectedFile}
+                    </p>
+                </div>
                 <div className="tab-panel__action">
                     <Button
-                    variant="contained"
+                    letiant="contained"
                     component="label"
                     className="tab-panel__action__button"
                     color="secondary"
@@ -142,7 +187,7 @@ export default function VerticalTabs() {
                         Template
                     </Button>
                     <Button
-                    variant="contained"
+                    letiant="contained"
                     component="label"
                     className="tab-panel__action__button"
                     >   
@@ -151,6 +196,8 @@ export default function VerticalTabs() {
                         <input
                             type="file"
                             hidden
+                            onChange={handleSelectImportFile}
+                            data-template="Student"
                         />
                     </Button>
                 </div>
@@ -177,9 +224,14 @@ export default function VerticalTabs() {
                         </FormControl>
                     </div>
                 </div>
+                <div className="tab-panel__filename">
+                    <p className="tab-panel__filename__text">
+                        File: {selectedFile}
+                    </p>
+                </div>
                 <div className="tab-panel__action">
                     <Button
-                    variant="contained"
+                    letiant="contained"
                     component="label"
                     className="tab-panel__action__button"
                     color="secondary"
@@ -190,7 +242,7 @@ export default function VerticalTabs() {
                         Template
                     </Button>
                     <Button
-                    variant="contained"
+                    letiant="contained"
                     component="label"
                     className="tab-panel__action__button"
                     >   
@@ -199,6 +251,8 @@ export default function VerticalTabs() {
                         <input
                             type="file"
                             hidden
+                            onChange={handleSelectImportFile}
+                            data-template="Point"
                         />
                     </Button>
                 </div>
