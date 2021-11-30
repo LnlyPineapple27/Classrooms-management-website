@@ -86,6 +86,7 @@ let classroomAPI = {
         return response
     },
     changeSid: async ({sid, userId, classroomId, name}) => {
+        console.log('a')
         const fetchURL = API_URL + `/${classroomId}/sids`
         const fetchBody = JSON.stringify({
             name: name,

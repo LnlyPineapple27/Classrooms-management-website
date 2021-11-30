@@ -109,12 +109,14 @@ export default function ClassroomDetail() {
     const handleChangeSI = async () => {
         const profile = JSON.parse(localStorage.getItem('account'))
         const data = {
-            classroomId: params.classroomI,
-            userId: profile.userId,
+            classroomId: params.classroomId,
+            userId: profile.userID,
             sid: sid,
             name: profile.name
         }
         const res = await classroomAPI.changeSid(data)
+        if(!res.ok)
+            alert(`Error ${res.status}: ${res.statusText}`)
         setOpenSid(false);
     }
 

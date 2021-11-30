@@ -3,14 +3,15 @@ import { useParams } from "react-router-dom"
 import { ThemeProvider } from "@mui/styles";
 import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 import assignmentAPI from '../../APIs/assignmentAPI'
-import { useState, useEffect } from 'react'
-
+import { useState, useEffect, useContext } from 'react'
+import { NavbarElContext } from "../../Context/GlobalContext";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
+import ClassroomTabs from "../ClassroomTabs";
 import Switch from '@mui/material/Switch';
 
 export default function GradeBoard() {
-    
+    const [,setNavbarEl] = useContext(NavbarElContext)
     let theme = createTheme();
     theme = responsiveFontSizes(theme);
     let params = useParams();
@@ -34,6 +35,7 @@ export default function GradeBoard() {
             }
             row['total'] = sum / columns_names.length;
             result.push(row)
+            
         }
         return result
     }
@@ -102,6 +104,9 @@ export default function GradeBoard() {
                             return  <p style={{color: 'blue'}}><b>{value}</b></p>;
                         }
                     }
+                })
+                setNavbarEl({
+                    classroomTabs: (<ClassroomTabs value={2} classroomId={params.classroomId} />),
                 })
                 setColumns(data_cols)
             }
