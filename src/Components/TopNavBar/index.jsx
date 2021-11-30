@@ -84,7 +84,6 @@ export default function TopNavBar() {
                 </IconButton>
                 <ImportDialog open={openImport} handleClose={() => setOpenImport(false)} />   
                 <MoreMenu handleOpenImport={() => {setOpenImport(true)}} handleClose={() => setMoreMenuAnchorEl(null)} anchorEl={moreMenuAnchorEl} />
-                {navbarEl.moreMenu}
                 {navbarEl.addButton}
                 <IconButton
                   size="large"

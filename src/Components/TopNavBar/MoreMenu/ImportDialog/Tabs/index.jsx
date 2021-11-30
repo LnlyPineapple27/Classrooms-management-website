@@ -74,6 +74,14 @@ export default function VerticalTabs() {
       setSlAssignment(e.target.value)
   }
   
+  const templateMap = {
+      Student: "Template_Import_Student.xlsx",
+      Point: "Template_Import_Point.xlsx",
+  }
+  const handleDownloadTemplate = e => { 
+    window.open(`${window.location.origin}/template/${templateMap[e.target.dataset.template]}`)
+  }
+
   const ariaLabel = { 'aria-label': 'description' };
   
   React.useEffect(() => {
@@ -127,13 +135,11 @@ export default function VerticalTabs() {
                     component="label"
                     className="tab-panel__action__button"
                     color="secondary"
+                    onClick={handleDownloadTemplate}
+                    data-template="Student"
                     >
                         <DownloadIcon />
                         Template
-                        <input
-                            type="file"
-                            hidden
-                        />
                     </Button>
                     <Button
                     variant="contained"
@@ -177,13 +183,11 @@ export default function VerticalTabs() {
                     component="label"
                     className="tab-panel__action__button"
                     color="secondary"
+                    onClick={handleDownloadTemplate}
+                    data-template="Point"
                     >
                         <DownloadIcon />
                         Template
-                        <input
-                            type="file"
-                            hidden
-                        />
                     </Button>
                     <Button
                     variant="contained"
