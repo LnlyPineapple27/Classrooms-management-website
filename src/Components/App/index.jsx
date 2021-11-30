@@ -11,6 +11,7 @@ import {
   } from "react-router-dom";
 import ClassroomDetail from '../Classroom/ClassroomDetail';
 import ClassroomDetailCard from '../Classroom/ClassroomDetailCard';
+import GradeBoard from '../GradeBoard';
 import { AuthProvider, AuthContext, NavbarElProvider } from '../../Context/GlobalContext'
 import { NewClassroomAddedProvider} from '../../Context/NewClassroomAddedContext';
 import { AddClassroomModalProvider } from '../../Context/AddClassroomModalContext'
@@ -30,6 +31,7 @@ export default function App() {
                             </AddClassroomModalProvider>
                             <Routes> 
                                 <Route path='/classrooms/:classroomId/assignments' element={<ListAssignment />}/>
+                                <Route path='/classrooms/:classroomId/scoreboard' element={<GradeBoard />}/>
                                 <Route path='/login' element={<LoginForm />} />
                                 <Route path='/classrooms/:classroomId' element={<ClassroomDetail />} />
                                 <Route path='/classrooms' element={<ClassroomsList />} />
