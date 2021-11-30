@@ -53,27 +53,45 @@ function a11yProps(index) {
 }
 
 
-export default function VerticalTabs() {
+export default function VerticalTabs({handleFileImportChange, message, severity}) {
   const [value, setValue] = React.useState(0);
-  const [severity, setSeverity] = React.useState(null);
-  const [message, setMessage] = React.useState(null);
   const [classrooms, setClassrooms] = React.useState([])
   const [assignments, setAssignments] = React.useState([])
   const [slClassroom, setSlClassroom] = React.useState(-1)
   const [slAssignment, setSlAssignment] = React.useState(-1)
   const [selectedFile, setSelectedFile] = React.useState("None")
-  const [fileData, setFileData] = React.useState([])
-  
+  const valueOptionMap = ["Student", "Score"]
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    handleFileImportChange({
+        option: valueOptionMap[newValue],
+        classroomId: slClassroom,
+        assignmentId: slAssignment,
+        data: []
+    })
+    setSelectedFile("None")
   };
 
   const handleClassroomSelected = e => {
+      console.log("a")
       setSlClassroom(e.target.value)
+      handleFileImportChange({
+        option: valueOptionMap[value],
+        classroomId: slClassroom,
+        assignmentId: slAssignment,
+        data: []
+      })
   }
 
   const handleAssignmentSelected = e => {
       setSlAssignment(e.target.value)
+      handleFileImportChange({
+        option: valueOptionMap[value],
+        classroomId: slClassroom,
+        assignmentId: slAssignment,
+        data: []
+      })
   }
   
   const templateMap = {
@@ -84,7 +102,9 @@ export default function VerticalTabs() {
     window.open(`${window.location.origin}/template/${templateMap[e.target.dataset.template]}`)
   }
   const handleSelectImportFile = e => {
+    console.log(e.target.dataset)
     let f = e.target.files[0]
+    if(!f) return
     setSelectedFile(f.name)
     const reader = new FileReader();
     reader.onload = (evt) => { // evt = on_file_select event
@@ -106,18 +126,24 @@ export default function VerticalTabs() {
             let value = ws[z].v;
             //store header names
             if(row == 1) {
-                headers[col] = value === "Student ID" ? "sid" : value.toLowerCase();
+                headers[col] = value.toLowerCase() === "student id" ? "sid" : value.toLowerCase();
                 continue;
             }
 
             if(!data[row]) data[row]={};
             data[row][headers[col]] = value;
-            }
-            //drop those first two rows which are empty
-            data.shift();
-            data.shift();
-            /* Update state */
-            setFileData(Array.from(data))
+        }
+        //drop those first two rows which are empty
+        data.shift();
+        data.shift();
+        /* Update state */
+        handleFileImportChange({
+            option: e.target.dataset.option,
+            classroomId: slClassroom,
+            assignmentId: slAssignment,
+            data: Array.from(data)
+        })
+
     };
     reader.readAsBinaryString(f);
   }
@@ -190,6 +216,7 @@ export default function VerticalTabs() {
                     letiant="contained"
                     component="label"
                     className="tab-panel__action__button"
+                    data-option="Student"
                     >   
                         <UploadIcon />
                         Upload
@@ -197,7 +224,7 @@ export default function VerticalTabs() {
                             type="file"
                             hidden
                             onChange={handleSelectImportFile}
-                            data-template="Student"
+                            data-option="Student"
                         />
                     </Button>
                 </div>
@@ -245,6 +272,7 @@ export default function VerticalTabs() {
                     letiant="contained"
                     component="label"
                     className="tab-panel__action__button"
+                    data-option="Point"
                     >   
                         <UploadIcon />
                         Upload
@@ -252,7 +280,7 @@ export default function VerticalTabs() {
                             type="file"
                             hidden
                             onChange={handleSelectImportFile}
-                            data-template="Point"
+                            data-option="Point"
                         />
                     </Button>
                 </div>

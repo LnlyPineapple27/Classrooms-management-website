@@ -114,7 +114,31 @@ let classroomAPI = {
             'Authorization': 'Bearer ' + localStorage.getItem('token'),
         }})
         return response
-    }
+    },
+    importStudents: async ({classroomId, data}) => {
+        const fetchURL = `${originURL}/classrooms/${classroomId}/sids/import`
+        const fetchOption = {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({data: data})
+        }
+        return await fetch(fetchURL, fetchOption)
+    },
+    importScores: async ({classroomId, assignmentId, data}) => {
+        const fetchURL = `${originURL}/classrooms/${classroomId}/assignments/${assignmentId}/scores/import`
+        const fetchOption = {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({data: data})
+        }
+        return await fetch(fetchURL, fetchOption)
+    },
 }
 
 export default classroomAPI
