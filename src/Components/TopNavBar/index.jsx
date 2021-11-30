@@ -15,7 +15,7 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import './index.scss'
 import { AuthContext } from '../../Context/GlobalContext';
 import { NavbarElContext } from '../../Context/GlobalContext';
-import AppsIcon from '@mui/icons-material/Apps';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import MoreMenu from './MoreMenu';
 import ImportDialog from './MoreMenu/ImportDialog'
 
@@ -80,11 +80,10 @@ export default function TopNavBar() {
                   onClick={ e => setMoreMenuAnchorEl(e.currentTarget)}
                   color="inherit"
                 >
-                  <AppsIcon />
+                  <MoreHorizIcon />
                 </IconButton>
                 <ImportDialog open={openImport} handleClose={() => setOpenImport(false)} />   
-                <MoreMenu handleOpenImport={() => {console.log('a')
-                setOpenImport(true)}} handleClose={() => setMoreMenuAnchorEl(null)} anchorEl={moreMenuAnchorEl} />
+                <MoreMenu handleOpenImport={() => {setOpenImport(true)}} handleClose={() => setMoreMenuAnchorEl(null)} anchorEl={moreMenuAnchorEl} />
                 {navbarEl.addButton}
                 <IconButton
                   size="large"
