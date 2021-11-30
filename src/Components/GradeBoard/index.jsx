@@ -79,9 +79,15 @@ export default function GradeBoard() {
                             filter: true,
                             sort: true,
                             customBodyRender: (value, tableMeta, updateValue) => {
-                                return (value)? 
-                                    <p style={{color: 'green'}}><b>{value}</b></p> 
-                                    : <p style={{color: 'red'}}>UNSUMMITED</p>;
+                                // return (value)? 
+                                //     <p style={{color: 'green'}}><b>{value}</b></p> 
+                                //     : <p style={{color: 'red'}}>UNSUMMITED</p>;
+                                return <FormControlLabel
+                                            label=''
+                                            value={value}
+                                            control={<TextField type="number" value={value} />}
+                                            onChange={event => updateValue(event.target.value)}
+                                        />
                             }
                         }
                     })
@@ -108,7 +114,7 @@ export default function GradeBoard() {
     return (
         <ThemeProvider theme={theme}>
             <MUIDataTable
-                title={"Grades of students in class id =" + params.classroomId}
+                title={"Grades of students in class"}
                 data={data}
                 columns={columns}
                 options={{
