@@ -21,6 +21,7 @@ export default function FormDialog({ open, handleClose }) {
                 <Tabs />
             </DialogContent>
             <DialogActions>
+                <Button onClick={handleClose}>Import</Button>
                 <Button onClick={handleClose}>Cancel</Button>
             </DialogActions>
         </Dialog>
