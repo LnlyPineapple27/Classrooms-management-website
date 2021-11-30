@@ -78,7 +78,18 @@ const assignmentAPI = {
 
         return response
     },
+    scoreboard: async (classroomId) => {
+        const fetchURL = API_URL + `/${classroomId}/scoreboard`;
+        const fetchOption = {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            },
+        }
+        const response = await fetch(fetchURL, fetchOption)
 
+        return response
+    }
 }
 
 export default assignmentAPI
