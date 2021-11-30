@@ -54,7 +54,7 @@ export default function GradeBoard() {
                 let data_cols = [];
                 data_cols.push({
                     name:'sid',
-                    label: 'SID',
+                    label: 'Student ID',
                     options: {
                         filter: true,
                         sort: true,
@@ -74,14 +74,14 @@ export default function GradeBoard() {
                 for (let i = 0; i < columns_names.length; i++) {
                     data_cols.push({
                         name: columns_names[i],
-                        label: columns_names[i],
+                        label: 'Assignment: ' + columns_names[i],
                         options: {
                             filter: true,
                             sort: true,
                             customBodyRender: (value, tableMeta, updateValue) => {
                                 return (value)? 
                                     <p style={{color: 'green'}}><b>{value}</b></p> 
-                                    : <p style={{color: 'red'}}><b>UNSUMMITED</b></p>;
+                                    : <p style={{color: 'red'}}>UNSUMMITED</p>;
                             }
                         }
                     })
