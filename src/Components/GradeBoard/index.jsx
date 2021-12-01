@@ -8,8 +8,8 @@ import { NavbarElContext } from "../../Context/GlobalContext";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
 import ClassroomTabs from "../ClassroomTabs";
-import Switch from '@mui/material/Switch';
-
+import { DataGrid } from "@material-ui/data-grid";
+import { useMemo, useRef } from "react";
 export default function GradeBoard() {
     const [,setNavbarEl] = useContext(NavbarElContext)
     let theme = createTheme();
@@ -24,8 +24,9 @@ export default function GradeBoard() {
         for(let i = 0; i < id_list.length; i++){
             let user_data = data.filter(item => item.userID === id_list[i])
             let row = {
-                sid: user_data[0].sid,
+                id: user_data[0].sid,
                 name: user_data[0].studentName,
+                userID: user_data[0].userID,
             }
             let sum = 0;
             for(let j = 0; j < columns_names.length; j++){
@@ -39,101 +40,208 @@ export default function GradeBoard() {
         }
         return result
     }
-        
-        
-    
     useEffect(() => {
         
         async function fetchData() {
             const response = await assignmentAPI.scoreboard(params.classroomId)
             if (!response.ok) {
                 setColumns([])
+                setData([])
             }
             else {
                 const response_data = await response.json()
                 let columns_names = [...new Set( response_data.map(item => item.assignmentName) )]
-                setData(cookData(response_data, columns_names))
+                
                 let data_cols = [];
                 data_cols.push({
-                    name:'sid',
-                    label: 'Student ID',
-                    options: {
-                        filter: true,
-                        sort: true,
-                        customBodyRender: (value, tableMeta, updateValue) => {
-                            return (value)? value : 'unassigned';
-                        }
-                    }
+                    field:'id',
+                    headerName: 'Student ID',
+                    flex: 1.0,
                 })
                 data_cols.push({
-                    name:'name',
-                    label: 'Name',
-                    options: {
-                        filter: true,
-                        sort: true,
-                    }
+                    field:'name',
+                    headerName: 'Name',
+                    flex: 1.0,
+                })
+                data_cols.push({
+                    field:'userID',
+                    headerName: 'UserID',
+                    flex: 1.0,
                 })
                 for (let i = 0; i < columns_names.length; i++) {
                     data_cols.push({
-                        name: columns_names[i],
-                        label: 'Assignment: ' + columns_names[i],
-                        options: {
-                            filter: true,
-                            sort: true,
-                            customBodyRender: (value, tableMeta, updateValue) => {
-                                // return (value)? 
-                                //     <p style={{color: 'green'}}><b>{value}</b></p> 
-                                //     : <p style={{color: 'red'}}>UNSUMMITED</p>;
-                                return <FormControlLabel
-                                            label=''
-                                            value={value}
-                                            control={<TextField onBlur={(e) => { console.log(e.target.value)}} type="number" value={value} />}
-                                            onChange={event => updateValue(event.target.value)}
-                                        />
-                            }
-                        }
+                        field: columns_names[i],
+                        headerName: 'Assignment: ' + columns_names[i],
+                        editable: true,
+                        flex: 1.0,
+                        // renderCell: (parameters) => {
+                        //     return (
+                        //       <TextField
+                        //         type="number"
+                        //         defaultValue={parameters.row.columns_names[i]}
+                        //         InputLabelProps={{ shrink: true }}
+                        //         onChange={(e) =>
+                        //             parameters.api.updateRows([{ ...parameters.row, columns_names[i]: e.target.value, }])
+                        //         }
+                        //       />
+                        //     );
+                        // }
+
+                        // options: {
+                        //     filter: true,
+                        //     sort: true,
+                        //     customBodyRender: (value, tableMeta, updateValue) => {
+                        //         // return (value)? 
+                        //         //     <p style={{color: 'green'}}><b>{value}</b></p> 
+                        //         //     : <p style={{color: 'red'}}>UNSUMMITED</p>;
+                        //         return <FormControlLabel
+                        //                     label=''
+                        //                     value={value}
+                        //                     control={<TextField onBlur={(e) => { console.log(data)}} type="number" value={value} />}
+                        //                     onChange={event => updateValue(event.target.value)}
+                        //                 />
+                        //     }
+                        // }
+
                     })
                 }
                 data_cols.push({
-                    name:'total',
-                    label: 'Total Score',
-                    options: {
-                        filter: true,
-                        sort: true,
-                        customBodyRender: (value, tableMeta, updateValue) => {
-                            return  <p style={{color: 'blue'}}><b>{value}</b></p>;
-                        }
-                    }
+                    field:'total',
+                    headerName: 'Total Score',
+                    flex: 1.0,
+                    // options: {
+                    //     filter: true,
+                    //     sort: true,
+                    //     customBodyRender: (value, tableMeta, updateValue) => {
+                    //         return  <p style={{color: 'blue'}}><b>{value}</b></p>;
+                    //     }
+                    // }
                 })
                 setNavbarEl({
                     classroomTabs: (<ClassroomTabs value={2} classroomId={params.classroomId} />),
                 })
+                setData(cookData(response_data, columns_names))
                 setColumns(data_cols)
             }
         }
         fetchData()
     }, [params.classroomId])
+
+    
+      
+
+
+    return (
+        <div>
+            <DataGrid
+                columns={columns}
+                rows={data}
+                autoHeight={true}
+                autoResizeColumns={true}
+                hideFooter={true}
+            />
+            {/* <Button variant="contained" color="primary" onClick={handleClickButton}>
+                Show me grid data
+            </Button> */}
+        </div>
+    );
+ 
+}
+    
+    // useEffect(() => {
+        
+    //     async function fetchData() {
+    //         const response = await assignmentAPI.scoreboard(params.classroomId)
+    //         if (!response.ok) {
+    //             setColumns([])
+    //             setData([])
+    //         }
+    //         else {
+    //             const response_data = await response.json()
+    //             let columns_names = [...new Set( response_data.map(item => item.assignmentName) )]
+                
+    //             let data_cols = [];
+    //             data_cols.push({
+    //                 name:'sid',
+    //                 label: 'Student ID',
+    //                 options: {
+    //                     filter: true,
+    //                     sort: true,
+    //                     customBodyRender: (value, tableMeta, updateValue) => {
+    //                         return (value)? value : 'unassigned';
+    //                     }
+    //                 }
+    //             })
+    //             data_cols.push({
+    //                 name:'name',
+    //                 label: 'Name',
+    //                 options: {
+    //                     filter: true,
+    //                     sort: true,
+    //                 }
+    //             })
+    //             for (let i = 0; i < columns_names.length; i++) {
+    //                 data_cols.push({
+    //                     name: columns_names[i],
+    //                     label: 'Assignment: ' + columns_names[i],
+    //                     options: {
+    //                         filter: true,
+    //                         sort: true,
+    //                         customBodyRender: (value, tableMeta, updateValue) => {
+    //                             // return (value)? 
+    //                             //     <p style={{color: 'green'}}><b>{value}</b></p> 
+    //                             //     : <p style={{color: 'red'}}>UNSUMMITED</p>;
+    //                             return <FormControlLabel
+    //                                         label=''
+    //                                         value={value}
+    //                                         control={<TextField onBlur={(e) => { console.log(data)}} type="number" value={value} />}
+    //                                         onChange={event => updateValue(event.target.value)}
+    //                                     />
+    //                         }
+    //                     }
+    //                 })
+    //             }
+    //             data_cols.push({
+    //                 name:'total',
+    //                 label: 'Total Score',
+    //                 options: {
+    //                     filter: true,
+    //                     sort: true,
+    //                     customBodyRender: (value, tableMeta, updateValue) => {
+    //                         return  <p style={{color: 'blue'}}><b>{value}</b></p>;
+    //                     }
+    //                 }
+    //             })
+    //             setNavbarEl({
+    //                 classroomTabs: (<ClassroomTabs value={2} classroomId={params.classroomId} />),
+    //             })
+    //             setData(cookData(response_data, columns_names))
+    //             setColumns(data_cols)
+    //         }
+    //     }
+    //     fetchData()
+    // }, [params.classroomId])
    
   
    
-    return (
-        <ThemeProvider theme={theme}>
-            <MUIDataTable
-                title={"Grades of students in class"}
-                data={data}
-                columns={columns}
-                options={{
-                    search: true,
-                    fixedHeader: true,
-                    selectableRows: false,  
-                    filter: true,
-                    filterType: "dropdown",
-                    resizableColumns: true,
-                }}
-            />
-        </ThemeProvider>
-    );
-}
+    // return (
+    //     <ThemeProvider theme={theme}>
+    //         <MUIDataTable
+    //             title={"Grades of students in class"}
+    //             data={data}
+    //             columns={columns}
+    //             options={{
+    //                 search: true,
+    //                 fixedHeader: true,
+    //                 selectableRows: false,  
+    //                 filter: true,
+    //                 filterType: "dropdown",
+    //                 resizableColumns: true,
+    //             }}
+    //         />
+    //     </ThemeProvider>
+    // );
+
 
     //----------------------------------------------------------------
     
