@@ -141,6 +141,18 @@ let classroomAPI = {
         }
         return await fetch(fetchURL, fetchOption)
     },
+    updateScore: async({classroomId, assignmentId, score, userid}) => {
+        const fetchURL = `${originURL}/classrooms/${classroomId}/assignments/${assignmentId}/scores/${userid}`
+        const fetchOption = {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({score: score})
+        }
+        return await fetch(fetchURL, fetchOption)
+    }
 }
 
 export default classroomAPI
