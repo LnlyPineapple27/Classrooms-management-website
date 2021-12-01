@@ -106,20 +106,21 @@ export default function GradeBoard() {
     }, [params.classroomId])
 
     
-    const handleEditRowsModelChange = React.useCallback((model) => {
-        if(model){
-            let student_id = Object.keys(model)[0];
-            let assignment_name = Object.keys(model[student_id])[0];
-            console.log(assignment_name)
-            let score = parseInt(model[student_id][assignment_name].value);
-            console.log('score: ',score)
-            let assignment_id = headerSave[assignment_name];
-            console.log('Assignment ID',assignment_id)
-            let userid = onclickRow['userID'];
-            console.log('UserID: ',userid)
-            //await classroomAPI.updateScore(params.classroomId, assignment_id, score, userid)
+    const handleEditRowsModelChange = React.useCallback(async (model) => {
+        console.log(model, Object.keys(model).length === 0)
+        if(!model || Object.keys(model).length === 0) return
+        console.log(onclickRow)
+        let student_id = Object.keys(model)[0];
+        let assignment_name = Object.keys(model[student_id])[0];
+        console.log(assignment_name)
+        let score = parseInt(model[student_id][assignment_name].value);
+        console.log('score: ',score)
+        let assignment_id = headerSave[assignment_name];
+        console.log('Assignment ID',assignment_id)
+        let userid = onclickRow['userID'];
+        console.log('UserID: ',userid)
+        await classroomAPI.updateScore(params.classroomId, assignment_id, score, userid)
             //console.log(score)
-        }
     }, []);
 
 
@@ -137,6 +138,7 @@ export default function GradeBoard() {
                     const selectedRowData = data.filter((row) =>
                       selectedIDs.has(row.id.toString())
                     );
+                    console.log('a')
                     setOnclickRow(selectedRowData[0])
                     //console.log(selectedRowData[0]);
                 }}
