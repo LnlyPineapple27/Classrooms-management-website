@@ -94,6 +94,7 @@ let classroomAPI = {
             classroomId: classroomId,
             userId: userId
         })
+        console.log(fetchBody);
         const response = await fetch(fetchURL, {
             method: 'POST',
             headers: {
