@@ -33,7 +33,6 @@ export default function GradeBoard() {
                 row[columns_names[j]] = tmp_sumfuk;
                 if(tmp_sumfuk !== null) sum += tmp_sumfuk;
             }
-            console.log(sum)
             row['total'] = (sum / columns_names.length).toFixed(2);
             result.push(row)
             
@@ -88,7 +87,7 @@ export default function GradeBoard() {
                                 return <FormControlLabel
                                             label=''
                                             value={value}
-                                            control={<TextField type="number" value={value} />}
+                                            control={<TextField onBlur={(e) => { console.log(e.target.value)}} type="number" value={value} />}
                                             onChange={event => updateValue(event.target.value)}
                                         />
                             }
