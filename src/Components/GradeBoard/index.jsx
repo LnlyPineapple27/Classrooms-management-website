@@ -30,7 +30,7 @@ export default function GradeBoard() {
             let sum = 0;
             for(let j = 0; j < columns_names.length; j++){
                 let tmp_sumfuk = user_data.find(item => item.assignmentName === columns_names[j]).score;
-                row[columns_names[j]] = tmp_sumfuk;
+                row[columns_names[j]] = tmp_sumfuk ?? 0;
                 if(tmp_sumfuk !== null) sum += tmp_sumfuk;
             }
             row['total'] = sum / columns_names.length;

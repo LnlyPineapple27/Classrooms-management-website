@@ -115,8 +115,14 @@ export default function ClassroomDetail() {
             name: profile.name
         }
         const res = await classroomAPI.changeSid(data)
-        if(!res.ok)
-            alert(`Error ${res.status}: ${res.statusText}`)
+        const resOk = res.ok
+        const resStatus = res.status
+        const resJson = await res.json()
+        const resMsg = resJson.msg
+        if(!resOk) {
+            alert(`Error ${resStatus}: ${resMsg}`)
+        }
+        else alert(`Success: ${resMsg}`)
         setOpenSid(false);
     }
 
