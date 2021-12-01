@@ -29,11 +29,12 @@ export default function GradeBoard() {
             }
             let sum = 0;
             for(let j = 0; j < columns_names.length; j++){
-                let tmp_sumfuk = user_data.find(item => item.assignmentName === columns_names[j]).score;
-                row[columns_names[j]] = tmp_sumfuk ?? 0;
+                let tmp_sumfuk = parseInt(user_data.find(item => item.assignmentName === columns_names[j]).score ?? 0);
+                row[columns_names[j]] = tmp_sumfuk;
                 if(tmp_sumfuk !== null) sum += tmp_sumfuk;
             }
-            row['total'] = sum / columns_names.length;
+            console.log(sum)
+            row['total'] = (sum / columns_names.length).toFixed(2);
             result.push(row)
             
         }
