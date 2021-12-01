@@ -10,7 +10,7 @@
 
 + Midterm asignment: <https://classrooms-management-website.vercel.app/>
 + BTN01 - Manage grade structure: <https://classrooms-management-website-btn01.vercel.app/>
-
++ BTN02 - Manage grade structure: <https://classrooms-management-website-btn02.vercel.app/>
 ## Notification
 
 + `midterm-backup` will be the backup branch for the midterm assignment deployment at the link <https://classrooms-management-website.vercel.app/>
