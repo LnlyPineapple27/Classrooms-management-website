@@ -19,12 +19,13 @@ export default function GradeBoard() {
     const [onclickRow, setOnclickRow] = useState({})
 
     const cookData = (data, columns_names) => {
-        let id_list = [...new Set( data.map(item => item.userID))];
+        //console.log("data", data);
+        let id_list = [...new Set( data.map(item => item.sid))];
+        //console.log("id_list", id_list);
         let result = [];
       
-        for(let i = 0; i < id_list.length; i++){
-
-            let user_data = data.filter(item => item.userID === id_list[i])
+        for(let i = 0; i < id_list.length; i++) {
+            let user_data = data.filter(item => item.sid === id_list[i])
             let row = {
                 id: user_data[0].sid,
                 name: user_data[0].studentName,
@@ -42,6 +43,7 @@ export default function GradeBoard() {
             result.push(row)
             
         }
+        //console.log("cook data", result);
         return result
     }
     const mapAssignment = (data)=>{
@@ -63,6 +65,7 @@ export default function GradeBoard() {
             }
             else {
                 const response_data = await response.json()
+                //console.log("scoreboard data from get", response_data);
                 let columns_names = [...new Set( response_data.map(item => item.assignmentName) )]
            
                 let data_cols = [];
