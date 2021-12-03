@@ -4,9 +4,17 @@ import assignmentAPI from '../../APIs/assignmentAPI'
 import { useState, useEffect, useContext } from 'react'
 import { NavbarElContext } from "../../Context/GlobalContext";
 import ClassroomTabs from "../ClassroomTabs";
-import { DataGrid } from "@material-ui/data-grid";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 import * as React from 'react';
 import classroomAPI from '../../APIs/classroomAPI'
+import { TextField } from "@mui/material";
+
 export default function GradeBoard() {
     const [,setNavbarEl] = useContext(NavbarElContext)
     let theme = createTheme();
@@ -16,16 +24,15 @@ export default function GradeBoard() {
     const [columns, setColumns] = useState([])
     const [data, setData] = useState([])
     const [headerSave, setHeaderSave] = useState({})
-    const [onclickRow, setOnclickRow] = useState({})
 
-    const cookData = (data, columns_names) => {
+    const cookData = (response_data, columns_names) => {
         //console.log("data", data);
-        let id_list = [...new Set( data.map(item => item.sid))];
+        let id_list = [...new Set( response_data.map(item => item.sid))];
         //console.log("id_list", id_list);
         let result = [];
       
         for(let i = 0; i < id_list.length; i++) {
-            let user_data = data.filter(item => item.sid === id_list[i])
+            let user_data = response_data.filter(item => item.sid === id_list[i])
             let row = {
                 id: user_data[0].sid,
                 name: user_data[0].studentName,
@@ -52,7 +59,7 @@ export default function GradeBoard() {
             result[data[i].assignmentName] = data[i].assignmentID
         }
         
-        console.log(result)
+        //console.log(result)
         return result
     }
     useEffect(() => {
@@ -108,49 +115,59 @@ export default function GradeBoard() {
         fetchData()
     }, [params.classroomId])
 
-    
-    const handleEditRowsModelChange = React.useCallback(async (model) => {
-        console.log(model, Object.keys(model).length === 0)
-        if(!model || Object.keys(model).length === 0) return
-        console.log(onclickRow)
-        let student_id = Object.keys(model)[0];
-        let assignment_name = Object.keys(model[student_id])[0];
-        console.log(assignment_name)
-        let score = parseInt(model[student_id][assignment_name].value);
-        console.log('score: ',score)
-        let assignment_id = headerSave[assignment_name];
-        console.log('Assignment ID',assignment_id)
-        let userid = onclickRow['userID'];
-        console.log('UserID: ',userid)
-        await classroomAPI.updateScore(params.classroomId, assignment_id, score, userid)
-            //console.log(score)
-    }, []);
+    const header_list = (data_row) => {
+      //console.log("header_row", data_row)
+      let result = []
+      let h = Object.keys(data_row[0])
+      //console.log("h: ", h)
+      h.forEach(key => {
+        if (key !== 'id' && key !== 'name' && key !== 'userID' && key !== 'total')
+          result.push(<TableCell>{'Assignment: ' + key[0].toUpperCase() + key.substring(1)}</TableCell>)
+        else
+          result.push(<TableCell>{key[0].toUpperCase() + key.substring(1)}</TableCell>)
+      })
+      return result
+    }
 
-
+    const row_cells = (data_row) => {
+      let result = []
+      let h = Object.keys(data_row)
+      h.forEach(key => {
+        if(key !== 'id' && key !== 'name' && key !== 'userID' && key !== 'total'){
+          result.push(<TableCell value={data_row[key]}><TextField>{data_row[key]}</TextField></TableCell>)
+        }
+        else{
+          result.push(<TableCell>{data_row[key]}</TableCell>)
+        }
+      })
+      return result
+    }
     return (
-        <div>
-            <DataGrid
-                columns={columns}
-                rows={data}
-                autoHeight={true}
-                autoResizeColumns={true}
-                hideFooter={true}
-                onEditRowsModelChange={handleEditRowsModelChange}
-                onSelectionModelChange={(ids) => {
-                    const selectedIDs = new Set(ids);
-                    const selectedRowData = data.filter((row) =>
-                      selectedIDs.has(row.id.toString())
-                    );
-                    console.log('a')
-                    setOnclickRow(selectedRowData[0])
-                    //console.log(selectedRowData[0]);
-                }}
-            />
-            {/* <Button variant="contained" color="primary" onClick={handleClickButton}>
-                Show me grid data
-            </Button> */}
-        </div>
+      console.log("data", data),
+      console.log("rows: ", data.length),
+        (data.length > 0)?
+          (<TableContainer component={Paper} >
+            <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+              <TableHead>
+                <TableRow>
+                  {header_list(data)}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {
+                  data.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                      {row_cells(row)}
+                    </TableRow>
+                  ))
+              }
+              </TableBody>
+            </Table>
+          </TableContainer>)
+          :
+          (<p>Loading...</p>)
     );
- 
 }
-    
