@@ -53,6 +53,7 @@ export default function GradeBoard() {
         //console.log("cook data", result);
         return result
     }
+
     const mapAssignment = (data)=>{
         let result = {}
         for(let i = 0; i < data.length; i++){
@@ -129,12 +130,36 @@ export default function GradeBoard() {
       return result
     }
 
+    const handleGradeUpdate = async (e, rowIndex, field) => {
+        console.log("Row number: ", rowIndex)
+        console.log("Assignment name: ", field)
+        console.log("Assignment id: ", headerSave[field])
+        console.log("Score: ", e.target.value)
+        // let new_data = [...data]
+        // let new_row = new_data[rowIndex]
+        // new_row[field] = e.target.value
+        // new_data[rowIndex] = new_row
+        // setData(new_data)
+        // let new_header = {...headerSave}
+        // new_header[field] = parseInt(e.target.value)
+        // //console.log("new_header", new_header)
+        // await classroomAPI.updateAssignment(params.classroomId, header_list(new_data)[rowIndex].props.field, new_header[field])
+    }
+
     const row_cells = (data_row) => {
       let result = []
       let h = Object.keys(data_row)
       h.forEach(key => {
         if(key !== 'id' && key !== 'name' && key !== 'userID' && key !== 'total'){
-          result.push(<TableCell value={data_row[key]}><TextField>{data_row[key]}</TextField></TableCell>)
+          result.push(<TableCell>
+                        <TextField
+                            onBlur={(e) => handleGradeUpdate(e, data.indexOf(data_row), key)} 
+                            type='number' 
+                            variant="standard" 
+                            min={0}>
+                            {data_row[key]}
+                        </TextField>
+                      </TableCell>)
         }
         else{
           result.push(<TableCell>{data_row[key]}</TableCell>)
@@ -142,9 +167,10 @@ export default function GradeBoard() {
       })
       return result
     }
+    
     return (
-      console.log("data", data),
-      console.log("rows: ", data.length),
+      //console.log("data", data),
+      //console.log("rows: ", data.length),
         (data.length > 0)?
           (<TableContainer component={Paper} >
             <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
