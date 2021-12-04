@@ -131,23 +131,36 @@ export default function GradeBoard() {
     }
 
     const handleGradeUpdate = async (e, rowIndex, field) => {
+      if((data.length > 0) && (data[rowIndex][field] !== null)) {
         console.log("Row number: ", rowIndex)
         console.log("Assignment name: ", field)
         console.log("Assignment id: ", headerSave[field])
         console.log("Score: ", e.target.value)
-        // let new_data = [...data]
-        // let new_row = new_data[rowIndex]
-        // new_row[field] = e.target.value
-        // new_data[rowIndex] = new_row
-        // setData(new_data)
-        // let new_header = {...headerSave}
-        // new_header[field] = parseInt(e.target.value)
-        // //console.log("new_header", new_header)
-        // await classroomAPI.updateAssignment(params.classroomId, header_list(new_data)[rowIndex].props.field, new_header[field])
+        console.log("Student id: ", data[rowIndex].id)
+        console.log("Classroom id: ", params.classroomId)
+
+        let _classroomId = params.classroomId
+        let _studentId = data[rowIndex].id
+        let _assignmentId = headerSave[field]
+        let _score = e.target.value
+        
+        if(_classroomId && _studentId && _assignmentId && _score) {
+          const response = await classroomAPI.updateScore(_classroomId, _studentId, _assignmentId, _score)
+          if (!response.ok) {
+            console.log("Update grade failed")
+          }
+          else {
+            console.log("Update grade success")
+          }
+        }
+      }
+      else {
+        console.log("No data to process")
+      }
     }
 
     const row_cells = (data_row) => {
-      let result = []
+      let result = []   
       let h = Object.keys(data_row)
       h.forEach(key => {
         if(key !== 'id' && key !== 'name' && key !== 'userID' && key !== 'total'){
