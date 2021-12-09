@@ -141,7 +141,7 @@ let classroomAPI = {
         }
         return await fetch(fetchURL, fetchOption)
     },
-    updateScore: async({classroomId, assignmentId, score, userid}) => {
+    updateScore: async(classroomId, assignmentId, score, userid) => {
         const fetchURL = `${originURL}/classrooms/${classroomId}/assignments/${assignmentId}/scores/${userid}`
         const fetchOption = {
             method: 'POST',
