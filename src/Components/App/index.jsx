@@ -16,6 +16,7 @@ import { AuthProvider, AuthContext, NavbarElProvider } from '../../Context/Globa
 import { NewClassroomAddedProvider} from '../../Context/NewClassroomAddedContext';
 import { AddClassroomModalProvider } from '../../Context/AddClassroomModalContext'
 import ListAssignment from '../Assignment/ListAssignment'
+import Dashboard from '../Dashboard';
 
 export default function App() {
     const [auth,] = useContext(AuthContext)
@@ -29,7 +30,8 @@ export default function App() {
                             <AddClassroomModalProvider>
                                 <TopNavBar />
                             </AddClassroomModalProvider>
-                            <Routes> 
+                            <Routes>
+                                <Route path='/admin/dashboard' element={<Dashboard />} />
                                 <Route path='/classrooms/:classroomId/assignments' element={<ListAssignment />}/>
                                 <Route path='/classrooms/:classroomId/scoreboard' element={<GradeBoard />}/>
                                 <Route path='/login' element={<LoginForm />} />
