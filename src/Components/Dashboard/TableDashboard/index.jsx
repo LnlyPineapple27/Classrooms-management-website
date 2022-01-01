@@ -86,7 +86,7 @@ var sampleData = [{
     "email": "MaidCafeInYourArea2@mcafe.com.jp",
     "role": 2
 }, {
-    "id":0,
+    "id":10,
     "username": "fcheeseman9",
     "password": "VEnz8BmmYA",
     "name": "Haachama Chama",
@@ -146,6 +146,7 @@ export default function BasicTable({ tableHeader }) {
     }
 
     const sortData = (data, state) => {
+        if(state === 0) return data
         const sortFactor = state === 1 ? 1 : -1
         const compareFunc = (a, b) => sortFactor * (Date.parse(a.createdDate) - Date.parse(b.createdDate))
         const newData = data.slice().sort(compareFunc)
@@ -166,7 +167,8 @@ export default function BasicTable({ tableHeader }) {
     const handleSort = () => {
         const newSortState = (sortState + 1) % 3 
         setSortSate(newSortState)
-        const newVData = newSortState === 0 ? filerData(originData, searchKeyword) : sortData(filerData(originData, searchKeyword), newSortState)
+        const filteredData = filerData(originData, searchKeyword)
+        const newVData = sortData(filteredData, newSortState)
         setVisibleData(newVData)
     }
 
