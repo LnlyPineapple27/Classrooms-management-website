@@ -95,7 +95,7 @@ var sampleData = [{
     "role": 2
 }]
 
-export default function BasicTable({ tableHeader }) {
+export default function BasicTable({ tableHeader, cuDialog, handleOpenDialog }) {
     const [headers, setHeaders] = useState([])
     const [originData, setOriginData] = useState([])
     const [visibleData, setVisibleData] = useState([])
@@ -156,8 +156,8 @@ export default function BasicTable({ tableHeader }) {
 
     const filerData = (data, keyword) => {
         const filterFunc = item => {
-            const lowercaseName = item.name.toLowerCase()
-            const lowercaseEmail = item.email.toLowerCase()
+            const lowercaseName = item.name ? item.name.toLowerCase() : ""
+            const lowercaseEmail = item.email ? item.email.toLowerCase() :""
             const lowercaseKW = keyword.toLowerCase()
             return lowercaseName.includes(lowercaseKW) || lowercaseEmail.includes(lowercaseKW)
         }
@@ -190,17 +190,24 @@ export default function BasicTable({ tableHeader }) {
             />
             <TableContainer component={Paper}>
                 <Box style={{ display: "flex", flexGrow: 1, padding: 10, alignItems: "center"}}>
-                    <Typography variant="h4" component="div" gutterBottom>
+                    <Typography style={{ minWidth: "33%" }} variant="h4" component="div" gutterBottom>
                         {tableHeader}
                     </Typography>
                     <Manager 
-                    style={{marginLeft: "auto"}} 
-                    checkedList={checkedList} 
-                    handleClickCreate={() => setDialogStatus(true)}
-                    handleClickUpdate={() => setDialogStatus(true)}
-                    handleClickSort={handleSort}
-                    sortBtnState={sortState}
-                    handleSearch={handleSearch}
+                        style={{
+                            marginLeft: "auto", 
+                            flexGrow: 1,
+                            display: "flex",
+                            width: "100%",
+                            justifyContent: "space-between"
+                        }} 
+                        checkedList={checkedList} 
+                        handleClickCreate={() => setDialogStatus(true)}
+                        handleClickUpdate={() => setDialogStatus(true)}
+                        handleClickSort={handleSort}
+                        sortBtnState={sortState}
+                        handleSearch={handleSearch}
+                        isCrud={false}
                     />
                 </Box>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">

@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react'
+import { React, useState } from 'react'
 import Stack from '@mui/material/Stack'
 import { Button } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -12,12 +12,15 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault'
 import Tooltip from '@mui/material/Tooltip'
-import { grey, cyan, teal } from '@mui/material/colors'
+import { Box } from '@mui/material'
+import CreateAccountDialog from '../../../CreateAccountDialog'
 
 
 
-export default function Manager({ handleSearch, sortBtnState, style, checkedList, handleClickCreate, handleClickUpdate, handleClickDelete, handleClickSort }) {
+export default function Manager({ isCrud, handleSearch, sortBtnState, style, checkedList, handleClickCreate, handleClickUpdate, handleClickDelete, handleClickSort }) {
     
+    const [createAccountDialogStatus, setCreateAccountDialogStatus] = useState(false)
+
     const sortBtnIconsMap = {
         0: <DisabledByDefaultIcon />,
         1: <ArrowDropUpIcon />,
@@ -35,11 +38,12 @@ export default function Manager({ handleSearch, sortBtnState, style, checkedList
     const blockDelete = list => Object.values(list).every(checked => checked === false)
 
     return (
-        <Stack style={style} direction="row" alignItems="center" spacing={2}>
-            
+        <Box style={style} direction="row" alignItems="center" spacing={2}>
+
             <Tooltip title="Search by name and email" placement="top">
                 <Paper
                     sx={{ p: '2px 4px', display: 'flex', alignItems: 'center' }}
+                    style={{ minWidth: "50%" }}
                 >
                     <InputBase
                         sx={{ ml: 1, flex: 1 }}
@@ -52,7 +56,8 @@ export default function Manager({ handleSearch, sortBtnState, style, checkedList
                     </IconButton>
                 </Paper>
             </Tooltip>
-            <Stack direction="row" alignItems="center" spacing={1}>
+
+            {isCrud ? (<Stack direction="row" alignItems="center" spacing={1}>
                 <Tooltip title={sortBtnTooltipsMap[sortBtnState]} placement="top">
                     <Button
                         variant="contained" 
@@ -89,7 +94,22 @@ export default function Manager({ handleSearch, sortBtnState, style, checkedList
                 >
                     Delete
                 </Button>
-            </Stack>
-        </Stack>
+            </Stack>) :
+                <Stack>
+                    <Button 
+                        variant="contained" 
+                        color="success" 
+                        endIcon={<AddCircleIcon />}
+                        onClick={() => setCreateAccountDialogStatus(true)}
+                    >
+                        Create Account
+                    </Button>
+                    <CreateAccountDialog
+                        status={createAccountDialogStatus} 
+                        handleClose={() => setCreateAccountDialogStatus(false)}
+                    />
+                </Stack>
+            }
+        </Box>
     )
 }   

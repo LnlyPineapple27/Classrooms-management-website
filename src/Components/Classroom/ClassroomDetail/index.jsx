@@ -23,6 +23,8 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { NavbarElContext } from "../../../Context/GlobalContext";
 import ClassroomTabs from '../../ClassroomTabs/'
+import ClassroomDetailCard from "../ClassroomDetailCard";
+
 
 export default function ClassroomDetail() {
     const [,setNavbarEl] = useContext(NavbarElContext)
@@ -32,9 +34,6 @@ export default function ClassroomDetail() {
         name: '',
         section:'',
         description:'',
-
-        inviteLink:'',
-        invitationURL: 'unknown',
     })
     const [email, setEmail] = useState('')
     const [openSendEmail, setOpenSendEmail] = useState(false)
@@ -128,27 +127,12 @@ export default function ClassroomDetail() {
 
     return (
         <div className="page-container">
-            <div className="page-container__classroom-detail d-flex flex-column align-center">
-                <h1 className="page-title">Classroom Detail</h1>
-                <div className="classroom-detail">
-                    <p className="classroom-detail__element classroom-name">
-                        <span className="classroom-detail__element__label">Name: </span>
-                        <span className="classroom-detail__element__content">{detail.name}</span>
-                    </p>
-                    <p className="classroom-detail__element classroom-section">
-                        <span className="classroom-detail__element__label">Section: </span>
-                        <span className="classroom-detail__element__content">{detail.section}</span>
-                    </p>
-                    <p className="classroom-detail__element classroom-description">
-                        <span className="classroom-detail__element__label">Description: </span>
-                        <span className="classroom-detail__element__content">{detail.description}</span>
-                    </p>
-                </div>
-            </div>
-            {/* <div className="page-container__button-group">
-                <Button className="page-container__button-group__button bg-primary" onClick={handleClickOpen}>Create Invite by Email</Button>
-                <Button className="page-container__button-group__button bg-primary" onClick={handleGetInvitationURL}>Create Invite Link</Button>
-            </div> */}
+            <ClassroomDetailCard 
+                id={detail.id} 
+                name={detail.name} 
+                section={detail.section}
+                description={detail.description}
+            />
             <div className="page-container__button-group">
                 {role === 2 && 
                 (<Button 
