@@ -95,7 +95,7 @@ var sampleData = [{
     "role": 2
 }]
 
-export default function BasicTable({ tableHeader }) {
+export default function BasicTable({ tableHeader, cuDialog, handleOpenDialog }) {
     const [headers, setHeaders] = useState([])
     const [originData, setOriginData] = useState([])
     const [visibleData, setVisibleData] = useState([])
@@ -156,8 +156,8 @@ export default function BasicTable({ tableHeader }) {
 
     const filerData = (data, keyword) => {
         const filterFunc = item => {
-            const lowercaseName = item.name.toLowerCase()
-            const lowercaseEmail = item.email.toLowerCase()
+            const lowercaseName = item.name ? item.name.toLowerCase() : ""
+            const lowercaseEmail = item.email ? item.email.toLowerCase() :""
             const lowercaseKW = keyword.toLowerCase()
             return lowercaseName.includes(lowercaseKW) || lowercaseEmail.includes(lowercaseKW)
         }
