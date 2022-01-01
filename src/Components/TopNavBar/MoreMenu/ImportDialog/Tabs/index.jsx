@@ -125,7 +125,7 @@ export default function VerticalTabs({handleFileImportChange, message, severity}
             let row = parseInt(z.substring(1));
             let value = ws[z].v;
             //store header names
-            if(row == 1) {
+            if(row === 1) {
                 headers[col] = value.toLowerCase() === "student id" ? "sid" : value.toLowerCase();
                 continue;
             }
@@ -148,7 +148,6 @@ export default function VerticalTabs({handleFileImportChange, message, severity}
     reader.readAsBinaryString(f);
   }
 
-  const ariaLabel = { 'aria-label': 'description' };
   
   React.useEffect(() => {
       const fetchData = async () => {

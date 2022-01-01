@@ -49,17 +49,21 @@ export default function ClassroomDetail() {
     useEffect(() => {
         let fetchData = async () => {
             let result = await classroomAPI.getClassroomDetail(params.classroomId)
-            console.log(result)
-            setDetail(result.data.classroomDetail ? result.data.classroomDetail : {})
+            let fDetail = result.data.classroomDetail ? result.data.classroomDetail : {}
+            let fRows = result.data.userList ? result.data.userList : []
             setInviteLink(`${window.document.location.hostname}/invite/2`+result.data.classroomDetail.inviteLink)
-            setRows(result.data.userList ? result.data.userList : [])
-            console.log(result.data.classroomDetail)
+            setRows(fRows)
+            setDetail({...fDetail, ...{
+                members: fRows.length,
+                lecturers: fRows.filter(row => row.Users.role === 1).map(row => row.Users.name)
+            }})
             const userId = JSON.parse(localStorage.getItem('account')) ? JSON.parse(localStorage.getItem('account')).userID : 'a'
             const fetchRole = await classroomAPI.getRole(params.classroomId, userId)
             if (fetchRole.ok) {
                 const userRole = await fetchRole.json()
                 setRole(userRole)
             }
+
         }
         setNavbarEl({
             classroomTabs: (<ClassroomTabs value={0} classroomId={params.classroomId} />),
@@ -132,6 +136,8 @@ export default function ClassroomDetail() {
                 name={detail.name} 
                 section={detail.section}
                 description={detail.description}
+                members={detail.members}
+                lecture={detail.lecturers}
             />
             <div className="page-container__button-group">
                 {role === 2 && 
@@ -237,20 +243,20 @@ export default function ClassroomDetail() {
                         <TableHead>
                             <TableRow>
                                 <TableCell>ID</TableCell>
-                                {columns.map(item => <TableCell align="right">{item}</TableCell>)}
+                                {columns.map((item, index) => <TableCell key={`header_cell_${index}`} align="right">{item}</TableCell>)}
                             </TableRow>
                         </TableHead>
                         <TableBody>
                         {rows.map((row, index) => (
                             <TableRow
-                            key={index}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                key={`row_${index}`}
+                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
-                            <TableCell >{index}</TableCell>
-                            <TableCell component="th" scope="row" align="right"><strong>{row.Users.name}    </strong></TableCell>
-                            <TableCell align="right">{codeToRole[row.Users.UserClassroom.role]}</TableCell>
-                            <TableCell align="right">{row.Users.dob.split('T')[0]}</TableCell>
-                            <TableCell align="right">{row.Users.email}</TableCell>
+                                <TableCell key={`cell_${index}`}>{index}</TableCell>
+                                <TableCell key={`cell_${index}_name`} component="th" scope="row" align="right"><strong>{row.Users.name}    </strong></TableCell>
+                                <TableCell key={`cell_${index}_role`} align="right">{codeToRole[row.Users.role]}</TableCell>
+                                <TableCell key={`cell_${index}_dob`} align="right">{row.Users.dob.split('T')[0]}</TableCell>
+                                <TableCell key={`cell_${index}_email`} align="right">{row.Users.email}</TableCell>
                             </TableRow>
                         ))}
                         </TableBody>

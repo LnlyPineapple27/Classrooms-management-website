@@ -45,7 +45,9 @@ export default function TopNavBar() {
         setAuth(false)
         break
       case 'profile':
-        navigate('/profile', { replace: true })
+        let accountInfo = JSON.parse(localStorage.getItem("account") ?? "") ?? {}
+        let id = accountInfo.userID
+        navigate(`/profile/${id}`, { replace: true })
         break
       default: break
     }

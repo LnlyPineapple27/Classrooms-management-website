@@ -26,7 +26,11 @@ export default function InvitedPage(props) {
     useEffect(()=>{
         const fetchData = async () => {
             let result = await classroomAPI.getClassroomDetailGuest(params.inviteCode)
-            setDetail(result.data)
+            setDetail({...result.data.classroomDetail, ...{
+                members: result.data.userList.length,
+                lecturers: result.data.userList.filter(item => item.Users.role === 1).map(item => item.Users.name)
+            }})
+            console.log(result.data)
         }
         fetchData()
     },[params.inviteCode])
@@ -57,6 +61,8 @@ export default function InvitedPage(props) {
                 section={detail.section}
                 description={detail.description}
                 name={detail.name}
+                members={detail.members}
+                lecturers={detail.lecturers}
             />
 
             <Box sx={{ mt: 2 }}>
