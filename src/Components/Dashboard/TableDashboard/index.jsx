@@ -190,17 +190,24 @@ export default function BasicTable({ tableHeader, cuDialog, handleOpenDialog }) 
             />
             <TableContainer component={Paper}>
                 <Box style={{ display: "flex", flexGrow: 1, padding: 10, alignItems: "center"}}>
-                    <Typography variant="h4" component="div" gutterBottom>
+                    <Typography style={{ minWidth: "33%" }} variant="h4" component="div" gutterBottom>
                         {tableHeader}
                     </Typography>
                     <Manager 
-                    style={{marginLeft: "auto"}} 
-                    checkedList={checkedList} 
-                    handleClickCreate={() => setDialogStatus(true)}
-                    handleClickUpdate={() => setDialogStatus(true)}
-                    handleClickSort={handleSort}
-                    sortBtnState={sortState}
-                    handleSearch={handleSearch}
+                        style={{
+                            marginLeft: "auto", 
+                            flexGrow: 1,
+                            display: "flex",
+                            width: "100%",
+                            justifyContent: "space-between"
+                        }} 
+                        checkedList={checkedList} 
+                        handleClickCreate={() => setDialogStatus(true)}
+                        handleClickUpdate={() => setDialogStatus(true)}
+                        handleClickSort={handleSort}
+                        sortBtnState={sortState}
+                        handleSearch={handleSearch}
+                        isCrud={false}
                     />
                 </Box>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">

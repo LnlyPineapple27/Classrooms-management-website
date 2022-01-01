@@ -1,22 +1,22 @@
-import ClassroomsList from '../Classroom/ClassroomsList';
+import ClassroomsList from '../Classroom/ClassroomsList'
 import TopNavBar from '../TopNavBar'
-import { useContext } from 'react';
-import LoginForm from '../Login_Register/LoginForm';
-import RegisterForm from '../Login_Register/RegisterForm';
-import Profile from '../Profile';
+import { useContext } from 'react'
+import LoginForm from '../Login_Register/LoginForm'
+import RegisterForm from '../Login_Register/RegisterForm'
+import Profile from '../Profile'
 import {
     BrowserRouter,
     Routes,
     Route
-  } from "react-router-dom";
-import ClassroomDetail from '../Classroom/ClassroomDetail';
-import ClassroomDetailCard from '../Classroom/ClassroomDetailCard';
-import GradeBoard from '../GradeBoard';
+  } from "react-router-dom"
+import ClassroomDetail from '../Classroom/ClassroomDetail'
+import GradeBoard from '../GradeBoard'
 import { AuthProvider, AuthContext, NavbarElProvider } from '../../Context/GlobalContext'
-import { NewClassroomAddedProvider} from '../../Context/NewClassroomAddedContext';
+import { NewClassroomAddedProvider} from '../../Context/NewClassroomAddedContext'
 import { AddClassroomModalProvider } from '../../Context/AddClassroomModalContext'
 import ListAssignment from '../Assignment/ListAssignment'
-import Dashboard from '../Dashboard';
+import Dashboard from '../Dashboard'
+import InvitedPage from '../InvitedPage'
 
 export default function App() {
     const [auth,] = useContext(AuthContext)
@@ -39,7 +39,7 @@ export default function App() {
                                 <Route path='/classrooms' element={<ClassroomsList />} />
                                 <Route path='/register' element={<RegisterForm />} />
                                 <Route path='/profile' element={<Profile />} />
-                                <Route path='/invite/:inviteCode' element={<ClassroomDetailCard />} />                            
+                                <Route path='/invite/:inviteCode' element={<InvitedPage />} />                            
                                 <Route path='/' element={ auth ? <ClassroomsList /> : <LoginForm />} /> 
                             </Routes>
                         </NewClassroomAddedProvider>
@@ -47,5 +47,5 @@ export default function App() {
                 </AuthProvider>
             </BrowserRouter>
         </div>
-    );
+    )
 }

@@ -1,90 +1,57 @@
-import {React,useEffect,useState,useContext} from 'react'
-import classroomAPI from '../../../APIs/classroomAPI'
-import { useParams } from 'react-router-dom'
-import { Button } from '@mui/material'
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import { useNavigate } from 'react-router-dom';
-import accountAPI from '../../../APIs/accountAPI';
-import { AuthContext } from '../../../Context/GlobalContext';
+import { React } from 'react'
+import Paper from '@mui/material/Paper'
+import Accordion from '@mui/material/Accordion'
+import AccordionSummary from '@mui/material/AccordionSummary'
+import AccordionDetails from '@mui/material/AccordionDetails'
+import Typography from '@mui/material/Typography'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
+import { Box } from '@mui/material'
 
-export default function ClassroomDetailCard() {
-    const [detail, setDetail] = useState({})
-    const params = useParams()
-    const [open, setOpen] = useState(false)
-    const navigate = useNavigate()
-    const [auth,] = useContext(AuthContext)
 
-    useEffect(()=>{
-        const fetchData = async () => {
-            let result = await classroomAPI.getClassroomDetailGuest(params.inviteCode)
-            setDetail(result.data)
-            console.log(result.data)
-        }
-        fetchData()
-    },[params.inviteCode])
+const lecturesMock = ["Trieu Trinh Trinh, To Tien Dat, Tran Minh Loc"]
 
-    const handleOpen = () => {
 
-        setOpen(true)
-    }
-
-    const handleClose = () => {
-        setOpen(false)
-    }
-
-    const handleJoin = async () => {
-        if(auth) {
-            let result = await accountAPI.joinClassroom(params.inviteCode, detail.id)
-            console.log(result)
-            navigate('/',{replace:true})
-        }
-        else
-            navigate('/login',{replace:true})
-    }
+export default function ClassroomDetailCard(props) {
     return (
-        <div className="page-container">
-            <div className="page-container__classroom-detail d-flex flex-column align-center">
-                <h1 className="page-title">Classroom Detail</h1>
-                <div className="classroom-detail">
-                    <p className="classroom-detail__element classroom-name">
-                        <span className="classroom-detail__element__label">Name: </span>
-                        <span className="classroom-detail__element__content">{detail.name}</span>
-                    </p>
-                    <p className="classroom-detail__element classroom-section">
-                        <span className="classroom-detail__element__label">Section: </span>
-                        <span className="classroom-detail__element__content">{detail.section}</span>
-                    </p>
-                    <p className="classroom-detail__element classroom-description">
-                        <span className="classroom-detail__element__label">Description: </span>
-                        <span className="classroom-detail__element__content">{detail.description}</span>
-                    </p>
-                </div>
-            </div>
-            <div className="page-container__button-group">
-                <Button
-                className="page-container__button-group__button bg-primary" 
-                onClick={handleOpen}
-                >
-                    Join
-                </Button>
-                    
-                <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle>Join Classroom</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            {auth ? 'Click Join below to confirm join this class.' : 'You need Login to do this action.'}
-                        </DialogContentText>
-                    </DialogContent>    
-                    <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleJoin}>{auth ? 'Join' : 'Login'}</Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
-        </div>
+        <Box component="div">
+            <Paper 
+                elevation={3} 
+                style={{ display:"flex", flexDirection:"column", justifyContent: "flex-end" }}
+            >
+                <Accordion TransitionProps={{ unmountOnExit: true }} expanded>
+                    <AccordionSummary
+                        expandIcon={<InfoOutlinedIcon fontSize='medium'/>}
+                        aria-controls="panel1a-content"
+                        id="classroomHeader"
+                    >
+                        <Typography 
+                            variant="button" 
+                            sx={{ flexShrink: 0 }} 
+                            style={{ fontSize: 24 , marginRight: "5%"}}
+                        >
+                            {props.name}
+                        </Typography>
+                        <Typography 
+                            sx={{ color: 'text.secondary' }} 
+                            style={{ fontSize: 20, margin: "auto 0" }}
+                        >
+                            {props.section}
+                        </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography variant="subtitle1" gutterBottom component="div">
+                            {props.description}
+                        </Typography>
+                        <Typography variant="caption" display="block" style={{ fontSize: 18 }} gutterBottom>
+                            {`Members: ${100}`}
+                        </Typography>
+                        <Typography variant="caption" display="block" style={{ fontSize: 18 }} gutterBottom>
+                            {`Lecturers: ${lecturesMock.reduce((prev, current, index) => `${prev}, ${current}`)}`}
+                        </Typography>
+                    </AccordionDetails>
+                </Accordion>
+            </Paper>
+            {props.children}
+        </Box>
     )
 } 
