@@ -16,7 +16,9 @@ import RestoreIcon from '@mui/icons-material/Restore';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import { NavbarElContext } from '../../Context/GlobalContext';
+import userAPI from '../../APIs/userAPI';
 import './index.scss'
+import { useParams } from 'react-router-dom';
 
 export default function Profile() {
     const [,setNavbarEl] = useContext(NavbarElContext)
@@ -27,11 +29,15 @@ export default function Profile() {
     const [isSaved, setIsSaved] = useState(false)
     const [error, setError] = useState(null)
     const [success, setSuccess] = useState(false)
+    const [isOwner, setIsOwner] = useState(false)
+    const params = useParams()
 
     useEffect(() => {
         const fetchData = async () => {
-            let result = await accountAPI.userProfile()
-            let profileInfoResult = result.data ?? {}
+            let id = params.id
+            let response = await userAPI.userProfile(id)
+            let profileInfoResult = await response.json()
+            setIsOwner(profileInfoResult.isOwner)
             setProfileInfo({...profileInfoResult, dob: profileInfoResult.dob.split('T')[0]})
             setVisibleInfo({
                 name:profileInfoResult.name,
@@ -130,50 +136,64 @@ export default function Profile() {
                         default:
                             return (
                                 <TextField
-                                key={index}
-                                id={`tf_${key}`}
-                                value={visibleInfo[key]}
-                                label={key.slice().toUpperCase()}
-                                margin="dense"
-                                className='info-container__element'
-                                onChange={handleChange(key)}
+                                    key={index}
+                                    id={`tf_${key}`}
+                                    value={visibleInfo[key]}
+                                    label={key.slice().toUpperCase()}
+                                    margin="dense"
+                                    className='info-container__element'
+                                    onChange={handleChange(key)}
+                                    disabled={!isOwner}
                                 />
                             )
                             case 'dob':
-                                return <LocalizationProvider className='info-container__element' dateAdapter={AdapterDateFns}>
+                                return (
+                                <LocalizationProvider 
+                                    className='info-container__element' 
+                                    dateAdapter={AdapterDateFns}
+                                    key={index}
+                                >
                                     <DesktopDatePicker
-                                        key={index}
                                         label="Date of birth"
                                         type="date"   
                                         value={visibleInfo[key]}
                                         format="yyyy-MM-dd"
+                                        disabled={!isOwner}
                                         onChange={handleChangeDate}
-                                        renderInput={(params) => <TextField
-                                                                    className='info-container__element'
-                                                                    label="Date of birth"
-                                                                    id="tf_dob"
-                                                                    onChange={handleChangeDate}
-                                                                    {...params} />}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                className='info-container__element'
+                                                label="Date of birth"
+                                                id="tf_dob"
+                                                onChange={handleChangeDate}
+                                                {...params} 
+                                                disabled={!isOwner}
+                                            />
+                                        )}
                                     />
-                                </LocalizationProvider>;
+                                </LocalizationProvider>
+                                )
                             case 'sex':
                                 return (
                                     <FormControl key={index} className='info-container__element'>
                                         <InputLabel >SEX</InputLabel>
-                                        <Select className='info-container__element'
-                                                        id="sl_sex"
-                                                        value={visibleInfo[key]}
-                                                        label={key.slice().toUpperCase()}
-                                                        onChange={handleChangeSex}>
-                                                    <MenuItem value={2}>Others</MenuItem>
-                                                    <MenuItem value={1}>Female</MenuItem>
-                                                    <MenuItem value={0}>Male</MenuItem>
-                                                </Select>
+                                        <Select 
+                                            className='info-container__element'
+                                            id="sl_sex"
+                                            value={visibleInfo[key]}
+                                            label={key.slice().toUpperCase()}
+                                            onChange={handleChangeSex}
+                                            disabled={!isOwner}
+                                        >
+                                            <MenuItem value={2}>Others</MenuItem>
+                                            <MenuItem value={1}>Female</MenuItem>
+                                            <MenuItem value={0}>Male</MenuItem>
+                                        </Select>
                                     </FormControl>
                                 )
                     }})
                 }
-                <div className="info-container__element button-group">
+                {isOwner && (<div className="info-container__element button-group">
                     <Button
                     className='info-container__element button-group__button'
                     variant="contained" 
@@ -195,7 +215,7 @@ export default function Profile() {
                     >
                         Save
                     </LoadingButton>
-                </div>
+                </div>)}
             </div>
         </Box>
     )

@@ -43,10 +43,10 @@ export default function ClassroomDetailCard(props) {
                             {props.description}
                         </Typography>
                         <Typography variant="caption" display="block" style={{ fontSize: 18 }} gutterBottom>
-                            {`Members: ${100}`}
+                            {`Members: ${props.members ?? "UNK"}`}
                         </Typography>
                         <Typography variant="caption" display="block" style={{ fontSize: 18 }} gutterBottom>
-                            {`Lecturers: ${lecturesMock.reduce((prev, current, index) => `${prev}, ${current}`)}`}
+                            {`Lecturers: ${(props.lecturers ?? ["UNK"]).reduce((prev, current, index) => `${prev}, ${current}`)}`}
                         </Typography>
                     </AccordionDetails>
                 </Accordion>

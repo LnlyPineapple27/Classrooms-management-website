@@ -38,7 +38,7 @@ export default function App() {
                                 <Route path='/classrooms/:classroomId' element={<ClassroomDetail />} />
                                 <Route path='/classrooms' element={<ClassroomsList />} />
                                 <Route path='/register' element={<RegisterForm />} />
-                                <Route path='/profile' element={<Profile />} />
+                                <Route path='/profile/:id' element={<Profile />} />
                                 <Route path='/invite/:inviteCode' element={<InvitedPage />} />                            
                                 <Route path='/' element={ auth ? <ClassroomsList /> : <LoginForm />} /> 
                             </Routes>
