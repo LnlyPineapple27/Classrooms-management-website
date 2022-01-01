@@ -12,7 +12,7 @@ export default function TableRowDashboard({ data, checkedList, setCheckedList })
     }
 
     const createCell = (header, field) => {
-        return <TableCell key={`${header}_${data.id}`} align="right">{field[header]}</TableCell>
+        return <TableCell key={`${header}_${data.id}`} align="left">{field[header]}</TableCell>
     }
 
     const createCheckboxCell = data => {

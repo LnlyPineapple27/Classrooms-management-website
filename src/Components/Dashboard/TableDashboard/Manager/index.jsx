@@ -16,7 +16,7 @@ import { grey, cyan, teal } from '@mui/material/colors'
 
 
 
-export default function Manager({ sortBtnState, style, checkedList, handleClickCreate, handleClickUpdate, handleClickDelete, handleClickSort }) {
+export default function Manager({ handleSearch, sortBtnState, style, checkedList, handleClickCreate, handleClickUpdate, handleClickDelete, handleClickSort }) {
     
     const sortBtnIconsMap = {
         0: <DisabledByDefaultIcon />,
@@ -39,15 +39,15 @@ export default function Manager({ sortBtnState, style, checkedList, handleClickC
             
             <Tooltip title="Search by name and email" placement="top">
                 <Paper
-                    component="form"
                     sx={{ p: '2px 4px', display: 'flex', alignItems: 'center' }}
                 >
                     <InputBase
                         sx={{ ml: 1, flex: 1 }}
                         placeholder="Name or email"
                         inputProps={{ 'aria-label': 'search records' }}
+                        onChange={e => handleSearch(e.target.value)}
                     />
-                    <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
+                    <IconButton sx={{ p: '10px' }} aria-label="search" disabled>
                         <SearchIcon />
                     </IconButton>
                 </Paper>
@@ -58,7 +58,8 @@ export default function Manager({ sortBtnState, style, checkedList, handleClickC
                         variant="contained" 
                         color="info"
                         endIcon= {sortBtnIconsMap[sortBtnState]}
-                        onClick={handleClickSort}>
+                        onClick={handleClickSort}
+                    >
                         Sort
                     </Button>
                 </Tooltip>

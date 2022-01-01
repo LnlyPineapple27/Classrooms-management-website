@@ -17,81 +17,81 @@ var sampleData = [{
     "id":1, 
     "username": "teacher",
     "password": "teacher",
-    "userID": 1,
+    "name": "Trinh Minh Dat",
     "createdDate": "2021-03-03",
-    "googleToken": "",
+    "email": "SuperIdol@spi.vn",
     "role": 1
 }, {
     "id":2,
     "username": "student",
     "password": "student",
-    "userID": 2,
+    "name": "To Dong Thanh",
     "createdDate": "2021-10-24",
-    "googleToken": "",
+    "email": "Cuutoivoi@cuu.toi.voi",
     "role": 2
 }, {
     "id":3,
     "username": "admin",
     "password": "admin",
-    "userID": 3,
+    "name": "Tran Phuoc Phat",
     "createdDate": "2021-03-12",
-    "googleToken": "",
+    "email": "TPP@abc.cc",
     "role": 0
 }, {
     "id":4,
     "username": "cespino3",
     "password": "MFTIFbJP",
-    "userID": 4,
+    "name": "Dau Buoi Tai Nhan",
     "createdDate": "2021-09-27",
-    "googleToken": "",
+    "email": "TaiNhanVippro@Vip.pro.vn",
     "role": 2
 }, {
     "id":5,
     "username": "ejeandeau4",
     "password": "FcDrE7VMtU",
-    "userID": 5,
+    "name": "Tieu Trinh Trinh",
     "createdDate": "2020-12-31",
-    "googleToken": "",
+    "email": "Onthidaihocvatly12@gmail.com",
     "role": 2
 }, {
     "id":6,
     "username": "zkubik5",
     "password": "t4bRlmb",
-    "userID": 6,
+    "name": "Meta Slave",
     "createdDate": "2021-02-05",
-    "googleToken": "",
+    "email": "GenshinGang@salve.meta.gang",
     "role": 2
 }, {
     "id":7,
     "username": "gcrowne6",
     "password": "loOc5PpfB",
-    "userID": 7,
+    "name": "Gachikoi Ni Nare",
     "createdDate": "2021-04-29",
-    "googleToken": "",
+    "email": "GachikoiGang@gang.sta.ww",
     "role": 2
 }, {
     "id":8,
     "username": "fluna7",
     "password": "AnHHLoC",
-    "userID": 8,
+    "name": "Moe Moe Kyun",
     "createdDate": "2021-01-06",
-    "googleToken": "",
+    "email": "MaidCafeInYourArea1@mcafe.com.jp",
     "role": 2
 }, {
     "id":9,
     "username": "rnuzzetti8",
     "password": "0dwSUm0tACEG",
-    "userID": 9,
+    "name": "Oishiku Nare",
     "createdDate": "2021-06-01",
-    "googleToken": "",
+    "email": "MaidCafeInYourArea2@mcafe.com.jp",
     "role": 2
 }, {
     "id":0,
     "username": "fcheeseman9",
     "password": "VEnz8BmmYA",
-    "userID": 10,
+    "name": "Haachama Chama",
     "createdDate": "2021-10-07",
-    "googleToken": "",
+    "email": "HaachaamaSekaiSaikoNoAidoru@gmail.com",
     "role": 2
 }]
 
@@ -102,6 +102,7 @@ export default function BasicTable({ tableHeader }) {
     const [checkedList, setCheckedList] = useState({})
     const [dialogStatus, setDialogStatus] = useState(false)
     const [sortState, setSortSate] = useState(0)
+    const [searchKeyword, setSearchKeyWord] = useState("")
 
     useEffect(() => {
         setHeaders(getHeaders(sampleData))
@@ -129,7 +130,7 @@ export default function BasicTable({ tableHeader }) {
     }
 
     const createHeaderCell = header => (
-        <TableCell key={`header_${header}`} align="right">
+        <TableCell key={`header_${header}`} align="left">
             {header}
         </TableCell>
     )
@@ -144,15 +145,34 @@ export default function BasicTable({ tableHeader }) {
         return [createCheckboxCell()].concat(headers.map(header => createHeaderCell(header)))
     }
 
+    const sortData = (data, state) => {
+        const sortFactor = state === 1 ? 1 : -1
+        const compareFunc = (a, b) => sortFactor * (Date.parse(a.createdDate) - Date.parse(b.createdDate))
+        const newData = data.slice().sort(compareFunc)
+        
+        return newData
+    }
+
+    const filerData = (data, keyword) => {
+        const filterFunc = item => {
+            const lowercaseName = item.name.toLowerCase()
+            const lowercaseEmail = item.email.toLowerCase()
+            const lowercaseKW = keyword.toLowerCase()
+            return lowercaseName.includes(lowercaseKW) || lowercaseEmail.includes(lowercaseKW)
+        }
+        return data.slice().filter(filterFunc)
+    }
+
     const handleSort = () => {
         const newSortState = (sortState + 1) % 3 
         setSortSate(newSortState)
+        const newVData = newSortState === 0 ? filerData(originData, searchKeyword) : sortData(filerData(originData, searchKeyword), newSortState)
+        setVisibleData(newVData)
+    }
 
-        if(newSortState === 0) return setVisibleData(originData);
-
-        const sortFactor = newSortState === 1 ? 1 : -1
-        const compareFunc = (a, b) => sortFactor * (Date.parse(a.createdDate) - Date.parse(b.createdDate))
-        const newVData = visibleData.slice().sort(compareFunc)
+    const handleSearch = keyword => {
+        setSearchKeyWord(keyword)
+        const newVData = sortData(filerData(originData, keyword), sortState)
         setVisibleData(newVData)
     }
 
@@ -178,6 +198,7 @@ export default function BasicTable({ tableHeader }) {
                     handleClickUpdate={() => setDialogStatus(true)}
                     handleClickSort={handleSort}
                     sortBtnState={sortState}
+                    handleSearch={handleSearch}
                     />
                 </Box>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
