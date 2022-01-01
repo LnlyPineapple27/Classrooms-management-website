@@ -16,8 +16,7 @@ import { grey, cyan, teal } from '@mui/material/colors'
 
 
 
-export default function Manager({ style, checkedList, handleClickCreate, handleClickUpdate, handleClickDelete, handleClickSort }) {
-    const [sortBtnState, setSortBtnState] = useState(0)
+export default function Manager({ sortBtnState, style, checkedList, handleClickCreate, handleClickUpdate, handleClickDelete, handleClickSort }) {
     
     const sortBtnIconsMap = {
         0: <DisabledByDefaultIcon />,
@@ -29,12 +28,6 @@ export default function Manager({ style, checkedList, handleClickCreate, handleC
         0: "No sorting.",
         1: "Sort by ascending created date.",
         2: "Sort by descending created date.",
-    }
-
-
-    const handleClickSortAndSetState = () => {
-        setSortBtnState((sortBtnState + 1) % Object.keys(sortBtnIconsMap).length)
-        handleClickSort()
     }
 
     const blockUpdate = list => Object.values(list).filter(Boolean).length !== 1
@@ -65,7 +58,7 @@ export default function Manager({ style, checkedList, handleClickCreate, handleC
                         variant="contained" 
                         color="info"
                         endIcon= {sortBtnIconsMap[sortBtnState]}
-                        onClick={handleClickSortAndSetState}>
+                        onClick={handleClickSort}>
                         Sort
                     </Button>
                 </Tooltip>

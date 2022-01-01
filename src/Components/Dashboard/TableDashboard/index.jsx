@@ -97,14 +97,17 @@ var sampleData = [{
 
 export default function BasicTable({ tableHeader }) {
     const [headers, setHeaders] = useState([])
-    const [data, setData] = useState([])
+    const [originData, setOriginData] = useState([])
+    const [visibleData, setVisibleData] = useState([])
     const [checkedList, setCheckedList] = useState({})
     const [dialogStatus, setDialogStatus] = useState(false)
+    const [sortState, setSortSate] = useState(0)
 
     useEffect(() => {
         setHeaders(getHeaders(sampleData))
-        setData(sampleData)
+        setOriginData(sampleData)
         setCheckedList(Object.fromEntries(sampleData.map(row => [row.id, false])))
+        setVisibleData(sampleData)
     }, [])
 
     const getHeaders = data => {
@@ -136,8 +139,21 @@ export default function BasicTable({ tableHeader }) {
             <Checkbox />
         </TableCell>
     )
+
     const createHeaderCellList = headers => {
         return [createCheckboxCell()].concat(headers.map(header => createHeaderCell(header)))
+    }
+
+    const handleSort = () => {
+        const newSortState = (sortState + 1) % 3 
+        setSortSate(newSortState)
+
+        if(newSortState === 0) return setVisibleData(originData);
+
+        const sortFactor = newSortState === 1 ? 1 : -1
+        const compareFunc = (a, b) => sortFactor * (Date.parse(a.createdDate) - Date.parse(b.createdDate))
+        const newVData = visibleData.slice().sort(compareFunc)
+        setVisibleData(newVData)
     }
 
     return (
@@ -148,7 +164,7 @@ export default function BasicTable({ tableHeader }) {
                 handleSave={() => setDialogStatus(false)}
                 title="Create"
                 contentText="Enter all required fields to confirm."
-                fields={data[0] ?? {}}
+                fields={originData[0] ?? {}}
             />
             <TableContainer component={Paper}>
                 <Box style={{ display: "flex", flexGrow: 1, padding: 10, alignItems: "center"}}>
@@ -160,7 +176,8 @@ export default function BasicTable({ tableHeader }) {
                     checkedList={checkedList} 
                     handleClickCreate={() => setDialogStatus(true)}
                     handleClickUpdate={() => setDialogStatus(true)}
-                    handleClickSort={() => {}}
+                    handleClickSort={handleSort}
+                    sortBtnState={sortState}
                     />
                 </Box>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -170,7 +187,7 @@ export default function BasicTable({ tableHeader }) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                    {data.map(row => (
+                    {visibleData.map(row => (
                         <TableRowDashboard
                         key={row.id}
                         data={row}
