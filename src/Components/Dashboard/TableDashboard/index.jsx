@@ -109,7 +109,7 @@ export default function BasicTable({ tableHeader }) {
 
     const getHeaders = data => {
         if(!isValidData(data)) return []
-        return Object.keys(data[0]);
+        return Object.keys(data[0])
     }
 
     const isValidData = data => {
@@ -119,7 +119,7 @@ export default function BasicTable({ tableHeader }) {
     const handleCheckAllChange = event => {
         setCheckedList(Object.keys(checkedList).reduce(
             (accumulator, current) => {
-                accumulator[current] = event.target.checked; 
+                accumulator[current] = event.target.checked 
                 return accumulator
             }, {})
         )
@@ -160,6 +160,7 @@ export default function BasicTable({ tableHeader }) {
                     checkedList={checkedList} 
                     handleClickCreate={() => setDialogStatus(true)}
                     handleClickUpdate={() => setDialogStatus(true)}
+                    handleClickSort={() => {}}
                     />
                 </Box>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">

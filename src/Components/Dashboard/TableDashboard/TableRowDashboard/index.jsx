@@ -1,7 +1,7 @@
 import { React } from 'react'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
-import Checkbox from '@mui/material/Checkbox';
+import Checkbox from '@mui/material/Checkbox'
 
 const label = { inputProps: { 'aria-label': 'Checkbox' } };
 
