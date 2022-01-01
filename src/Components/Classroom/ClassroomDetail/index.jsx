@@ -29,7 +29,7 @@ import ClassroomDetailCard from "../ClassroomDetailCard";
 export default function ClassroomDetail() {
     const [,setNavbarEl] = useContext(NavbarElContext)
     const columns = ['Name', 'Role', 'Dob', 'Email']
-    const codeToRole = ['Teacher', 'Teacher', 'Student']
+    const codeToRole = ['Admin', 'Teacher', 'Student']
     const [detail, setDetail] = useState({
         name: '',
         section:'',
@@ -137,7 +137,7 @@ export default function ClassroomDetail() {
                 section={detail.section}
                 description={detail.description}
                 members={detail.members}
-                lecture={detail.lecturers}
+                lecturers={detail.lecturers}
             />
             <div className="page-container__button-group">
                 {role === 2 && 

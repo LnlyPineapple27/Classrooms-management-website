@@ -26,6 +26,7 @@ export default function ItemAssignment({ isManager, assignment, toggleChangeItem
     const [value, setValue] = useState({ name:'', maxPoint:'' })
 
     const getDeadlineTime = datetime => {
+        if(!datetime) return ""
         const datetime_data = datetime.slice(5, 16).split('T')
         const time = datetime_data[1]
         const date = datetime_data[0].split('-').join('/')

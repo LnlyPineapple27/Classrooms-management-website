@@ -37,11 +37,11 @@ export default function ListAssignment() {
         // console.log(result);
         if (!result.destination) return;
         if(result.destination.index === result.source.index) return;
-        // console.log('Before:\n',items);
-        let items_list = Array.from(items); 
+        console.log('Before:\n',items);
+        let items_list = items.slice(); 
         items_list = array_move(items_list, result.source.index, result.destination.index);
-        // console.log('After:\n', items_list);
-        setItems(items_list);
+        console.log('After:\n', items_list);
+        setItems([...items_list]);
         // console.log('After-items:\n', items);
 
         
@@ -49,9 +49,9 @@ export default function ListAssignment() {
         const response = await assignmentAPI.rearrangeAssignments(params.classroomId, items_list);
         if (!response.ok) 
             console.log('Can not update assignments positions');
-        else
-            console.log('Assignments positions updated');	
-        setToggleAddNew(!toggleAddNew)
+        else {
+
+        }	
     }
     useEffect(() => {
         
@@ -87,43 +87,34 @@ export default function ListAssignment() {
         return <div>Loading...</div>
     else
         return (
-            // <Box className='container'>
-            //     <AddAssignmentFormDialog handleAdded={() => setToggleAddNew(!toggleAddNew)} status={openAddDialog} handleClose={() => setOpenAddDialog(false)} />
-            //     <h1 className="container__page-title">Assignments</h1>
-            //     <List className='container__assignment-list'>{
-            //         items.map((item, index) => {
-            //             const cloneItem = {...item}
-            //             console.log(cloneItem, index)
-            //             return (<ItemAssignment key={index} assignment={cloneItem} toggleChangeItem={() => setToggleAddNew(!toggleAddNew)}/>)
-            //         })
-            //     }</List>
-            // </Box>
-
             <Box className='container'>
                 <AddAssignmentFormDialog handleAdded={() => setToggleAddNew(!toggleAddNew)} status={openAddDialog} handleClose={() => setOpenAddDialog(false)} />
                 <h1 className="container__page-title">Assignments</h1>
                 <DragDropContext onDragEnd={handleOnDragEnd}>
                     <Droppable droppableId="droppable">
                         {(provided) => (
-                                <List className='container__assignment-list'ref={provided.innerRef} {...provided.droppableProps}>{
-                                    items.map((item, index) => {
-                                        const cloneItem = {...item}
-                                        // console.log(item)
-                                        return (<Draggable key={index} draggableId={index.toString()} index={index}>
-                                                    {(provided) => {
-                                                        return (<div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                                                    <ItemAssignment 
-                                                                        key={index} 
-                                                                        assignment={cloneItem} 
-                                                                        toggleChangeItem={() => setToggleAddNew(!toggleAddNew)}
-                                                                        isManager={role < 2 && role >= 0}
-                                                                        />
-                                                                </div>)
-                                                    }}
-                                                </Draggable>)
-                                    })}
-                                    {provided.placeholder}
-                                </List>
+                            <List className='container__assignment-list' ref={provided.innerRef} {...provided.droppableProps}>{
+                                items.map((item, index) => {
+                                    // const cloneItem = {...item}
+                                    // console.log(item)
+                                    return (
+                                        <Draggable key={`draggable_${index}`} draggableId={index.toString()} index={index}>
+                                            {(provided) => {
+                                                return (
+                                                    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                                        <ItemAssignment 
+                                                            key={`assignment_${index}`} 
+                                                            assignment={item} 
+                                                            toggleChangeItem={() => setToggleAddNew(!toggleAddNew)}
+                                                            isManager={role < 2 && role >= 0}
+                                                        />
+                                                    </div>
+                                                )}}
+                                        </Draggable>
+                                    )
+                                })}
+                                {provided.placeholder}
+                            </List>
                         )}
                     </Droppable>
                 </DragDropContext>

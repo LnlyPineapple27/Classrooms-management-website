@@ -95,7 +95,17 @@ export default function Manager({ isCrud, handleSearch, sortBtnState, style, che
                     Delete
                 </Button>
             </Stack>) :
-                <Stack>
+                <Stack direction="row" alignItems="center" spacing={1}>
+                    <Tooltip title={sortBtnTooltipsMap[sortBtnState]} placement="top">
+                        <Button
+                            variant="contained" 
+                            color="info"
+                            endIcon= {sortBtnIconsMap[sortBtnState]}
+                            onClick={handleClickSort}
+                        >
+                            Sort
+                        </Button>
+                    </Tooltip>
                     <Button 
                         variant="contained" 
                         color="success" 
