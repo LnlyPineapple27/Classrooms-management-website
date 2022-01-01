@@ -26,6 +26,7 @@ export default function ItemAssignment({ isManager, assignment, toggleChangeItem
     const [value, setValue] = useState({ name:'', maxPoint:'' })
 
     const getDeadlineTime = datetime => {
+        if(!datetime) return ""
         const datetime_data = datetime.slice(5, 16).split('T')
         const time = datetime_data[1]
         const date = datetime_data[0].split('-').join('/')
@@ -71,17 +72,17 @@ export default function ItemAssignment({ isManager, assignment, toggleChangeItem
 
     return (
         <ListItem
-        className='item' 
-        secondaryAction={
-            isManager &&
-            <Box>
-                <IconButton onClick={handleMenu} edge="end" aria-label="more">
-                    <MoreVertIcon />
-                </IconButton>
-                <MoreMenu anchorEl={anchorEl} handleCloseMenu={handleCloseMenu} handleConfirm={removeAssignment} />
-            </Box>
-        } 
-        disablePadding
+            className='item' 
+            secondaryAction={
+                isManager &&
+                <Box>
+                    <IconButton onClick={handleMenu} edge="end" aria-label="more">
+                        <MoreVertIcon />
+                    </IconButton>
+                    <MoreMenu anchorEl={anchorEl} handleCloseMenu={handleCloseMenu} handleConfirm={removeAssignment} />
+                </Box>
+            } 
+            disablePadding
         >
             <ListItemButton onClick={() => !updating && navigate(`${assignment.id}`, { replace: false })}>
                 <ListItemIcon>

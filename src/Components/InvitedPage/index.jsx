@@ -46,7 +46,7 @@ export default function InvitedPage(props) {
 
     const handleJoin = async () => {
         if(auth) {
-            let result = await accountAPI.joinClassroom(params.inviteCode, props.id)
+            let result = await accountAPI.joinClassroom(params.inviteCode, detail.id)
             console.log(result)
             navigate('/',{replace:true})
         }

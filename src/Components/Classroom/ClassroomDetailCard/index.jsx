@@ -8,9 +8,6 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import { Box } from '@mui/material'
 
 
-const lecturesMock = ["Trieu Trinh Trinh, To Tien Dat, Tran Minh Loc"]
-
-
 export default function ClassroomDetailCard(props) {
     return (
         <Box component="div">
@@ -35,7 +32,7 @@ export default function ClassroomDetailCard(props) {
                             sx={{ color: 'text.secondary' }} 
                             style={{ fontSize: 20, margin: "auto 0" }}
                         >
-                            {props.section}
+                            {`Section: ${props.section}`}
                         </Typography>
                     </AccordionSummary>
                     <AccordionDetails>

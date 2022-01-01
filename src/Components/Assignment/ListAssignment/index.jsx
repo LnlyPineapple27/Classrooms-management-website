@@ -1,4 +1,4 @@
-import { React, useEffect, useState, useContext } from 'react'
+import { React, useEffect, useState, useContext, forwardRef } from 'react'
 import ItemAssignment from '../ItemAssignment'
 import assignmentAPI from '../../../APIs/assignmentAPI'
 import { useParams } from 'react-router-dom'
@@ -6,14 +6,60 @@ import ErrorPage from '../../ErrorPage'
 import List from '@mui/material/List'
 import Box from '@mui/material/Box'
 import '../index.scss'
-import { NavbarElContext } from '../../../Context/GlobalContext';
+import { NavbarElContext } from '../../../Context/GlobalContext'
 import ClassroomTabs from '../../ClassroomTabs'
 import NavbarAddButton from '../../NavbarAddButton'
 import AddAssignmentFormDialog from '../AddAssignmentFormDialog'
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import classroomAPI from '../../../APIs/classroomAPI'
+import Snackbar from '@mui/material/Snackbar'
+import MuiAlert from '@mui/material/Alert'
 
-export default function ListAssignment() {
+
+const Alert = forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
+})
+
+function DraggableAssignmentItem({ assignment, toggleChangeItem, index, isManager }) {
+    return (
+        <Draggable key={`draggable_${assignment.id}`} draggableId={index.toString()} index={index}>
+            {(provided) => {
+                return (
+                    <div           
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                    >
+                        <ItemAssignment
+
+                            key={`assignment_${index}`} 
+                            assignment={assignment} 
+                            toggleChangeItem={toggleChangeItem}
+                            isManager={isManager}
+                        />
+                    </div>
+                    
+                )
+            }}
+        </Draggable>
+    )
+}
+
+function AssignmentList({ assignments, toggleChangeItem, isManager }) {
+    return (
+        assignments.map((item, index) => (
+            <DraggableAssignmentItem
+                key={`draggable_${index}`}
+                assignment={item}
+                toggleChangeItem={toggleChangeItem}
+                index={index}
+                isManager={isManager}
+            />)
+        )
+    )
+}
+
+export default function DragDropListAssignment() {
     const [error, setError] = useState(null)
     const [items, setItems] = useState([])
     const [loading, setLoading] = useState(true)
@@ -22,37 +68,67 @@ export default function ListAssignment() {
     const [openAddDialog, setOpenAddDialog] = useState(false)
     const [toggleAddNew, setToggleAddNew] = useState(false)
     const [role, setRole] = useState(2)
+    const [snackBarPops, setSnackBarProps] = useState({
+        severity: "None",
+        content: "None",
+        status: false
+    })
 
     function array_move(arr, old_index, new_index) {
         if (new_index >= arr.length) {
-            var k = new_index - arr.length + 1;
+            var k = new_index - arr.length + 1
             while (k--) {
-                arr.push(undefined);
+                arr.push(undefined)
             }
         }
-        arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
-        return arr; // for testing
-    };
+        arr.splice(new_index, 0, arr.splice(old_index, 1)[0])
+        return arr // for testing
+    }
+
     async function handleOnDragEnd(result){
-        // console.log(result);
-        if (!result.destination) return;
-        if(result.destination.index === result.source.index) return;
-        // console.log('Before:\n',items);
-        let items_list = Array.from(items); 
-        items_list = array_move(items_list, result.source.index, result.destination.index);
-        // console.log('After:\n', items_list);
-        setItems(items_list);
-        // console.log('After-items:\n', items);
+        // console.log(result)
+        if (!result.destination) return
+        if(result.destination.index === result.source.index) return
+        // console.log('Before:\n',items)
+        let items_list = items.slice() 
+        items_list = array_move(items_list, result.source.index, result.destination.index)
+        // console.log('After:\n',items_list)
+        setItems(items_list)
+        // console.log('After-items:\n', items)
 
         
         //Sending changed data to APIs
-        const response = await assignmentAPI.rearrangeAssignments(params.classroomId, items_list);
-        if (!response.ok) 
-            console.log('Can not update assignments positions');
-        else
-            console.log('Assignments positions updated');	
-        setToggleAddNew(!toggleAddNew)
+        setSnackBarProps({
+            severity: "info",
+            content: "Saving arrangement ...",
+            status: true
+        })
+        const response = await assignmentAPI.rearrangeAssignments(params.classroomId, items_list)
+        if (!response.ok) {
+            console.log('Can not update assignments positions')
+            setSnackBarProps({
+                severity: "error",
+                content: `Error ${response.status}: ${response.statusText}. Can not update assignments positions.`,
+                status: true
+            })
+        }
+        else {
+            setSnackBarProps({
+                severity: "success",
+                content: "Saved",
+                status: true
+            })
+        }
     }
+
+    const handleCloseSnackBar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return
+        }
+
+        setSnackBarProps({...snackBarPops, status: false})
+    }
+
     useEffect(() => {
         
         async function fetchData() {
@@ -87,47 +163,31 @@ export default function ListAssignment() {
         return <div>Loading...</div>
     else
         return (
-            // <Box className='container'>
-            //     <AddAssignmentFormDialog handleAdded={() => setToggleAddNew(!toggleAddNew)} status={openAddDialog} handleClose={() => setOpenAddDialog(false)} />
-            //     <h1 className="container__page-title">Assignments</h1>
-            //     <List className='container__assignment-list'>{
-            //         items.map((item, index) => {
-            //             const cloneItem = {...item}
-            //             console.log(cloneItem, index)
-            //             return (<ItemAssignment key={index} assignment={cloneItem} toggleChangeItem={() => setToggleAddNew(!toggleAddNew)}/>)
-            //         })
-            //     }</List>
-            // </Box>
-
             <Box className='container'>
+                <Snackbar open={snackBarPops.status} autoHideDuration={6000} onClose={handleCloseSnackBar}>
+                    <Alert onClose={handleCloseSnackBar} severity={snackBarPops.severity}>
+                        {snackBarPops.content}
+                    </Alert>
+                </Snackbar>
                 <AddAssignmentFormDialog handleAdded={() => setToggleAddNew(!toggleAddNew)} status={openAddDialog} handleClose={() => setOpenAddDialog(false)} />
                 <h1 className="container__page-title">Assignments</h1>
                 <DragDropContext onDragEnd={handleOnDragEnd}>
                     <Droppable droppableId="droppable">
                         {(provided) => (
-                                <List className='container__assignment-list'ref={provided.innerRef} {...provided.droppableProps}>{
-                                    items.map((item, index) => {
-                                        const cloneItem = {...item}
-                                        // console.log(item)
-                                        return (<Draggable key={index} draggableId={index.toString()} index={index}>
-                                                    {(provided) => {
-                                                        return (<div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                                                    <ItemAssignment 
-                                                                        key={index} 
-                                                                        assignment={cloneItem} 
-                                                                        toggleChangeItem={() => setToggleAddNew(!toggleAddNew)}
-                                                                        isManager={role < 2 && role >= 0}
-                                                                        />
-                                                                </div>)
-                                                    }}
-                                                </Draggable>)
-                                    })}
+                            <div ref={provided.innerRef} {...provided.droppableProps}>
+                                <List className='container__assignment-list'>
+                                    <AssignmentList 
+                                        assignments={items} 
+                                        toggleChangeItem={() => setToggleAddNew(!toggleAddNew)} 
+                                        isManager={role === 1}
+                                    />
                                     {provided.placeholder}
                                 </List>
+                            </div>
+                            
                         )}
                     </Droppable>
                 </DragDropContext>
             </Box>
         )
 }
-                            
