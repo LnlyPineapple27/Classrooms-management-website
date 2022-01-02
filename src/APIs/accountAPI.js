@@ -153,7 +153,19 @@ let accountAPI = {
         console.log(result)
 
         return result
-
+    },
+    getAll: async role => {
+        let query = role ? `role=${role}` : "" 
+        return await fetch(
+            `${API_URL}?${query}`,
+            {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                    'Content-Type': 'application/json'
+                },
+            }
+        )
     }
 }
 export default accountAPI
