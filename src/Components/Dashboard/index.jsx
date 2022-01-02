@@ -66,13 +66,13 @@ export default function Dashboard() {
                 <Tab label="Classrooms" {...a11yProps(2)} />
             </Tabs>
             <TabPanel value={value} index={0}>
-                <AccountsTable />
+                <AccountsTable sortProps={{ key:"createdAt", type:"date" }} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <AccountsTable role={1} />
+                <AccountsTable role={1} sortProps={{ key:"createdAt", type:"date" }} />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <ClassroomsTable />
+                <ClassroomsTable sortProps={{ key:"createdAt", type:"date" }} />
             </TabPanel>
         </Box>
     )

@@ -15,13 +15,13 @@ export default function ClassroomCard({id, header, title, subTitle, content, act
     >
       <Card className='classroom-card' variant="outlined" sx={{height:1, width:1}}>
         <React.Fragment>
-          <CardActionArea component={Link} to={`/classrooms/${id}`}>
+          {/* <CardActionArea component={Link} to={`/classrooms/${id}`}>
             <CardMedia
               height="100"
               component="img"
               image="https://picsum.photos/100/200"
             />
-          </CardActionArea>
+          </CardActionArea> */}
             <CardContent className='classroom-card__content'>
                 <Typography className='one-line-text' sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                   {header}

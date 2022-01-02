@@ -140,7 +140,7 @@ export default function CreateAccountDialog({ status, handleClose}) {
                         <Select 
                             className='login-form__text-field login-form__element'
                             id="sl_role"
-                            value={formData.sex}
+                            value={formData.role}
                             labelId="il_role"
                             label="Sex"
                             onChange={handleChange("role")}
