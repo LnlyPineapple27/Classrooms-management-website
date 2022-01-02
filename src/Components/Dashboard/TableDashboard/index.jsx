@@ -13,89 +13,9 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import TableDashboardDialog from './TableDashboardDialog'
 
-var sampleData = [{
-    "id":1, 
-    "username": "teacher",
-    "password": "teacher",
-    "name": "Trinh Minh Dat",
-    "createdDate": "2021-03-03",
-    "email": "SuperIdol@spi.vn",
-    "role": 1
-}, {
-    "id":2,
-    "username": "student",
-    "password": "student",
-    "name": "To Dong Thanh",
-    "createdDate": "2021-10-24",
-    "email": "Cuutoivoi@cuu.toi.voi",
-    "role": 2
-}, {
-    "id":3,
-    "username": "admin",
-    "password": "admin",
-    "name": "Tran Phuoc Phat",
-    "createdDate": "2021-03-12",
-    "email": "TPP@abc.cc",
-    "role": 0
-}, {
-    "id":4,
-    "username": "cespino3",
-    "password": "MFTIFbJP",
-    "name": "Dau Buoi Tai Nhan",
-    "createdDate": "2021-09-27",
-    "email": "TaiNhanVippro@Vip.pro.vn",
-    "role": 2
-}, {
-    "id":5,
-    "username": "ejeandeau4",
-    "password": "FcDrE7VMtU",
-    "name": "Tieu Trinh Trinh",
-    "createdDate": "2020-12-31",
-    "email": "Onthidaihocvatly12@gmail.com",
-    "role": 2
-}, {
-    "id":6,
-    "username": "zkubik5",
-    "password": "t4bRlmb",
-    "name": "Meta Slave",
-    "createdDate": "2021-02-05",
-    "email": "GenshinGang@salve.meta.gang",
-    "role": 2
-}, {
-    "id":7,
-    "username": "gcrowne6",
-    "password": "loOc5PpfB",
-    "name": "Gachikoi Ni Nare",
-    "createdDate": "2021-04-29",
-    "email": "GachikoiGang@gang.sta.ww",
-    "role": 2
-}, {
-    "id":8,
-    "username": "fluna7",
-    "password": "AnHHLoC",
-    "name": "Moe Moe Kyun",
-    "createdDate": "2021-01-06",
-    "email": "MaidCafeInYourArea1@mcafe.com.jp",
-    "role": 2
-}, {
-    "id":9,
-    "username": "rnuzzetti8",
-    "password": "0dwSUm0tACEG",
-    "name": "Oishiku Nare",
-    "createdDate": "2021-06-01",
-    "email": "MaidCafeInYourArea2@mcafe.com.jp",
-    "role": 2
-}, {
-    "id":10,
-    "username": "fcheeseman9",
-    "password": "VEnz8BmmYA",
-    "name": "Haachama Chama",
-    "createdDate": "2021-10-07",
-    "email": "HaachaamaSekaiSaikoNoAidoru@gmail.com",
-    "role": 2
-}]
 
-export default function TableDashboard({ tableHeader, data, isCrud, isManager }) {
+
+export default function TableDashboard({ tableHeader, data, isCrud, isManager, sortProps }) {
     const headers = data ? data[0] ? Object.keys(data[0]) : [] : []
     const originData = data ?? []
     const [visibleData, setVisibleData] = useState(data ?? [])
@@ -134,11 +54,12 @@ export default function TableDashboard({ tableHeader, data, isCrud, isManager })
     }
 
     const sortData = (data, state) => {
-        if(state === 0) return data
-        const sortFactor = state === 1 ? 1 : -1
-        const compareFunc = (a, b) => sortFactor * (Date.parse(a.createdDate) - Date.parse(b.createdDate))
+        if(state === 0 || !sortProps) return data
+        const sortFactor = state
+        let compareFunc = (a, b) => sortFactor * (a - b)
+        if(sortProps.type.toLowerCase() === "date")
+            compareFunc = (a, b) => sortFactor * (Date.parse(a[sortProps.key]) - Date.parse(b[sortProps.key]))
         const newData = data.slice().sort(compareFunc)
-        
         return newData
     }
 

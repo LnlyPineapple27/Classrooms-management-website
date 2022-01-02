@@ -12,27 +12,20 @@ let getResultFromResponse = async response => {
     }
     
     result.data = result.isOk && await response.json()
-    console.log(result)
+    console.log(response)
     result.message = result.isOk ? 'Request success' : `An error has occurred: ${response.status}`
     return result
 }
 
 let classroomAPI = {
-    getAllClassrooms: async () => {
-        let userId = localStorage.getItem('account') ? JSON.parse(localStorage.getItem('account')).userID : null
-        
-        if(!userId) return {
-            isOk: false,
-            data: null,
-            status: 409,
-            message: 'Unauthorize'} // not have get out
-
+    getAllClassrooms: async userId => {
         let token = localStorage.getItem('token')
-        let fetchURL = API_URL + `?userID=${userId}`
+        let fetchURL = API_URL + `?userID=${userId ?? ""}`
         let response = await fetch(fetchURL, {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
             },
         })
         return getResultFromResponse(response)
@@ -58,7 +51,9 @@ let classroomAPI = {
             method: 'GET',
             headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json'
         }})
+        console.log("a213123")
         let result = await getResultFromResponse(response)
         console.log(result)
         return result
@@ -72,6 +67,7 @@ let classroomAPI = {
             method: 'GET',
             headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json'
         }})
         let result = await getResultFromResponse(response)
         return result
@@ -82,6 +78,7 @@ let classroomAPI = {
             method: 'GET',
             headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json'
         }})
         return response
     },

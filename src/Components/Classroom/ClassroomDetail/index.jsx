@@ -44,6 +44,7 @@ export default function ClassroomDetail() {
     useEffect(() => {
         let fetchData = async () => {
             let result = await classroomAPI.getClassroomDetail(params.classroomId)
+            console.log("AAAA")
             let fDetail = result.data.classroomDetail ? result.data.classroomDetail : {}
             let fRows = result.data.userList ? result.data.userList : []
             
@@ -74,7 +75,7 @@ export default function ClassroomDetail() {
 
         }
         setNavbarEl({
-            classroomTabs: (<ClassroomTabs value={0} classroomId={params.classroomId} />),
+            classroomTabs: role === 2 && (<ClassroomTabs value={0} classroomId={params.classroomId} />),
         })
         fetchData()
     },[params.classroomId, setNavbarEl])

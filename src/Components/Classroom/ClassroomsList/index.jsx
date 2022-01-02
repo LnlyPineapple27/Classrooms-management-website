@@ -17,7 +17,8 @@ export default function ClassroomsList () {
 
     useEffect(() => {
         async function fetchData() {
-          let result = await classroomAPI.getAllClassrooms()
+          let userId = localStorage.getItem('account') ? JSON.parse(localStorage.getItem('account')).userID : null
+          let result = await classroomAPI.getAllClassrooms(userId)
           setIsLoaded(true)
           console.log(result)
             
