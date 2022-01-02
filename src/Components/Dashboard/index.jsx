@@ -66,10 +66,10 @@ export default function Dashboard() {
                 <Tab label="Classrooms" {...a11yProps(2)} />
             </Tabs>
             <TabPanel value={value} index={0}>
-                <AccountsTable role={[1, 2]} sortProps={{ key:"createdAt", type:"date" }} enableBan={true} />
+                <AccountsTable roles={[1, 2]} sortProps={{ key:"createdAt", type:"date" }} enableBan={true} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <AccountsTable role={[1]} sortProps={{ key:"createdAt", type:"date" }} />
+                <AccountsTable roles={[0]} sortProps={{ key:"createdAt", type:"date" }} />
             </TabPanel>
             <TabPanel value={value} index={2}>
                 <ClassroomsTable sortProps={{ key:"createdAt", type:"date" }} />

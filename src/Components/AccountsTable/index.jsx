@@ -32,6 +32,7 @@ export default function AccountsTable({ roles, sortProps, enableBan }) {
 
         const fetchData = async () => {
             setBAckDropState({ ...backdropState, open: true })
+            console.log(roles)
             let response = await accountAPI.getAll(roles)
             setBAckDropState({ ...backdropState, open: false })
             if(response.ok) {
