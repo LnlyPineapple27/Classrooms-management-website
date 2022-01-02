@@ -95,30 +95,18 @@ var sampleData = [{
     "role": 2
 }]
 
-export default function BasicTable({ tableHeader, cuDialog, handleOpenDialog }) {
-    const [headers, setHeaders] = useState([])
-    const [originData, setOriginData] = useState([])
-    const [visibleData, setVisibleData] = useState([])
-    const [checkedList, setCheckedList] = useState({})
+export default function TableDashboard({ tableHeader, data, isCrud, isManager }) {
+    const headers = data ? data[0] ? Object.keys(data[0]) : [] : []
+    const originData = data ?? []
+    const [visibleData, setVisibleData] = useState(data ?? [])
+    const [checkedList, setCheckedList] = useState(Object.fromEntries(data.map(row => [row.id, false])))
     const [dialogStatus, setDialogStatus] = useState(false)
     const [sortState, setSortSate] = useState(0)
     const [searchKeyword, setSearchKeyWord] = useState("")
-
+    
     useEffect(() => {
-        setHeaders(getHeaders(sampleData))
-        setOriginData(sampleData)
-        setCheckedList(Object.fromEntries(sampleData.map(row => [row.id, false])))
-        setVisibleData(sampleData)
-    }, [])
-
-    const getHeaders = data => {
-        if(!isValidData(data)) return []
-        return Object.keys(data[0])
-    }
-
-    const isValidData = data => {
-        return data && typeof(data) == typeof([]) && data.length > 0 && typeof(data[0]) == typeof({}) 
-    }
+        setVisibleData(data ?? [])
+    }, [data])
 
     const handleCheckAllChange = event => {
         setCheckedList(Object.keys(checkedList).reduce(
@@ -186,7 +174,7 @@ export default function BasicTable({ tableHeader, cuDialog, handleOpenDialog }) 
                 handleSave={() => setDialogStatus(false)}
                 title="Create"
                 contentText="Enter all required fields to confirm."
-                fields={originData[0] ?? {}}
+                fields={originData ?? {}}
             />
             <TableContainer component={Paper}>
                 <Box style={{ display: "flex", flexGrow: 1, padding: 10, alignItems: "center"}}>
@@ -207,7 +195,8 @@ export default function BasicTable({ tableHeader, cuDialog, handleOpenDialog }) 
                         handleClickSort={handleSort}
                         sortBtnState={sortState}
                         handleSearch={handleSearch}
-                        isCrud={false}
+                        isCrud={isCrud}
+                        isManager={isManager}
                     />
                 </Box>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -219,10 +208,10 @@ export default function BasicTable({ tableHeader, cuDialog, handleOpenDialog }) 
                     <TableBody>
                     {visibleData.map(row => (
                         <TableRowDashboard
-                        key={row.id}
-                        data={row}
-                        checkedList={checkedList}
-                        setCheckedList={setCheckedList}
+                            key={row.id}
+                            data={row}
+                            checkedList={checkedList}
+                            setCheckedList={setCheckedList}
                         />
                     ))}
                     </TableBody>

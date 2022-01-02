@@ -17,7 +17,7 @@ import CreateAccountDialog from '../../../CreateAccountDialog'
 
 
 
-export default function Manager({ isCrud, handleSearch, sortBtnState, style, checkedList, handleClickCreate, handleClickUpdate, handleClickDelete, handleClickSort }) {
+export default function Manager({ isManager, isCrud, handleSearch, sortBtnState, style, checkedList, handleClickCreate, handleClickUpdate, handleClickDelete, handleClickSort }) {
     
     const [createAccountDialogStatus, setCreateAccountDialogStatus] = useState(false)
 
@@ -106,18 +106,22 @@ export default function Manager({ isCrud, handleSearch, sortBtnState, style, che
                             Sort
                         </Button>
                     </Tooltip>
-                    <Button 
-                        variant="contained" 
-                        color="success" 
-                        endIcon={<AddCircleIcon />}
-                        onClick={() => setCreateAccountDialogStatus(true)}
-                    >
-                        Create Account
-                    </Button>
-                    <CreateAccountDialog
-                        status={createAccountDialogStatus} 
-                        handleClose={() => setCreateAccountDialogStatus(false)}
-                    />
+                    {isManager && (
+                        <Box>
+                            <Button 
+                            variant="contained" 
+                            color="warning" 
+                            endIcon={<AddCircleIcon />}
+                            onClick={() => setCreateAccountDialogStatus(true)}
+                            >
+                                Account
+                            </Button>
+                            <CreateAccountDialog
+                                status={createAccountDialogStatus} 
+                                handleClose={() => setCreateAccountDialogStatus(false)}
+                            />
+                        </Box>
+                    )}
                 </Stack>
             }
         </Box>

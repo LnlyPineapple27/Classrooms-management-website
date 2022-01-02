@@ -22,6 +22,8 @@ export default function TableRowDashboard({ data, checkedList, setCheckedList })
             </TableCell>
         )
     }
+    // console.log("data row")
+    // console.log(data)
 
     const createCellList = data => {
         return [createCheckboxCell(data)].concat(Object.keys(data).map(key => createCell(key, data)))

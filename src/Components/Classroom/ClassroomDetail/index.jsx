@@ -1,29 +1,23 @@
-import { React, useState, useEffect, useContext } from "react";
+import { React, useState, useEffect, useContext } from "react"
 import { useParams } from "react-router-dom"
-import classroomAPI from "../../../APIs/classroomAPI";
-import { Button } from "@mui/material";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import classroomAPI from "../../../APIs/classroomAPI"
+import { Button } from "@mui/material"
 import '../index.scss'
 import sendEmail from '../../sendEmail'
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import { NavbarElContext } from "../../../Context/GlobalContext";
+import TextField from '@mui/material/TextField'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import Select from '@mui/material/Select'
+import { NavbarElContext } from "../../../Context/GlobalContext"
 import ClassroomTabs from '../../ClassroomTabs/'
-import ClassroomDetailCard from "../ClassroomDetailCard";
+import ClassroomDetailCard from "../ClassroomDetailCard"
+import TableDashboard from "../../Dashboard/TableDashboard"
 
 
 export default function ClassroomDetail() {
@@ -52,10 +46,14 @@ export default function ClassroomDetail() {
             let fDetail = result.data.classroomDetail ? result.data.classroomDetail : {}
             let fRows = result.data.userList ? result.data.userList : []
             setInviteLink(`${window.document.location.hostname}/invite/2`+result.data.classroomDetail.inviteLink)
-            setRows(fRows)
+            let cookedFRows = fRows.map(row => ({...row.Users, role: codeToRole[row.Users.role]})).map(({UserClassroom, ...item}) => item)
+            setRows(cookedFRows)
+            console.log(cookedFRows)
+            let lecturerList = cookedFRows.filter(row => row.role === codeToRole[1]).map(row => row.name)
+            lecturerList = lecturerList.length > 0 ? lecturerList : ["UNK"]
             setDetail({...fDetail, ...{
-                members: fRows.length,
-                lecturers: fRows.filter(row => row.Users.role === 1).map(row => row.Users.name)
+                members: cookedFRows.length,
+                lecturers: lecturerList
             }})
             const userId = JSON.parse(localStorage.getItem('account')) ? JSON.parse(localStorage.getItem('account')).userID : 'a'
             const fetchRole = await classroomAPI.getRole(params.classroomId, userId)
@@ -76,25 +74,25 @@ export default function ClassroomDetail() {
     }, [select, detail.inviteLink])
 
     const handleChange = (event) => {
-        setSelect(event.target.value);
-    };
+        setSelect(event.target.value)
+    }
 
     const handleClickOpenSendEmail = () => {
         setOpenSendEmail(true)
 
-    };
+    }
 
     const handleCloseSendEmail = () => {
         setOpenSendEmail(false)
-    };
+    }
 
     const handleClickOpenInviteLink = () => {
         setOpenInviteLink(true)
-    };
+    }
 
     const handleCloseInviteLink = () => {
         setOpenInviteLink(false)
-    };
+    }
 
     const handleSendEmail = () => {
 
@@ -106,7 +104,7 @@ export default function ClassroomDetail() {
 
             message: "Cheer! :>",
         }
-        sendEmail(templatedEmail);
+        sendEmail(templatedEmail)
     }
 
     const handleChangeSI = async () => {
@@ -126,7 +124,7 @@ export default function ClassroomDetail() {
             alert(`Error ${resStatus}: ${resMsg}`)
         }
         else alert(`Success: ${resMsg}`)
-        setOpenSid(false);
+        setOpenSid(false)
     }
 
     return (
@@ -237,32 +235,7 @@ export default function ClassroomDetail() {
                     </DialogActions>
                 </Dialog>
             </div>
-            <div className="page-container__users-list">
-                <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 650 }} aria-label="users table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>ID</TableCell>
-                                {columns.map((item, index) => <TableCell key={`header_cell_${index}`} align="right">{item}</TableCell>)}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                        {rows.map((row, index) => (
-                            <TableRow
-                                key={`row_${index}`}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell key={`cell_${index}`}>{index}</TableCell>
-                                <TableCell key={`cell_${index}_name`} component="th" scope="row" align="right"><strong>{row.Users.name}    </strong></TableCell>
-                                <TableCell key={`cell_${index}_role`} align="right">{codeToRole[row.Users.role]}</TableCell>
-                                <TableCell key={`cell_${index}_dob`} align="right">{row.Users.dob.split('T')[0]}</TableCell>
-                                <TableCell key={`cell_${index}_email`} align="right">{row.Users.email}</TableCell>
-                            </TableRow>
-                        ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </div>    
+            <TableDashboard tableHeader="Members" data={rows} isCrud={false} isManager={false}/>
         </div> 
     )    
 }

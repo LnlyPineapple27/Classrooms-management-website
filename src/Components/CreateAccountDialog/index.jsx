@@ -24,8 +24,18 @@ export default function CreateAccountDialog({ status, handleClose}) {
         email:"",
         sex:2,
         name:"",
-        dob: new Date()
+        dob: new Date(),
+        role:2
     })
+
+    const getRoleTitle = ["Admin", "Lecturer", "Student"]
+
+    // const getRoleCode = getRoleTitle.reduce((acc, curr, index) => ({...acc, [curr]: index}), {})
+
+    const handleSave = () => {
+        console.log(formData)
+        handleClose()
+    }
 
     const handleChange = name => event => {
         setFormData({ ...formData, [name]: event.target.value })
@@ -75,6 +85,23 @@ export default function CreateAccountDialog({ status, handleClose}) {
                     onChange={handleChange("cPassword")}
                     variant="outlined"
                 />
+
+                <FormControl margin="normal" fullWidth>
+                    <InputLabel id="il_role">Role</InputLabel>
+                    <Select 
+                        className='login-form__text-field login-form__element'
+                        id="sl_role"
+                        value={formData.sex}
+                        labelId="il_role"
+                        label="Sex"
+                        onChange={handleChange("role")}
+                    >
+                        <MenuItem value={2}>{getRoleTitle[2]}</MenuItem>
+                        <MenuItem value={1}>{getRoleTitle[1]}</MenuItem>
+                        <MenuItem value={0}>{getRoleTitle[0]}</MenuItem>
+                    </Select>
+                </FormControl>
+
                 <TextField
                     margin="normal"
                     id="name"
@@ -131,7 +158,7 @@ export default function CreateAccountDialog({ status, handleClose}) {
             
             <DialogActions>
                 <Button onClick={handleClose} variant='contained' color='secondary'>Cancel</Button>
-                <Button onClick={handleClose} variant='contained' color='info'>Save</Button>
+                <Button onClick={handleSave} variant='contained' color='info'>Save</Button>
             </DialogActions>
         </Dialog>
     )
