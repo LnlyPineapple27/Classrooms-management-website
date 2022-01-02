@@ -1,14 +1,15 @@
-import React from 'react';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import { CardActionArea } from '@mui/material';
-import { CardMedia } from '@mui/material';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import { Link } from 'react-router-dom';
+import React from 'react'
+import Box from '@mui/material/Box'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import Typography from '@mui/material/Typography'
+import { Link, useNavigate } from 'react-router-dom'
+import CardActions from '@mui/material/CardActions'
+import Button from '@mui/material/Button'
 import '../index.scss'
 
-export default function ClassroomCard({id, header, title, subTitle, content, actionTitle, actionCallback}) {
+export default function ClassroomCard({id, header, title, subTitle, content, createdAt, creator}) {
+  const navigate = useNavigate()
   return (
     <Box 
       className='classroom-card-box'
@@ -27,7 +28,7 @@ export default function ClassroomCard({id, header, title, subTitle, content, act
                   {header}
                 </Typography>
                 <Typography className='two-line-text classroom-card__content__title' variant="h5" component="div">
-                  <Link to={`/classrooms/${id}`}>{title}</Link>
+                  <Link to={`/classrooms/${id}`} style={{ textDecoration: 'none', color:"black" }}>{title}</Link>
                 </Typography>
                 <Typography className='classroom-card__content__subtitle' sx={{ mb: 1.5 }} color="text.secondary">
                   {subTitle}
@@ -35,9 +36,15 @@ export default function ClassroomCard({id, header, title, subTitle, content, act
                 <Typography variant="body2">
                   {content}
                 </Typography>
+                <Typography variant="caption">
+                  {`Created At ${createdAt} by ${creator}`}
+                </Typography>
               </CardContent>
+              <CardActions>
+                <Button size="small" onClick={() => navigate(`/classrooms/${id}`, { replace: true })}>Learn More</Button>
+              </CardActions>
         </React.Fragment>
       </Card>
     </Box>
-  );
+  )
 }

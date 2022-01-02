@@ -54,8 +54,10 @@ export default function TableDashboard({ tableHeader, data, isCrud, isManager, s
     }
 
     const sortData = (data, state) => {
+        console.log(sortProps)
         if(state === 0 || !sortProps) return data
-        const sortFactor = state
+        const sortFactor = state === 1 ? 1 : -1
+        console.log(sortFactor)
         let compareFunc = (a, b) => sortFactor * (a - b)
         if(sortProps.type.toLowerCase() === "date")
             compareFunc = (a, b) => sortFactor * (Date.parse(a[sortProps.key]) - Date.parse(b[sortProps.key]))

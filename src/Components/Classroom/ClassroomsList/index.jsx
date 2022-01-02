@@ -16,16 +16,21 @@ export default function ClassroomsList () {
     const [openAddModal, setOpenAddModal] = useState(false)
 
     useEffect(() => {
+        const cookData = raw => {
+            return raw.map(item => ({...item, createdAt: item.createdAt.split("T")[0]}))
+        }
+
         async function fetchData() {
-          let userId = localStorage.getItem('account') ? JSON.parse(localStorage.getItem('account')).userID : null
-          let result = await classroomAPI.getAllClassrooms(userId)
-          setIsLoaded(true)
-          console.log(result)
-            
-          if (result.isOk)
-            setItems(result.data.classrooms)
-          else
-            setError(result)
+            let userId = localStorage.getItem('account') ? JSON.parse(localStorage.getItem('account')).userID : null
+            let result = await classroomAPI.getAllClassrooms(userId)
+            setIsLoaded(true)
+            let raw = result.data.classrooms
+            let cooked = cookData(raw)    
+            console.log(cooked)
+            if (result.isOk)
+                setItems(cooked)
+            else
+                setError(result)
         }
         setNavbarEl({addButton: (<NavbarAddButton ariaLabel='Add Classroom' onClick={() => setOpenAddModal(true)} />)})
         fetchData()
@@ -58,9 +63,11 @@ export default function ClassroomsList () {
                     <ClassroomCard
                         id={item.id}
                         key={item.id}
-                        header={item.description}
+                        header={item.section}
                         title={item.name}
-                        subTitle={item.section}
+                        subTitle={item.description}
+                        createdAt={item.createdAt}
+                        creator={item.creator}
                         actionTitle='Detail'
                         imgHref={`https://picsum.photos/id/${index}/100/200`}
                     />

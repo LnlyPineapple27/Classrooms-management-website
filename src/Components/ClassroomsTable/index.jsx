@@ -24,7 +24,8 @@ export default function ClassroomsTable() {
         const cookData = rawData => rawData.map(({creatorID, creatorName, ...item}) => ({
             ...item,
             creator: <Link to={`/profile/${creatorID}`}>{creatorName}</Link>,
-            detail: <Link to={`/classrooms/${item.id}`}>Detail ...</Link>
+            detail: <Link to={`/classrooms/${item.id}`}>Detail ...</Link>,
+            createdAt: item.createdAt.split("T")[0]
         }))
 
         const fetchData = async () => {
