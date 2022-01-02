@@ -13,7 +13,7 @@ const Alert = forwardRef(function Alert(props, ref) {
 });
 
 
-export default function AccountsTable({ role, sortProps }) {
+export default function AccountsTable({ roles, sortProps, enableBan }) {
     const [data, setData] = useState([])
     const [backdropState, setBAckDropState] = useState({ content:"Fetching data from server ...", open: true })
     const [snackbarState, setSnackbarState] = useState({ severity:"info", open: false, content:"Loading data ..." })
@@ -23,8 +23,8 @@ export default function AccountsTable({ role, sortProps }) {
         const codeToRole = ["Admin", "Lecturer", "Student"]
 
         const cookData = rawData => rawData.map(({accountID, userID, role, ...item}) => ({
+            id: accountID   ,
             ...item,
-            id: accountID,
             role: codeToRole[role],
             detail: <Link to={`/profile/${userID}`}>Detail...</Link>,
             createdAt: item.createdAt.split("T")[0]
@@ -32,7 +32,7 @@ export default function AccountsTable({ role, sortProps }) {
 
         const fetchData = async () => {
             setBAckDropState({ ...backdropState, open: true })
-            let response = await accountAPI.getAll(role)
+            let response = await accountAPI.getAll(roles)
             setBAckDropState({ ...backdropState, open: false })
             if(response.ok) {
                 let rawData = await response.json()
@@ -82,7 +82,7 @@ export default function AccountsTable({ role, sortProps }) {
                     {snackbarState.content}
                 </Alert>
             </Snackbar>
-            <TableDashboard tableHeader={"Accounts"} data={data} isCrud={false} isManager={true} sortProps={sortProps} />
+            <TableDashboard enableBan={enableBan} tableHeader={"Accounts"} data={data} isCrud={false} isManager={true} sortProps={sortProps} />
         </Fragment>
     )
 }

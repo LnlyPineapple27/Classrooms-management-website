@@ -15,7 +15,7 @@ import TableDashboardDialog from './TableDashboardDialog'
 
 
 
-export default function TableDashboard({ tableHeader, data, isCrud, isManager, sortProps }) {
+export default function TableDashboard({ enableBan, tableHeader, data, isCrud, isManager, sortProps }) {
     const headers = data ? data[0] ? Object.keys(data[0]) : [] : []
     const originData = data ?? []
     const [visibleData, setVisibleData] = useState(data ?? [])
@@ -26,9 +26,11 @@ export default function TableDashboard({ tableHeader, data, isCrud, isManager, s
     
     useEffect(() => {
         setVisibleData(data ?? [])
+        setCheckedList(Object.fromEntries(data.map(row => [row.id, false])))
     }, [data])
 
     const handleCheckAllChange = event => {
+        console.log(Object.fromEntries(data.map(row => [row.id, false])))
         setCheckedList(Object.keys(checkedList).reduce(
             (accumulator, current) => {
                 accumulator[current] = event.target.checked 
@@ -101,7 +103,7 @@ export default function TableDashboard({ tableHeader, data, isCrud, isManager, s
             />
             <TableContainer component={Paper}>
                 <Box style={{ display: "flex", flexGrow: 1, padding: 10, alignItems: "center"}}>
-                    <Typography style={{ minWidth: "33%" }} variant="h4" component="div" gutterBottom>
+                    <Typography style={{ marginRight: "20px" }} variant="h4" component="div" gutterBottom>
                         {tableHeader}
                     </Typography>
                     <Manager 
@@ -110,7 +112,6 @@ export default function TableDashboard({ tableHeader, data, isCrud, isManager, s
                             flexGrow: 1,
                             display: "flex",
                             width: "100%",
-                            justifyContent: "space-between"
                         }} 
                         checkedList={checkedList} 
                         handleClickCreate={() => setDialogStatus(true)}
@@ -120,6 +121,7 @@ export default function TableDashboard({ tableHeader, data, isCrud, isManager, s
                         handleSearch={handleSearch}
                         isCrud={isCrud}
                         isManager={isManager}
+                        enableBan={enableBan}
                     />
                 </Box>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">

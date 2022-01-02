@@ -1,4 +1,5 @@
-let API_URL = process.env.REACT_APP_API_URL + '/accounts'
+const API_URL = process.env.REACT_APP_API_URL + '/accounts'
+const queryHelpers = require("./queryHelpers")
 
 const getResultFromResponse = async response => {
     let result = {
@@ -154,8 +155,8 @@ let accountAPI = {
 
         return result
     },
-    getAll: async role => {
-        let query = role ? `role=${role}` : "" 
+    getAll: async roles => {
+        let query = roles ? queryHelpers.parseArray("roles", roles) : "" 
         return await fetch(
             `${API_URL}?${query}`,
             {
@@ -175,6 +176,16 @@ let accountAPI = {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
+        })
+    },
+    banAccounts: async banList => {
+        return await fetch(`${API_URL}/ban`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(banList)
         })
     }
 }
