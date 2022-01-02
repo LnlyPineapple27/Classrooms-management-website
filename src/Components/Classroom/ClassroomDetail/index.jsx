@@ -24,6 +24,7 @@ export default function ClassroomDetail() {
     const [,setNavbarEl] = useContext(NavbarElContext)
     const columns = ['Name', 'Role', 'Dob', 'Email']
     const codeToRole = ['Admin', 'Teacher', 'Student']
+    const codeToSex = ["Male", "Female"]
     const [detail, setDetail] = useState({
         name: '',
         section:'',
@@ -45,8 +46,17 @@ export default function ClassroomDetail() {
             let result = await classroomAPI.getClassroomDetail(params.classroomId)
             let fDetail = result.data.classroomDetail ? result.data.classroomDetail : {}
             let fRows = result.data.userList ? result.data.userList : []
+            
             setInviteLink(`${window.document.location.hostname}/invite/2`+result.data.classroomDetail.inviteLink)
-            let cookedFRows = fRows.map(row => ({...row.Users, role: codeToRole[row.Users.role]})).map(({UserClassroom, ...item}) => item)
+            
+            let cookedFRows = fRows.map(row => (
+                {...row.Users, ...{
+                    role: codeToRole[row.Users.role],
+                    sex: codeToSex[row.Users.sex],
+                    dob: row.Users.dob.split("T")[0]
+                }}
+            )).map(({UserClassroom, ...item}) => item)
+
             setRows(cookedFRows)
             console.log(cookedFRows)
             let lecturerList = cookedFRows.filter(row => row.role === codeToRole[1]).map(row => row.name)
