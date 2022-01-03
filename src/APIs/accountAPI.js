@@ -33,7 +33,7 @@ const validateProfileData = profileData => {
     }
     const profileValidProps = ['name', 'dob', 'sex', 'email']
     
-    if (!Object.keys(profileData).every(prop => profileValidProps.includes(prop))) return result
+    if (!profileValidProps.every(prop => Object.keys(profileData).includes(prop))) return result
     
     let isOk = true
     for(let prop of profileValidProps) {
