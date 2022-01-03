@@ -55,7 +55,7 @@ export default function AccountsTable({ roles, sortProps, enableBan }) {
 
             if(!event.target.value || event.target.value === "") return setSnackbarState({
                 severity: "error",
-                content: `Error: M T new SID`,
+                content: `Error: Empty new SID`,
                 open: true
             })
 

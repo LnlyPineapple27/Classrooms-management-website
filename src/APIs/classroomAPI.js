@@ -89,7 +89,7 @@ let classroomAPI = {
             name: name,
             sid: sid,
             classroomId: classroomId,
-            userId: userId
+            userID: userId
         })
         console.log(fetchBody);
         const response = await fetch(fetchURL, {
