@@ -1,29 +1,33 @@
 import { React, useState, useEffect, useContext } from 'react'
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import accountAPI from '../../APIs/accountAPI';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Button from '@mui/material/Button';
-import { LoadingButton } from '@mui/lab';
-import SaveIcon from '@mui/icons-material/Save';
-import RestoreIcon from '@mui/icons-material/Restore';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import { NavbarElContext } from '../../Context/GlobalContext';
-import userAPI from '../../APIs/userAPI';
+import Box from '@mui/material/Box'
+import TextField from '@mui/material/TextField'
+import accountAPI from '../../APIs/accountAPI'
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import LocalizationProvider from '@mui/lab/LocalizationProvider'
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker'
+import Select from '@mui/material/Select'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import Button from '@mui/material/Button'
+import { LoadingButton } from '@mui/lab'
+import SaveIcon from '@mui/icons-material/Save'
+import RestoreIcon from '@mui/icons-material/Restore'
+import Alert from '@mui/material/Alert'
+import AlertTitle from '@mui/material/AlertTitle'
+import { NavbarElContext } from '../../Context/GlobalContext'
+import userAPI from '../../APIs/userAPI'
 import './index.scss'
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom'
+import { Stack } from '@mui/material'
+
 
 export default function Profile() {
+    const profileInfoKeys = ['name', 'sex', 'dob', 'email', 'role',]
+    const visibleDataKeys = [...profileInfoKeys,'SID']
     const [,setNavbarEl] = useContext(NavbarElContext)
-    const [profileInfo, setProfileInfo] = useState({'name':'', 'sex':'', 'dob':'', 'email':''})
-    const [visibleInfo, setVisibleInfo] = useState({'name':'', 'sex':'', 'dob':'', 'email':''})
+    const [profileInfo, setProfileInfo] = useState({})
+    const [visibleInfo, setVisibleInfo] = useState({'name':'', 'sex':'', 'dob':'', 'email':'', 'role':'','SID':''})
     const [isInfoChanged, setIsInfoChanged] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [isSaved, setIsSaved] = useState(false)
@@ -33,18 +37,21 @@ export default function Profile() {
     const params = useParams()
 
     useEffect(() => {
+        const codeToRole = ["Admin", "Lecturer", "Student"]
+
         const fetchData = async () => {
             let id = params.id
             let response = await userAPI.userProfile(id)
             let profileInfoResult = await response.json()
+            let originData = {...profileInfoResult, ...{
+                role: codeToRole[profileInfoResult.role],
+                dob:profileInfoResult.dob.split('T')[0]},
+                SID: profileInfoResult.SID ?? "Not mapped yet."
+            }
             setIsOwner(profileInfoResult.isOwner)
-            setProfileInfo({...profileInfoResult, dob: profileInfoResult.dob.split('T')[0]})
-            setVisibleInfo({
-                name:profileInfoResult.name,
-                sex:profileInfoResult.sex,
-                dob:profileInfoResult.dob.split('T')[0],
-                email:profileInfoResult.email
-            })
+            setProfileInfo(originData)
+            setVisibleInfo(visibleDataKeys.reduce((acc, curr) => ({...acc, [curr]: originData[curr]}), {}))
+            // console.log(visibleDataKeys.reduce((acc, curr) => ({...acc, [curr]: originData[curr]}), {}))
             setNavbarEl({})
         }
         fetchData()
@@ -52,16 +59,8 @@ export default function Profile() {
     },[isSaved, setNavbarEl])
 
     useEffect(() => {
-        const checkChangeInfo = () => {
-            let trigger = true
-            for(let prop in visibleInfo) {
-                trigger = visibleInfo[prop] === profileInfo[prop]
-                if(!trigger) break
-            }
-            return trigger
-        }
         
-        setIsInfoChanged(!checkChangeInfo())
+        setIsInfoChanged(profileInfoKeys.map(key => visibleInfo[key] !== profileInfo[key]).some(checker => checker))
 
     }, [visibleInfo, profileInfo])
 
@@ -70,12 +69,7 @@ export default function Profile() {
     }, [profileInfo])
 
     const handleResetInfo = () => {
-        setVisibleInfo({
-            name:profileInfo.name,
-            sex:profileInfo.sex,
-            dob:profileInfo.dob,
-            email:profileInfo.email
-        })
+        setVisibleInfo(visibleDataKeys.reduce((acc, curr) => ({...acc, [curr]: profileInfo[curr]}), {}))
     }
 
     const handleSaveInfo = async () => {
@@ -88,33 +82,33 @@ export default function Profile() {
     }
 
     const convertDate = (str) => {
-        const date = new Date(str), mnth = ("0" + (date.getMonth() + 1)).slice(-2), day = ("0" + date.getDate()).slice(-2);
-        return [date.getFullYear(), mnth, day].join("-");
+        const date = new Date(str), mnth = ("0" + (date.getMonth() + 1)).slice(-2), day = ("0" + date.getDate()).slice(-2)
+        return [date.getFullYear(), mnth, day].join("-")
     }
 
     const handleChange = name => event => {
-        setVisibleInfo({ ...visibleInfo, [name]: event.target.value });
+        setVisibleInfo({ ...visibleInfo, [name]: event.target.value })
     }
     
     const handleChangeDate = date => {
-        setVisibleInfo({ ...visibleInfo, dob: convertDate(date) });
+        setVisibleInfo({ ...visibleInfo, dob: convertDate(date) })
     }
 
     const handleChangeSex = event => {
-        setVisibleInfo({ ...visibleInfo, sex: event.target.value });
+        setVisibleInfo({ ...visibleInfo, sex: event.target.value })
     }
     return (
         <Box
-        className='page-container'
-        component="form"
-        sx={{
-            '& .MuiTextField-root': { m: 1, width: '25ch' },
-        }}
-        noValidate
-        autoComplete="off"
+            className='page-container'
+            component="form"
+            sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
+            }}
+            noValidate
+            autoComplete="off"
         >
             <div className='info-container'>
-                <h1 className='page-title'>Personal Information</h1>
+                <h1 className='page-title'>{`${profileInfo.role} Information`}</h1>
                 {error && 
                 <Alert 
                     className='info-container__element info-container__element--alert' 
@@ -131,6 +125,26 @@ export default function Profile() {
                     <AlertTitle>Update Information Successfully</AlertTitle>
                     {success}
                 </Alert>}
+                <Stack direction="row" sx={{ display:"flex", width:1, ".MuiTextField-root": {m:0} }} space={2}>
+                    <TextField
+                        id="tf_sid"
+                        value={visibleInfo.SID}
+                        label="STUDENT ID"
+                        margin="normal"
+                        onChange={handleChange("SID")}
+                        disabled={!isOwner}
+                        sx={{ flex:1, }}
+                    />
+                    {isOwner && (<Button 
+                        sx={{ml: 1}} 
+                        variant="contained" 
+                        color="info"
+                        disabled={profileInfo.SID === visibleInfo.SID}
+                        >
+                            Map
+                        </Button>
+                    )}
+                </Stack>
                 {Object.keys(visibleInfo).map((key, index) => {
                     switch(key) {
                         default:
@@ -140,7 +154,7 @@ export default function Profile() {
                                     id={`tf_${key}`}
                                     value={visibleInfo[key]}
                                     label={key.slice().toUpperCase()}
-                                    margin="dense"
+                                    margin="normal"
                                     className='info-container__element'
                                     onChange={handleChange(key)}
                                     disabled={!isOwner}
@@ -191,27 +205,31 @@ export default function Profile() {
                                         </Select>
                                     </FormControl>
                                 )
+                            case 'SID': 
+                            case 'role':
+                                break
+
                     }})
                 }
                 {isOwner && (<div className="info-container__element button-group">
                     <Button
-                    className='info-container__element button-group__button'
-                    variant="contained" 
-                    color="primary" 
-                    endIcon={<RestoreIcon />}
-                    onClick={handleResetInfo}
+                        className='info-container__element button-group__button'
+                        variant="contained" 
+                        color="primary" 
+                        endIcon={<RestoreIcon />}
+                        onClick={handleResetInfo}
                     >
                         Restore
                     </Button>
                     <LoadingButton
-                    className='info-container__element button-group__button'
-                    variant="contained" 
-                    color="success" 
-                    disabled={!isInfoChanged}
-                    endIcon={<SaveIcon />}
-                    onClick={handleSaveInfo}
-                    loading={isLoading}
-                    loadingPosition="end"
+                        className='info-container__element button-group__button'
+                        variant="contained" 
+                        color="success" 
+                        disabled={!isInfoChanged}
+                        endIcon={<SaveIcon />}
+                        onClick={handleSaveInfo}
+                        loading={isLoading}
+                        loadingPosition="end"
                     >
                         Save
                     </LoadingButton>
