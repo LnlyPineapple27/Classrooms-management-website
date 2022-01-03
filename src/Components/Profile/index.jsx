@@ -20,11 +20,14 @@ import userAPI from '../../APIs/userAPI'
 import './index.scss'
 import { useParams } from 'react-router-dom'
 import { Stack } from '@mui/material'
+import * as sIdAPI from '../../APIs/sidAPI'
 
 
 export default function Profile() {
     const profileInfoKeys = ['name', 'sex', 'dob', 'email', 'role',]
     const visibleDataKeys = [...profileInfoKeys,'SID']
+    const codeToRole = ["Admin", "Lecturer", "Student"]
+    const roleToCode = codeToRole.reduce((acc, curr, index) => ({...acc, [curr]:index}), {})
     const [,setNavbarEl] = useContext(NavbarElContext)
     const [profileInfo, setProfileInfo] = useState({})
     const [visibleInfo, setVisibleInfo] = useState({'name':'', 'sex':'', 'dob':'', 'email':'', 'role':'','SID':''})
@@ -37,7 +40,6 @@ export default function Profile() {
     const params = useParams()
 
     useEffect(() => {
-        const codeToRole = ["Admin", "Lecturer", "Student"]
 
         const fetchData = async () => {
             let id = params.id
@@ -97,6 +99,15 @@ export default function Profile() {
     const handleChangeSex = event => {
         setVisibleInfo({ ...visibleInfo, sex: event.target.value })
     }
+
+    const handleMapSID = async event => {
+        setIsLoading(true)
+        let result = await sIdAPI.updateOrCreateIfNotExist(visibleInfo.SID, profileInfo.id)
+        setError(result.ok ? null : `Error ${result.status}: ${result.statusText}`)
+        setSuccess(!!result.ok)
+        setIsSaved(true)
+    }
+
     return (
         <Box
             className='page-container'
@@ -125,7 +136,7 @@ export default function Profile() {
                     <AlertTitle>Update Information Successfully</AlertTitle>
                     {success}
                 </Alert>}
-                <Stack direction="row" sx={{ display:"flex", width:1, ".MuiTextField-root": {m:0} }} space={2}>
+                {roleToCode[profileInfo.role] === 2 && <Stack direction="row" sx={{ display:"flex", width:1, ".MuiTextField-root": {m:0} }} space={2}>
                     <TextField
                         id="tf_sid"
                         value={visibleInfo.SID}
@@ -136,15 +147,16 @@ export default function Profile() {
                         sx={{ flex:1, }}
                     />
                     {isOwner && (<Button 
-                        sx={{ml: 1}} 
-                        variant="contained" 
-                        color="info"
-                        disabled={profileInfo.SID === visibleInfo.SID}
+                            sx={{ml: 1}} 
+                            variant="contained" 
+                            color="info"
+                            disabled={profileInfo.SID === visibleInfo.SID}
+                            onClick={handleMapSID}
                         >
                             Map
                         </Button>
                     )}
-                </Stack>
+                </Stack>}
                 {Object.keys(visibleInfo).map((key, index) => {
                     switch(key) {
                         default:
