@@ -45,7 +45,7 @@ export default function GradeBoard() {
             let sum = 0;
             for(let j = 0; j < columns_names.length; j++){
                 
-                let tmp_sumfuk = parseInt(user_data.find(item => item.assignmentName === columns_names[j]).score ?? 0);
+                let tmp_sumfuk = Number(user_data.find(item => item.assignmentName === columns_names[j]).score ?? 0).toFixed(2);
 
                 row[columns_names[j]] = tmp_sumfuk;
 
