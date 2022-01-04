@@ -16,7 +16,7 @@ import classroomAPI from '../../APIs/classroomAPI'
 import { TextField } from "@mui/material";
 import accountAPI from "../../APIs/accountAPI";
 import userAPI from "../../APIs/userAPI";
-
+import './index.scss'
 export default function GradeBoard() {
     const [,setNavbarEl] = useContext(NavbarElContext)
     let theme = createTheme();
@@ -221,6 +221,9 @@ export default function GradeBoard() {
             </Table>
           </TableContainer>)
           :
-          (<p>Loading...</p>)
+          (<div>
+              <h2>Seems like no grade data was found for this class :(</h2>
+              <div class="loader"></div>
+            </div> )
     );
 }
