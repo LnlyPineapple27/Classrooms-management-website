@@ -44,12 +44,14 @@ export default function GradeBoard() {
             
             let sum = 0;
             for(let j = 0; j < columns_names.length; j++){
+                let tmp_sumfuk = Number(user_data.find(item => item.assignmentName === columns_names[j]).score ?? 0);
                 
-                let tmp_sumfuk = Number(user_data.find(item => item.assignmentName === columns_names[j]).score ?? 0).toFixed(2);
-
-                row[columns_names[j]] = tmp_sumfuk;
-
                 if(tmp_sumfuk !== null) sum += tmp_sumfuk;
+
+                tmp_sumfuk = tmp_sumfuk.toFixed(2);
+                row[columns_names[j]] = tmp_sumfuk;
+                console.log("tmp_sumfuk:", tmp_sumfuk);
+                console.log("sum:", sum);
             }
             row['total'] = (sum / columns_names.length).toFixed(2);
             result.push(row)
