@@ -187,6 +187,16 @@ let accountAPI = {
             },
             body: JSON.stringify(banList)
         })
+    },
+    getRole: async accountId => {
+        let fetchAPI = API_URL + `/${accountId}/role`
+        return await fetch(fetchAPI, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+        })
     }
 }
 export default accountAPI

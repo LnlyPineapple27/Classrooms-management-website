@@ -14,6 +14,8 @@ import Paper from '@mui/material/Paper';
 import * as React from 'react';
 import classroomAPI from '../../APIs/classroomAPI'
 import { TextField } from "@mui/material";
+import accountAPI from "../../APIs/accountAPI";
+import userAPI from "../../APIs/userAPI";
 
 export default function GradeBoard() {
     const [,setNavbarEl] = useContext(NavbarElContext)
@@ -24,6 +26,7 @@ export default function GradeBoard() {
     const [columns, setColumns] = useState([])
     const [data, setData] = useState([])
     const [headerSave, setHeaderSave] = useState({})
+    const [role, setRole] = useState(2)
 
     const cookData = (response_data, columns_names) => {
         //console.log("data", data);
@@ -113,6 +116,10 @@ export default function GradeBoard() {
                 setHeaderSave(mapAssignment(response_data))
                 setData(cookData(response_data, columns_names))
                 setColumns(data_cols)
+                let responseRole = await accountAPI.getRole(JSON.parse(localStorage.getItem("account") ?? "").id)
+                if(responseRole.ok) {
+                  setRole(await responseRole.json())
+                }
             }
         }
         fetchData()
@@ -175,6 +182,7 @@ export default function GradeBoard() {
                   variant="standard" 
                   min={0}
                   placeholder={data_row[key]}
+                  disabled={!["0", "1"].includes(role.toString())}
               />
             </TableCell>)
         }
