@@ -41,7 +41,9 @@ export default function GradeBoard() {
             
             let sum = 0;
             for(let j = 0; j < columns_names.length; j++){
+                
                 let tmp_sumfuk = parseInt(user_data.find(item => item.assignmentName === columns_names[j]).score ?? 0);
+
                 row[columns_names[j]] = tmp_sumfuk;
 
                 if(tmp_sumfuk !== null) sum += tmp_sumfuk;
@@ -132,13 +134,13 @@ export default function GradeBoard() {
 
     const handleGradeUpdate = async (e, rowIndex, field) => {
       if((data.length > 0) && (data[rowIndex][field] !== null)) {
-        console.log(data)
-        console.log("Row number: ", rowIndex)
-        console.log("Assignment name: ", field)
-        console.log("Assignment id: ", headerSave[field])
-        console.log("Score: ", e.target.value)
-        console.log("Student id: ", data[rowIndex].id)
-        console.log("Classroom id: ", params.classroomId)
+        // console.log(data)
+        // console.log("Row number: ", rowIndex)
+        // console.log("Assignment name: ", field)
+        // console.log("Assignment id: ", headerSave[field])
+        // console.log("Score: ", e.target.value)
+        // console.log("Student id: ", data[rowIndex].id)
+        // console.log("Classroom id: ", params.classroomId)
 
         let _classroomId = params.classroomId
         let _studentId = data[rowIndex].userID
@@ -164,16 +166,17 @@ export default function GradeBoard() {
       let result = []   
       let h = Object.keys(data_row)
       h.forEach(key => {
-        if(key !== 'id' && key !== 'name' && key !== 'userID' && key !== 'total'){
-          result.push(<TableCell>
-                        <TextField
-                            onBlur={(e) => handleGradeUpdate(e, data.indexOf(data_row), key)} 
-                            type='number' 
-                            variant="standard" 
-                            min={0}>
-                            {data_row[key]}
-                        </TextField>
-                      </TableCell>)
+        if(key !== 'id' && key !== 'name' && key !== 'userID' && key !== 'total') {
+          result.push(
+            <TableCell>
+              <TextField
+                  onBlur={(e) => handleGradeUpdate(e, data.indexOf(data_row), key)} 
+                  type='number' 
+                  variant="standard" 
+                  min={0}
+                  placeholder={data_row[key]}
+              />
+            </TableCell>)
         }
         else{
           result.push(<TableCell>{data_row[key]}</TableCell>)
