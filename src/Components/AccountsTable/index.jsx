@@ -17,10 +17,11 @@ const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const MySIDBox = forwardRef(props => {
+const MySIDBox = forwardRef((props, ref) => {
     const { children } = props
     return(
-        <Box 
+        <Box
+            ref={ref} 
             component="span" 
             sx={{                
                 width:130, 

@@ -20,7 +20,7 @@ const Alert = forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
 })
 
-function DraggableAssignmentItem({ assignment, toggleChangeItem, index, isManager }) {
+function DraggableAssignmentItem({ handleFinalizeAssignment, assignment, toggleChangeItem, index, isManager }) {
     return (
         <Draggable key={`draggable_${assignment.id}`} draggableId={index.toString()} index={index}>
             {(provided) => {
@@ -31,7 +31,7 @@ function DraggableAssignmentItem({ assignment, toggleChangeItem, index, isManage
                         {...provided.dragHandleProps}
                     >
                         <ItemAssignment
-
+                            handleFinalizeAssignment={handleFinalizeAssignment}
                             key={`assignment_${index}`} 
                             assignment={assignment} 
                             toggleChangeItem={toggleChangeItem}
@@ -45,7 +45,7 @@ function DraggableAssignmentItem({ assignment, toggleChangeItem, index, isManage
     )
 }
 
-function AssignmentList({ assignments, toggleChangeItem, isManager }) {
+function AssignmentList({ handleFinalizeAssignment, assignments, toggleChangeItem, isManager }) {
     return (
         assignments.map((item, index) => (
             <DraggableAssignmentItem
@@ -54,6 +54,7 @@ function AssignmentList({ assignments, toggleChangeItem, isManager }) {
                 toggleChangeItem={toggleChangeItem}
                 index={index}
                 isManager={isManager}
+                handleFinalizeAssignment={handleFinalizeAssignment}
             />)
         )
     )
@@ -129,17 +130,42 @@ export default function DragDropListAssignment() {
         setSnackBarProps({...snackBarPops, status: false})
     }
 
+    const handleFinalizeAssignment = id => async event => {
+        let newItems = items.map(item => (item.id === id ? {...item, finalize: (item.finalize + 1) % 2} : {...item}))
+        setItems(newItems)
+        setSnackBarProps({
+            content: "Updating ...",
+            severity: "info",
+            status:true
+        })
+        let response = await assignmentAPI.update(params.classroomId, id, newItems.find(item => item.id === id))
+        if(response.ok) {
+            setSnackBarProps({
+                content: "Saved",
+                severity: "success",
+                status:true
+            })
+        }
+        else {
+            setSnackBarProps({
+                severity: "error",
+                content: `Error ${response.status}: ${response.statusText}. Can not update assignments positions.`,
+                status: true
+            })
+            newItems = items.map(item => (item.id === id ? {...item, finalize: (item.finalize + 1) % 2} : {...item}))
+            setItems(newItems)
+        }
+    }
+
     useEffect(() => {
         
         async function fetchData() {
             const response = await assignmentAPI.getAllAssignments(params.classroomId)
             if (!response.ok) {
                 setError(response.status)
-                setItems([])
             }
             else {
                 const response_data = await response.json()
-                setItems([])
                 setItems(response_data)
                 setLoading(false)
                 const userId = JSON.parse(localStorage.getItem('account')) ? JSON.parse(localStorage.getItem('account')).userID : 'a'
@@ -180,6 +206,7 @@ export default function DragDropListAssignment() {
                                         assignments={items} 
                                         toggleChangeItem={() => setToggleAddNew(!toggleAddNew)} 
                                         isManager={role === 1}
+                                        handleFinalizeAssignment={handleFinalizeAssignment}
                                     />
                                     {provided.placeholder}
                                 </List>

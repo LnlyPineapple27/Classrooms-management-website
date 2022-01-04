@@ -13,23 +13,23 @@
     }
 }
 
-.item {
-    &__item-button {
-        &__item-text {
-            &.item-text {
-                &--deadline {
-                    text-align: end;
-                }
-                &--point {
-                    text-align: end;
-                }
-            }
-        }
-        &__item-text + &__item-text {
-            margin-left: 50px;
-        }
-    }
-}
+// .item {
+//     &__item-button {
+//         &__item-text {
+//             &.item-text {
+//                 &--deadline {
+//                     text-align: end;
+//                 }
+//                 &--point {
+//                     text-align: end;
+//                 }
+//             }
+//         }
+//         &__item-text + &__item-text {
+//             margin-left: 50px;
+//         }
+//     }
+// }
 
 .Mui-disabled {
     opacity: 1 !important;
