@@ -90,16 +90,19 @@ export default function ReviewRequestCard({ reviewReq, comments }) {
                 </Box>
             </CardContent>
             <CardActions>
-                <Tooltip title="Finalize" placement='top'>
+                {/* <Tooltip title="Finalize" placement='top'>
                     <Checkbox
                         icon={<FactCheckOutlinedIcon fontSize='medium' />}
                         checkedIcon={<FactCheckIcon fontSize='medium' />}
                         onClick={() => {}}
                     />
-                </Tooltip>
-                <IconButton aria-label="share" onClick={toggleShowComment}>
-                    <ChatBubbleOutlineIcon />
-                </IconButton>
+                </Tooltip> */}
+                <Stack direction={"row"} spacing={0} alignItems={"center"}>
+                    <IconButton aria-label="share" onClick={toggleShowComment}>
+                        <ChatBubbleOutlineIcon />
+                    </IconButton> 
+                    <Typography>{mockComments.length}</Typography>
+                </Stack>
             </CardActions>
             <Collapse in={showComment} timeout="auto" sx={{ p:3 }} unmountOnExit>
                 <Stack direction={"column"} spacing={1}>
