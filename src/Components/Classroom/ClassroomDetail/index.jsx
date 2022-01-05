@@ -72,7 +72,6 @@ export default function ClassroomDetail() {
                 const userRole = await fetchRole.json()
                 setRole(userRole)
             }
-
         }
         setNavbarEl({
             classroomTabs: role === 2 && (<ClassroomTabs value={0} classroomId={params.classroomId} />),
