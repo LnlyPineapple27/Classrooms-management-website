@@ -10,14 +10,15 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import { red } from '@mui/material/colors'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-import { Stack, Checkbox, Tooltip } from '@mui/material'
-import FactCheckIcon from '@mui/icons-material/FactCheck'
-import FactCheckOutlinedIcon from '@mui/icons-material/FactCheckOutlined'
+import { InputBase, Stack, } from '@mui/material'
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline'
 import Collapse from '@mui/material/Collapse'
 import ReviewRequestComment from '../ReviewRequestComment'
-import Box from '@mui/material/Box';
+import Box from '@mui/material/Box'
 import { GradeTextField } from '../GradeTextField'
+import TextField from '@mui/material/TextField'
+import InputAdornment from '@mui/material/InputAdornment'
+import SendIcon from '@mui/icons-material/Send'
 
 
 const mockComments = [
@@ -105,8 +106,32 @@ export default function ReviewRequestCard({ reviewReq, comments }) {
                 </Stack>
             </CardActions>
             <Collapse in={showComment} timeout="auto" sx={{ p:3 }} unmountOnExit>
-                <Stack direction={"column"} spacing={1}>
-                    {mockComments.map(item => <ReviewRequestComment comment={item} />)}
+                <Stack direction="column">
+                    <Box>
+                        <Typography fontSize={20} variant="button" display="block" gutterBottom>
+                            Give comment
+                        </Typography>
+                        <TextField
+                            multiline
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="start">
+                                        <IconButton>
+                                            <SendIcon color="primary"/>
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            fullWidth
+                            variant="outlined"
+                        />
+                    </Box>
+                    <Typography margin="2.5rem 0 1rem 0" fontSize={20} variant="button" display="block" gutterBottom>
+                        Comments
+                    </Typography>
+                    <Stack direction={"column"} spacing={1}>
+                        {mockComments.map(item => <ReviewRequestComment comment={item} />)}
+                    </Stack>
                 </Stack>
             </Collapse>
         </Card>
