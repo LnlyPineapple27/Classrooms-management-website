@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom"
 import CircularProgress from '@mui/material/CircularProgress'
 import ClassroomTabs from '../ClassroomTabs'
 import ReviewRequestCard from "../ReviewRequestCard";
+import classroomAPI from "../../APIs/classroomAPI"
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -75,9 +76,31 @@ export default function ReviewRequestPage() {
     const handleSnackbarClose = () => setSnackbarState({...snackbarState, open: false})
 
     useEffect(() => {
-        setLoading(true)
-        setRequests(mockRequest)
-        setLoading(false)
+        const fetchData = async () => {
+            setLoading(true)
+            const userID = JSON.parse(localStorage.getItem("account")).userID
+            const response = await classroomAPI.getGradeReviewRequest(userID, params.classroomId)
+            setLoading(false)
+            if(response.ok) {
+                setSnackbarState({
+                    severity: "success",
+                    content: "Loaded",
+                    open:true
+                })
+                const rawData = await response.json()
+                console.log(rawData)
+                setRequests([])
+            }
+            else {
+                setSnackbarState({
+                    severity: "success",
+                    content: "Loaded",
+                    open:true
+                })
+            }
+        }
+       
+        fetchData()
         setNavbarEl({
             classroomTabs: (<ClassroomTabs value={3} classroomId={params.classroomId} />),
         })

@@ -149,6 +149,17 @@ let classroomAPI = {
             body: JSON.stringify({score: score})
         }
         return await fetch(fetchURL, fetchOption)
+    },
+    getGradeReviewRequest: (userID, classroomID) => {
+        const fetchURL = `${originURL}/classrooms/${classroomID}/gradereview`
+        const fetchOption = {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            }
+        }
+        return fetch(fetchURL, fetchOption) 
     }
 }
 
