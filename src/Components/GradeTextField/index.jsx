@@ -15,5 +15,14 @@ export function GradeTextField(props) {
         setValue(newValue)
     }
 
-    return <TextField variant="standard" value={value} type="number" {...remainProps} onChange={handleChange}/>
+    return (
+        <TextField 
+            variant="standard" 
+            value={value} 
+            type="number" 
+            {...remainProps} 
+            onChange={handleChange}
+            label="FINAL"
+        />
+    )
 }

@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import { red } from '@mui/material/colors'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-import { InputBase, Stack, } from '@mui/material'
+import { InputBase, Stack, Tooltip, } from '@mui/material'
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline'
 import Collapse from '@mui/material/Collapse'
 import ReviewRequestComment from '../ReviewRequestComment'
@@ -53,9 +53,11 @@ export default function ReviewRequestCard({ reviewReq, comments }) {
         <Card elevation={5}>
             <CardHeader
                 avatar={
-                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                        {reviewReq.name ? reviewReq.name[0] : "NaN"}
-                    </Avatar>
+                    <Tooltip placement='top' title={reviewReq.name ?? "NaN"}> 
+                        <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                            {reviewReq.name ? reviewReq.name[0] : "NaN"}
+                        </Avatar>
+                    </Tooltip>
                 }
                 action={
                     <IconButton aria-label="settings">
@@ -87,7 +89,7 @@ export default function ReviewRequestCard({ reviewReq, comments }) {
                     noValidate
                     autoComplete="off"
                 >
-                    <GradeTextField min={0} max={reviewReq.maxGrade} />
+                    <GradeTextField id={reviewReq.id} min={0} max={reviewReq.maxGrade} />
                 </Box>
             </CardContent>
             <CardActions>
