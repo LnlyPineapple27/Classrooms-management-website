@@ -18,6 +18,8 @@ import assignmentAPI from '../../../APIs/assignmentAPI'
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import FactCheckOutlinedIcon from '@mui/icons-material/FactCheckOutlined';
 import { Tooltip } from '@mui/material'
+import InfoIcon from '@mui/icons-material/Info';
+import ReviewRequestCreateDialog from '../../ReviewRequestCreateDialog'
 import '../index.scss'
 
 
@@ -26,6 +28,7 @@ export default function ItemAssignment({ isManager, assignment, toggleChangeItem
     const [anchorEl, setAnchorEl] = useState(null)
     const [updating, setUpdating] = useState(false)
     const [value, setValue] = useState({ name:'', maxPoint:'' })
+    const [requestOpen, setRequestOpen] = useState(false)
 
     const getDeadlineTime = datetime => {
         if(!datetime) return ""
@@ -121,12 +124,20 @@ export default function ItemAssignment({ isManager, assignment, toggleChangeItem
                 </Box>
                 :
                 <Stack direction="row" alignItems={"center"} space={2}>
-                    {isManager && <Checkbox
-                        icon={<FactCheckOutlinedIcon fontSize='large' />}
-                        checkedIcon={<FactCheckIcon fontSize='large' />}
-                        checked={assignment.finalize === 1}
-                        onClick={handleFinalizeAssignment(assignment.id)}
-                    />}
+                    {isManager ? 
+                        <Checkbox
+                            icon={<FactCheckOutlinedIcon fontSize='large' />}
+                            checkedIcon={<FactCheckIcon fontSize='large' />}
+                            checked={assignment.finalize === 1}
+                            onClick={handleFinalizeAssignment(assignment.id)}
+                        /> :
+                        <Box>
+                            <IconButton>
+                                <InfoIcon onClick={() => setRequestOpen(true)} />
+                            </IconButton>
+                            <ReviewRequestCreateDialog open={requestOpen} handleClose={() => setRequestOpen(false)}  />
+                        </Box>
+                    }
                     <ListItemText primary={`Deadline: ${deadline.time}, ${deadline.date}`} className='item__item-button__item-text item-text--deadline' />
                 </Stack>
                 }
