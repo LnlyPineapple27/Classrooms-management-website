@@ -45,6 +45,10 @@ const mockComments = [
 export default function ReviewRequestCard({ reviewReq, comments }) {
     const [showComment, setShowComment] = useState(false)
 
+    const handleUpdateGrade = value => e => {
+        
+    }
+
     const toggleShowComment = () => {
         setShowComment(!showComment)
     }

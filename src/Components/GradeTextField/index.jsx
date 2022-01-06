@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField'
 import { useState } from 'react'
 
 export function GradeTextField(props) {
-    const { type, max, min, ...remainProps } = props
+    const { type, max, min, handleUpdateGrade, ...remainProps } = props
     const [value, setValue] = useState(0)
 
     const handleChange = (e) => {
@@ -22,6 +22,7 @@ export function GradeTextField(props) {
             type="number" 
             {...remainProps} 
             onChange={handleChange}
+            onBlur={handleUpdateGrade(value)}
             label="FINAL"
         />
     )

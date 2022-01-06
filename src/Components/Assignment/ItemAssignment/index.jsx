@@ -121,12 +121,12 @@ export default function ItemAssignment({ isManager, assignment, toggleChangeItem
                 </Box>
                 :
                 <Stack direction="row" alignItems={"center"} space={2}>
-                    <Checkbox
+                    {isManager && <Checkbox
                         icon={<FactCheckOutlinedIcon fontSize='large' />}
                         checkedIcon={<FactCheckIcon fontSize='large' />}
                         checked={assignment.finalize === 1}
                         onClick={handleFinalizeAssignment(assignment.id)}
-                    />
+                    />}
                     <ListItemText primary={`Deadline: ${deadline.time}, ${deadline.date}`} className='item__item-button__item-text item-text--deadline' />
                 </Stack>
                 }
