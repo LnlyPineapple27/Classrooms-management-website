@@ -8,16 +8,19 @@ import DialogContentText from '@mui/material/DialogContentText';
 import ReviewRequestForm from '../ReviewRequestForm/'
 import DialogTitle from '@mui/material/DialogTitle';
 import classroomAPI from '../../APIs/classroomAPI';
+import { useParams } from 'react-router-dom';
 
 export default function ReviewRequestCreateDialog({ max, id, open, handleClose }) {
+  const params = useParams();
   const [formData, setFormData] = useState({expectGrade: "", explaination: ""})
 
   const handleSubmit = async e => {
-      const submitData = {...formData, assignmentID: id}
+      const submitData = {...formData, assignmentID: id, classroomID: params.classroomId}
       const response = await classroomAPI.createGradeReviewRequest(submitData)
       if(response.ok) {
         console.log("OK")
       }
+      handleClose();
   }
 
   return (
