@@ -71,9 +71,34 @@ export default function ReviewRequestPage() {
     const [requests, setRequests] = useState([])
     const [loading, setLoading] = useState(false)
     const [snackbarState, setSnackbarState] = useState({severity:"", content:"", open:""})
+    const [refresh, setRefresh] = useState(false)
     const params = useParams()
 
     const handleSnackbarClose = () => setSnackbarState({...snackbarState, open: false})
+
+    const snackbarLoading = () => {
+        setSnackbarState({
+            severity: "info",
+            content: "Loading ...",
+            open:true
+        })
+    }
+
+    const snackbarSuccess = () => {
+        setSnackbarState({
+            severity: "success",
+            content: "Success",
+            open:true
+        })
+    }
+
+    const snackbarError = response => {
+        setSnackbarState({
+            severity: "error",
+            content: `Error ${response.status}: ${response.statusText}`,
+            open:true
+        })
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -82,21 +107,13 @@ export default function ReviewRequestPage() {
             const response = await classroomAPI.getGradeReviewRequest(userID, params.classroomId)
             setLoading(false)
             if(response.ok) {
-                setSnackbarState({
-                    severity: "success",
-                    content: "Loaded",
-                    open:true
-                })
+                snackbarSuccess()
                 const rawData = await response.json()
                 console.log(rawData)
-                setRequests([])
+                setRequests(rawData)
             }
             else {
-                setSnackbarState({
-                    severity: "success",
-                    content: "Loaded",
-                    open:true
-                })
+                snackbarError(response)
             }
         }
        
@@ -104,7 +121,7 @@ export default function ReviewRequestPage() {
         setNavbarEl({
             classroomTabs: (<ClassroomTabs value={3} classroomId={params.classroomId} />),
         })
-    },[])
+    },[refresh])
 
     return (
       <Box component="div">
@@ -118,13 +135,24 @@ export default function ReviewRequestPage() {
                     <CircularProgress color="inherit" />
                 </Box>
             </Backdrop>
-            <Snackbar open={snackbarState.open} autoHideDuration={6000} onClose={handleSnackbarClose}>
+            <Snackbar anchorOrigin={{vertical: "top", horizontal: "right"}} open={snackbarState.open} autoHideDuration={6000} onClose={handleSnackbarClose}>
                 <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
                     {snackbarState.content}
                 </Alert>
             </Snackbar>
             <Stack direction="column" spacing={3} sx={{ p:2 }}>
-                {requests.map(req => <ReviewRequestCard key={`rrc_${req.id}`} reviewReq={req} />)}
+                {requests.map(req => (
+                    <ReviewRequestCard 
+                        snackbar={{
+                            error: snackbarError,
+                            success: snackbarSuccess,
+                            loading: snackbarLoading
+                        }} 
+                        key={`rrc_${req.id}`} 
+                        reviewReq={req}
+                        refreshToggle={() => setRefresh(!refresh)}
+                    />
+                ))}
             </Stack>
       </Box>
     )

@@ -22,7 +22,11 @@ export function GradeTextField(props) {
             type="number" 
             {...remainProps} 
             onChange={handleChange}
-            onBlur={handleUpdateGrade(value)}
+            onBlur={e => {
+                const capture = value
+                setValue(0)
+                handleUpdateGrade(capture)(e)
+            }}
             label="FINAL"
         />
     )

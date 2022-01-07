@@ -19,6 +19,9 @@ import { GradeTextField } from '../GradeTextField'
 import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 import SendIcon from '@mui/icons-material/Send'
+import classroomAPI from '../../APIs/classroomAPI'
+import assignmentAPI from '../../APIs/assignmentAPI'
+import { useParams } from 'react-router-dom'
 
 
 const mockComments = [
@@ -42,11 +45,28 @@ const mockComments = [
 ]
 
 
-export default function ReviewRequestCard({ reviewReq, comments }) {
+export default function ReviewRequestCard({ refreshToggle, reviewReq, comments, snackbar }) {
     const [showComment, setShowComment] = useState(false)
+    const params = useParams();
 
-    const handleUpdateGrade = value => e => {
+    const handleUpdateGrade = value => async e => {
+        snackbar.loading()
+        const account = JSON.parse(localStorage.getItem("account"))
+        const response = await assignmentAPI.update(
+            params.classroomId, 
+            reviewReq.assignmentID, {
+                userId: account.userID,
+                classroomId: params.classroomId, 
+                assignmentId: reviewReq.assignmentID,
+                score: value
+            }
+        )
         
+        if(response.ok) {
+            snackbar.success()
+            refreshToggle()
+        }
+        else snackbar.error()
     }
 
     const toggleShowComment = () => {
@@ -57,9 +77,9 @@ export default function ReviewRequestCard({ reviewReq, comments }) {
         <Card elevation={5}>
             <CardHeader
                 avatar={
-                    <Tooltip placement='top' title={reviewReq.name ?? "NaN"}> 
+                    <Tooltip placement='top' title={reviewReq.authorName ?? "NaN"}> 
                         <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                            {reviewReq.name ? reviewReq.name[0] : "NaN"}
+                            {reviewReq.authorName ? reviewReq.authorName[0] : "NaN"}
                         </Avatar>
                     </Tooltip>
                 }
@@ -68,20 +88,24 @@ export default function ReviewRequestCard({ reviewReq, comments }) {
                         <MoreVertIcon />
                     </IconButton>
                 }
-                title={<Typography variant="overline">Grade review request of <strong>'{reviewReq.assignmentName}'</strong></Typography>}
-                subheader={reviewReq.createdAt}
+                title={(
+                    <Typography variant="overline">
+                        Grade review request of <strong>'{reviewReq.assignmentName}'</strong> by '{reviewReq.authorName}'
+                    </Typography>
+                )}
+                subheader={reviewReq.createdAt.split("T")[0]}
             /> 
             <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                    Explain: {reviewReq.explaination}
+                <Typography sx={{color: "black"}} variant="body" color="text.secondary">
+                    {reviewReq.explaination}
                 </Typography>
                 
-                <Stack spacing={3} direction="row">
+                <Stack sx={{mt:3}} spacing={3} direction="row">
                     <Typography  variant="overline" color="text.secondary">
                         Expect Grade: <strong>{reviewReq.expectGrade}</strong>
                     </Typography>
                     <Typography  variant="overline" color="text.secondary">
-                        Real Grade: <strong>{reviewReq.realGrade}/{reviewReq.maxGrade}</strong>
+                        Real Grade: <strong>{reviewReq.score}/{reviewReq.maxPoint}</strong>
                     </Typography>
                 </Stack>
                 
@@ -93,7 +117,7 @@ export default function ReviewRequestCard({ reviewReq, comments }) {
                     noValidate
                     autoComplete="off"
                 >
-                    <GradeTextField id={reviewReq.id} min={0} max={reviewReq.maxGrade} />
+                    <GradeTextField handleUpdateGrade={handleUpdateGrade} id={reviewReq.id} min={0} max={reviewReq.maxPoint} />
                 </Box>
             </CardContent>
             <CardActions>
