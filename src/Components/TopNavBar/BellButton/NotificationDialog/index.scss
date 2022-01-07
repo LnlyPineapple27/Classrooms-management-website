@@ -1,0 +1,16 @@
+.left-align {
+    width:50%;
+    Text-align:left;
+    float:left;
+};
+
+.right-align{
+    width:50%;
+    Text-align:right;
+    float:right;
+};
+
+#block_container {
+    display: flex;
+    justify-content: center;
+}

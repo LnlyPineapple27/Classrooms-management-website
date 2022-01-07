@@ -12,7 +12,6 @@ import LoginIcon from '@mui/icons-material/Login';
 import { Button } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import './index.scss'
 import { AuthContext } from '../../Context/GlobalContext';
 import { NavbarElContext } from '../../Context/GlobalContext';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
