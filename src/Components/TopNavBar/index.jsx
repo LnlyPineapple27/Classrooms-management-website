@@ -20,7 +20,6 @@ import MoreMenu from './MoreMenu';
 import ImportDialog from './MoreMenu/ImportDialog'
 import MagicBell, { FloatingNotificationInbox } from "@magicbell/magicbell-react";
 import { MagicBellProvider } from "@magicbell/react-headless";
-import { useBell } from '@magicbell/react-headless';
 import NotificationsBell from './BellButton'
 export default function TopNavBar() {
   const [navbarEl, setNavbarEl] = React.useContext(NavbarElContext)
@@ -90,15 +89,20 @@ export default function TopNavBar() {
               </MagicBell>)
               : null
           }  */}
-
+          
           {auth ? (
-              <div>
                 <MagicBellProvider
                   apiKey="95cd7bd4a5452bd5ee1f798615475395c4d4d935"
                   userExternalId={JSON.parse(localStorage.getItem("account")).userID}
                 >
                   <NotificationsBell/>
                 </MagicBellProvider>
+          )
+          : null}
+          {auth ? (
+            
+              <div>
+                
                 
                 <IconButton
                   size="large"
