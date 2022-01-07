@@ -18,6 +18,7 @@ import { NavbarElContext } from '../../Context/GlobalContext';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import MoreMenu from './MoreMenu';
 import ImportDialog from './MoreMenu/ImportDialog'
+import MagicBell, { FloatingNotificationInbox } from "@magicbell/magicbell-react";
 
 
 export default function TopNavBar() {
@@ -27,7 +28,13 @@ export default function TopNavBar() {
   const navigate = useNavigate()
   const [moreMenuAnchorEl, setMoreMenuAnchorEl] = React.useState(null);
   const [openImport, setOpenImport] = React.useState(false)
-
+  const theme = {"icon":{"borderColor":"#13a369","width":"24px"},
+                  "unseenBadge":{"backgroundColor":"#DF4759"},
+                  "header":{"backgroundColor":"#14bf71","textColor":"#ffffff","borderRadius":"16px"},
+                  "footer":{"backgroundColor":"#14bf71","textColor":"#ffffff","borderRadius":"16px"},
+                  "notification":{"default":{"textColor":"#15091F","borderRadius":"8px","backgroundColor":"#14bf71"},
+                  "unseen":{"backgroundColor":"#14bf71","textColor":"#15091F","borderRadius":"8px"},
+                  "unread":{"backgroundColor":"#14bf71","textColor":"#15091F","borderRadius":"8px"}}};
 
 
   const handleMenu = (event) => {
@@ -72,8 +79,17 @@ export default function TopNavBar() {
           <Box className='nav-bar__tabs-container' sx={{ flexGrow: 1 }} >
             {navbarEl.classroomTabs}
           </Box>
+          <MagicBell
+              apiKey="95cd7bd4a5452bd5ee1f798615475395c4d4d935"
+              userExternalId={JSON.parse(localStorage.getItem("account")).userID}
+              theme={theme}
+            >
+              {(props) => <FloatingNotificationInbox width={400} height={500} {...props} />}
+            </MagicBell>
+          
           {auth ? (
               <div>
+                
                 <IconButton
                   size="large"
                   aria-label="More features"
@@ -84,9 +100,11 @@ export default function TopNavBar() {
                 >
                   <MoreHorizIcon />
                 </IconButton>
+
                 <ImportDialog open={openImport} handleClose={() => setOpenImport(false)} />   
                 <MoreMenu handleOpenImport={() => {setOpenImport(true)}} handleClose={() => setMoreMenuAnchorEl(null)} anchorEl={moreMenuAnchorEl} />
                 {navbarEl.addButton}
+                
                 <IconButton
                   size="large"
                   aria-label="account of current user"
@@ -96,6 +114,7 @@ export default function TopNavBar() {
                   color="inherit"
                 >
                   <AccountCircle />
+                
                 </IconButton>
                 <Menu
                   id="menu-appbar"
