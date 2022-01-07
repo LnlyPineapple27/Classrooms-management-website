@@ -59,7 +59,6 @@ export default function TopNavBar() {
       default: break
     }
   };
-
   return (
     <Box sx={{ flexGrow: 1 }}>      
       <AppBar className='nav-bar' position="static">
@@ -79,14 +78,15 @@ export default function TopNavBar() {
           <Box className='nav-bar__tabs-container' sx={{ flexGrow: 1 }} >
             {navbarEl.classroomTabs}
           </Box>
-          <MagicBell
-              apiKey="95cd7bd4a5452bd5ee1f798615475395c4d4d935"
-              userExternalId={JSON.parse(localStorage.getItem("account")).userID}
-              theme={theme}
-            >
-              {(props) => <FloatingNotificationInbox width={400} height={500} {...props} />}
-            </MagicBell>
-          
+          {auth ? (<MagicBell
+                apiKey="95cd7bd4a5452bd5ee1f798615475395c4d4d935"
+                userExternalId={JSON.parse(localStorage.getItem("account")).userID}
+                theme={theme}
+              >
+                {(props) => <FloatingNotificationInbox width={400} height={500} {...props} />}
+              </MagicBell>)
+              : null
+          }
           {auth ? (
               <div>
                 
