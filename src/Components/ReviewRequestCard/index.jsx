@@ -52,15 +52,16 @@ export default function ReviewRequestCard({ refreshToggle, reviewReq, comments, 
     const handleUpdateGrade = value => async e => {
         snackbar.loading()
         const account = JSON.parse(localStorage.getItem("account"))
-        const response = await assignmentAPI.update(
-            params.classroomId, 
-            reviewReq.assignmentID, {
-                userId: account.userID,
-                classroomId: params.classroomId, 
-                assignmentId: reviewReq.assignmentID,
-                score: value
-            }
-        )
+        //console.log('reviewReq', reviewReq);
+        let _classroomId = params.classroomId
+        // Find a way to get userID. The userID create that review request i mean.
+        let _studentId = reviewReq.authorID
+        let _senderSID = reviewReq.senderSID
+        let _assignmentId = reviewReq.assignmentID
+        let _score = value
+        //console.log(_score)
+
+        const response = await classroomAPI.updateScore(_classroomId, _assignmentId, _score, _studentId);
         
         if(response.ok) {
             snackbar.success()
