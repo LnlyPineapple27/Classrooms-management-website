@@ -19,8 +19,9 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import MoreMenu from './MoreMenu';
 import ImportDialog from './MoreMenu/ImportDialog'
 import MagicBell, { FloatingNotificationInbox } from "@magicbell/magicbell-react";
-
-
+import { MagicBellProvider } from "@magicbell/react-headless";
+import { useBell } from '@magicbell/react-headless';
+import NotificationsBell from './BellButton'
 export default function TopNavBar() {
   const [navbarEl, setNavbarEl] = React.useContext(NavbarElContext)
   const [auth, setAuth] = React.useContext(AuthContext);
@@ -28,13 +29,13 @@ export default function TopNavBar() {
   const navigate = useNavigate()
   const [moreMenuAnchorEl, setMoreMenuAnchorEl] = React.useState(null);
   const [openImport, setOpenImport] = React.useState(false)
-  const theme = {"icon":{"borderColor":"#13a369","width":"24px"},
-                  "unseenBadge":{"backgroundColor":"#DF4759"},
-                  "header":{"backgroundColor":"#14bf71","textColor":"#ffffff","borderRadius":"16px"},
-                  "footer":{"backgroundColor":"#14bf71","textColor":"#ffffff","borderRadius":"16px"},
-                  "notification":{"default":{"textColor":"#15091F","borderRadius":"8px","backgroundColor":"#14bf71"},
-                  "unseen":{"backgroundColor":"#14bf71","textColor":"#15091F","borderRadius":"8px"},
-                  "unread":{"backgroundColor":"#14bf71","textColor":"#15091F","borderRadius":"8px"}}};
+  // const theme = {"icon":{"borderColor":"#13a369","width":"24px"},
+  //                 "unseenBadge":{"backgroundColor":"#DF4759"},
+  //                 "header":{"backgroundColor":"#14bf71","textColor":"#ffffff","borderRadius":"16px"},
+  //                 "footer":{"backgroundColor":"#14bf71","textColor":"#ffffff","borderRadius":"16px"},
+  //                 "notification":{"default":{"textColor":"#15091F","borderRadius":"8px","backgroundColor":"#14bf71"},
+  //                 "unseen":{"backgroundColor":"#14bf71","textColor":"#15091F","borderRadius":"8px"},
+  //                 "unread":{"backgroundColor":"#14bf71","textColor":"#15091F","borderRadius":"8px"}}};
 
 
   const handleMenu = (event) => {
@@ -59,6 +60,7 @@ export default function TopNavBar() {
       default: break
     }
   };
+  
   return (
     <Box sx={{ flexGrow: 1 }}>      
       <AppBar className='nav-bar' position="static">
@@ -78,17 +80,25 @@ export default function TopNavBar() {
           <Box className='nav-bar__tabs-container' sx={{ flexGrow: 1 }} >
             {navbarEl.classroomTabs}
           </Box>
-          {auth ? (<MagicBell
+           {/* {auth ? (<MagicBell
                 apiKey="95cd7bd4a5452bd5ee1f798615475395c4d4d935"
                 userExternalId={JSON.parse(localStorage.getItem("account")).userID}
                 theme={theme}
               >
-                {(props) => <FloatingNotificationInbox width={400} height={500} {...props} />}
+              {(props) => <FloatingNotificationInbox width={400} height={500} {...props} />}
+           
               </MagicBell>)
               : null
-          }
+          }  */}
+
           {auth ? (
               <div>
+                <MagicBellProvider
+                  apiKey="95cd7bd4a5452bd5ee1f798615475395c4d4d935"
+                  userExternalId={JSON.parse(localStorage.getItem("account")).userID}
+                >
+                  <NotificationsBell/>
+                </MagicBellProvider>
                 
                 <IconButton
                   size="large"
