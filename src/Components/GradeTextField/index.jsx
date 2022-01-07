@@ -17,7 +17,6 @@ export function GradeTextField(props) {
 
     return (
         <TextField 
-            variant="standard" 
             value={value} 
             type="number" 
             {...remainProps} 
@@ -27,7 +26,6 @@ export function GradeTextField(props) {
                 setValue(0)
                 handleUpdateGrade(capture)(e)
             }}
-            label="FINAL"
         />
     )
 }

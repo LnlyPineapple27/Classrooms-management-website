@@ -7,19 +7,24 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import ReviewRequestForm from '../ReviewRequestForm/'
 import DialogTitle from '@mui/material/DialogTitle';
+import classroomAPI from '../../APIs/classroomAPI';
 
-export default function ReviewRequestCreateDialog({ open, handleClose }) {
-  const [formData, setFormData] = useState({})
+export default function ReviewRequestCreateDialog({ max, id, open, handleClose }) {
+  const [formData, setFormData] = useState({expectGrade: "", explaination: ""})
 
-  const handleSubmit = formData => e => {
-      
+  const handleSubmit = async e => {
+      const submitData = {...formData, assignmentID: id}
+      const response = await classroomAPI.createGradeReviewRequest(submitData)
+      if(response.ok) {
+        console.log("OK")
+      }
   }
 
   return (
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Request</DialogTitle>
         <DialogContent>
-          <ReviewRequestForm formData={formData} setFormData={setFormData} />
+          <ReviewRequestForm max={max} formData={formData} setFormData={setFormData} />
         </DialogContent>
         <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>

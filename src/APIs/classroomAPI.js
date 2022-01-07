@@ -160,6 +160,23 @@ let classroomAPI = {
             }
         }
         return fetch(fetchURL, fetchOption) 
+    },
+    createGradeReviewRequest: ({ assignmentID, classroomID, expectGrade, explaination}) => {
+        const fetchURL = API_URL + `/${classroomID}/gradereview`
+        const fetchBody = JSON.stringify({
+            assignmentID: assignmentID,
+            expectGrade: expectGrade,
+            explaination: explaination
+        })
+        const fetchOption = {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+            body: fetchBody
+        }
+        return fetch(fetchURL, fetchOption)
     }
 }
 

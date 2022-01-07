@@ -118,7 +118,7 @@ export default function ReviewRequestCard({ refreshToggle, reviewReq, comments, 
                     noValidate
                     autoComplete="off"
                 >
-                    <GradeTextField handleUpdateGrade={handleUpdateGrade} id={reviewReq.id} min={0} max={reviewReq.maxPoint} />
+                    <GradeTextField label="FINAL" variant="standard" handleUpdateGrade={handleUpdateGrade} min={0} max={reviewReq.maxPoint} />
                 </Box>
             </CardContent>
             <CardActions>
@@ -161,7 +161,7 @@ export default function ReviewRequestCard({ refreshToggle, reviewReq, comments, 
                         Comments
                     </Typography>
                     <Stack direction={"column"} spacing={1}>
-                        {mockComments.map(item => <ReviewRequestComment comment={item} />)}
+                        {mockComments.map(item => <ReviewRequestComment key={`cmt_${item.id}`} comment={item} />)}
                     </Stack>
                 </Stack>
             </Collapse>
