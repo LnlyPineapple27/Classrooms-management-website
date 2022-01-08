@@ -14,7 +14,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import classroomAPI from '../../../APIs/classroomAPI'
 import Snackbar from '@mui/material/Snackbar'
 import MuiAlert from '@mui/material/Alert'
-
+import SendNotification from '../../../APIs/SendNotification'
 
 const Alert = forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
@@ -75,6 +75,25 @@ export default function DragDropListAssignment() {
         status: false
     })
 
+    const sendNoti = async (student_list, assignment_name) => {
+
+        //When a teacher finalizes a grade composition,
+        //create notifications to all students in the class
+        const title = `Assignment: ${assignment_name}`;
+        const content = "Has been finalized by the teacher.";
+        const receivers = student_list.map(item => ({external_id: item.toString()}));
+
+        //console.log(receivers);
+        const response = await SendNotification.sendNotification(title, content, receivers)
+        
+        //console.log("Notification APi response:", response)
+        if(response.status === 201) {
+          console.log("Notification sent successfully")
+        }
+        else {
+          console.log("Notification failed", response)
+        }
+    }
     function array_move(arr, old_index, new_index) {
         if (new_index >= arr.length) {
             var k = new_index - arr.length + 1
@@ -130,7 +149,7 @@ export default function DragDropListAssignment() {
         setSnackBarProps({...snackBarPops, status: false})
     }
 
-    const handleFinalizeAssignment = id => async event => {
+    const handleFinalizeAssignment = (id, name) => async event => {
         let newItems = items.map(item => (item.id === id ? {...item, finalize: (item.finalize + 1) % 2} : {...item}))
         setItems(newItems)
         setSnackBarProps({
@@ -145,6 +164,13 @@ export default function DragDropListAssignment() {
                 severity: "success",
                 status:true
             })
+
+            let data_0 = await classroomAPI.getUsersThatHasRole(params.classroomId, 2);
+            let student_list_id = await data_0.json();
+            let id_list = student_list_id.map(item => item.id);
+            //console.log(id_list)
+            sendNoti(id_list, name);
+
         }
         else {
             setSnackBarProps({

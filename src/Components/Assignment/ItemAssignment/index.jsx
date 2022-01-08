@@ -129,7 +129,7 @@ export default function ItemAssignment({ isManager, assignment, toggleChangeItem
                             icon={<FactCheckOutlinedIcon fontSize='large' />}
                             checkedIcon={<FactCheckIcon fontSize='large' />}
                             checked={assignment.finalize === 1}
-                            onClick={handleFinalizeAssignment(assignment.id)}
+                            onClick={handleFinalizeAssignment(assignment.id, assignment.name)}
                         /> :
                         <Box>
                             <IconButton onClick={() => setRequestOpen(true)}>
