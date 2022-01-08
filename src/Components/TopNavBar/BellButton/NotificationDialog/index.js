@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { useMagicBellEvent, useNotifications } from "@magicbell/react-headless";
 import NotificationItem from "./NotificationItem";
-import './index.scss'
+import './index.css'
 const NotificationDialog = ({ open, close }) => {
   const store = useNotifications();
 
@@ -47,15 +47,13 @@ const NotificationDialog = ({ open, close }) => {
         </DialogTitle>
         
         <DialogContent dividers>
-          <header className="mb-4 flex">
-          <div className="flex-1">
-            <button onClick={() => store.markAllAsRead()}>
+          <header className="dialog-noti">
+            <button  className="read-btn" onClick={() => store.markAllAsRead()}>
               Mark all as read
             </button>
-          </div>
-          <p>
-            {store.total} notifications / {store.unreadCount} unread
-          </p>
+            <p>
+              {store.total} notifications / {store.unreadCount} unread
+            </p>
           </header>
           <section>
             {store.notifications.map((notification) => (

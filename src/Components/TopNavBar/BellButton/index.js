@@ -20,7 +20,7 @@ const NotificationsBell = () => {
                 setNotificationDialog(true);
             }}
             color="inherit">
-            <Badge badgeContent={unreadCount} color="secondary">
+            <Badge badgeContent={unreadCount} color="success">
                 <NotificationsNoneIcon />
             </Badge>           
                    

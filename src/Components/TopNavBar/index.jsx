@@ -17,7 +17,6 @@ import { NavbarElContext } from '../../Context/GlobalContext';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import MoreMenu from './MoreMenu';
 import ImportDialog from './MoreMenu/ImportDialog'
-import MagicBell, { FloatingNotificationInbox } from "@magicbell/magicbell-react";
 import { MagicBellProvider } from "@magicbell/react-headless";
 import NotificationsBell from './BellButton'
 export default function TopNavBar() {
