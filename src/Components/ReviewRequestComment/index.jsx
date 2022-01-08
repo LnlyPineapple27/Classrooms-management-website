@@ -11,7 +11,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 export default function ReviewRequestComment({ comment }) {
     return (
-        <Card elevation={1}>
+        <Card elevation={1} sx={{ width: 1}}>
             <CardHeader
                 avatar={
                     <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -24,7 +24,7 @@ export default function ReviewRequestComment({ comment }) {
                     </IconButton>
                 }
                 title={comment.authorName}
-                subheader={comment.createdAt}
+                subheader={`${comment.createdAt.split("T")[0]} at ${comment.createdAt.split("T")[1].substring(0, 8)}`}
             /> 
             <CardContent>
                 <Typography variant="body2" color="text.secondary">

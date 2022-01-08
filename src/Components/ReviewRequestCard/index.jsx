@@ -1,5 +1,5 @@
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
@@ -51,6 +51,28 @@ export default function ReviewRequestCard({ refreshToggle, reviewReq, snackbar }
     const [giveCommentValue, setGiveCommentValue] = useState("")
     const params = useParams();
 
+    useEffect(() => {
+        const fetchData = async () => {
+            snackbar.loading()
+            const submitData = {
+                classroomID: params.classroomId,
+                requestID: reviewReq.id
+            }
+            console.log(submitData)
+            const response = await classroomAPI.getComments(submitData)
+            if(response.ok) {
+                snackbar.success()
+                const responseData = await response.json()
+                setComments(responseData)
+                console.log(responseData)
+            }
+            else {
+                snackbar.error(response)
+            }
+        }
+        fetchData()
+    }, [])
+
     const handleUpdateGrade = value => async e => {
         snackbar.loading()
         const account = JSON.parse(localStorage.getItem("account"))
@@ -83,7 +105,7 @@ export default function ReviewRequestCard({ refreshToggle, reviewReq, snackbar }
         if(response.ok) {
             snackbar.success()
             const responseData = await response.json()
-            setComments({...comments, [reviewReq.id]: responseData})
+            setComments(responseData)
             console.log(responseData)
         }
         else {
@@ -94,12 +116,11 @@ export default function ReviewRequestCard({ refreshToggle, reviewReq, snackbar }
     const toggleShowComment = () => {
         const currentToggle = !showComment
         setShowComment(currentToggle)
-
         currentToggle && fetchComments()
-        
     }
 
     const handleGiveComment = async () => {
+        if(!giveCommentValue) return
         snackbar.loading()
         const currentAccount = JSON.parse(localStorage.getItem('account')) ?? {}
         const submitData = {
@@ -117,6 +138,8 @@ export default function ReviewRequestCard({ refreshToggle, reviewReq, snackbar }
         else {
             snackbar.error(response)
         }
+
+        setGiveCommentValue("")
     }
 
     const handleGiveCommentValueChange = e => {
@@ -175,7 +198,7 @@ export default function ReviewRequestCard({ refreshToggle, reviewReq, snackbar }
                     <IconButton aria-label="share" onClick={toggleShowComment}>
                         <ChatBubbleOutlineIcon />
                     </IconButton> 
-                    <Typography>{mockComments.length}</Typography>
+                    <Typography>{comments.length}</Typography>
                 </Stack>
             </CardActions>
             <Collapse in={showComment} timeout="auto" sx={{ p:3 }} unmountOnExit>
