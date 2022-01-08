@@ -114,6 +114,15 @@ let classroomAPI = {
         }})
         return response
     },
+    getUsersThatHasRole: async (classroomID, role) => {
+        const fetchURL = `${API_URL}/${classroomID}/users?role=${role}`
+        const response = await fetch(fetchURL, {
+            method: 'GET',
+            headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token'),
+        }})
+        return response
+    },
     importStudents: async ({classroomId, data}) => {
         const fetchURL = `${originURL}/classrooms/${classroomId}/sids/import`
         const fetchOption = {
