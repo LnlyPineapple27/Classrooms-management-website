@@ -102,7 +102,7 @@ export default function Profile() {
 
     const handleMapSID = async event => {
         setIsLoading(true)
-        let result = await sIdAPI.updateOrCreateIfNotExist(visibleInfo.SID, profileInfo.id)
+        let result = await sIdAPI.updateOrCreateIfNotExist(visibleInfo.SID, profileInfo.id, profileInfo.name)
         setError(result.ok ? null : `Error ${result.status}: ${result.statusText}`)
         setSuccess(!!result.ok)
         setIsSaved(true)

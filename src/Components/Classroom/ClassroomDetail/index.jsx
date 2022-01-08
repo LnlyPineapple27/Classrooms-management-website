@@ -148,14 +148,6 @@ export default function ClassroomDetail() {
                 lecturers={detail.lecturers}
             />
             <div className="page-container__button-group">
-                {role === 2 && 
-                (<Button 
-                className="page-container__button-group__button bg-primary" 
-                onClick={() => setOpenSid(true)}
-                >
-                    Change Student ID
-                </Button>)}
-                
                 {role < 2 && (
                     <Button
                     className="page-container__button-group__button bg-primary" 
