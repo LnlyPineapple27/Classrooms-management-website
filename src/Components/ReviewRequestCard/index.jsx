@@ -22,6 +22,7 @@ import SendIcon from '@mui/icons-material/Send'
 import classroomAPI from '../../APIs/classroomAPI'
 import assignmentAPI from '../../APIs/assignmentAPI'
 import { useParams } from 'react-router-dom'
+import SendNotification from '../../APIs/SendNotification'
 
 
 const mockComments = [
@@ -72,7 +73,25 @@ export default function ReviewRequestCard({ refreshToggle, reviewReq, snackbar }
         }
         fetchData()
     }, [])
+    const sendGradeUpdateNoti = async (receiver_list, grade, assignment_name) => {
 
+        //When a teacher finalizes a grade composition,
+        //create notifications to all students in the class
+        const title = `Your grade for assignment '${assignment_name}' has been updated!`;
+        const content = `Final grade: ${grade}`;
+        const receivers = receiver_list.map(item => ({external_id: item.toString()}));
+
+        //console.log(receivers);
+        const response = await SendNotification.sendNotification(title, content, receivers)
+        
+        //console.log("Notification APi response:", response)
+        if(response.status === 201) {
+          console.log("Notification sent successfully")
+        }
+        else {
+          console.log("Notification failed", response)
+        }
+    }
     const handleUpdateGrade = value => async e => {
         snackbar.loading()
         const account = JSON.parse(localStorage.getItem("account"))
@@ -90,6 +109,8 @@ export default function ReviewRequestCard({ refreshToggle, reviewReq, snackbar }
         if(response.ok) {
             snackbar.success()
             refreshToggle()
+            sendGradeUpdateNoti([_studentId], _score, reviewReq.assignmentName)
+            //console.log("reviewReq", reviewReq);
         }
         else snackbar.error()
     }
@@ -118,7 +139,25 @@ export default function ReviewRequestCard({ refreshToggle, reviewReq, snackbar }
         setShowComment(currentToggle)
         currentToggle && fetchComments()
     }
+    const sendReplyNoti = async (receiver_list, comment) => {
 
+        //When a teacher finalizes a grade composition,
+        //create notifications to all students in the class
+        const title = "Your grade review has been replied!";
+        const content = `A teacher has commented to your request: ${comment}`;
+        const receivers = receiver_list.map(item => ({external_id: item.toString()}));
+
+        //console.log(receivers);
+        const response = await SendNotification.sendNotification(title, content, receivers)
+        
+        //console.log("Notification APi response:", response)
+        if(response.status === 201) {
+          console.log("Notification sent successfully")
+        }
+        else {
+          console.log("Notification failed", response)
+        }
+    }
     const handleGiveComment = async () => {
         if(!giveCommentValue) return
         snackbar.loading()
@@ -134,11 +173,12 @@ export default function ReviewRequestCard({ refreshToggle, reviewReq, snackbar }
         if(response.ok) {
             snackbar.success()
             fetchComments()
+            sendReplyNoti([reviewReq.authorID], giveCommentValue);
         }
         else {
             snackbar.error(response)
         }
-
+       
         setGiveCommentValue("")
     }
 
