@@ -32,7 +32,7 @@ export default function TopNavBar() {
   const sendNoti = async (event) => {
     const title = "Test API number 3";
     const content = "This is a test notification";
-    const receivers = [{external_id: '2'}, {email: 'datpt1000cyber@gmail.com'}]
+    const receivers = [{external_id: '2'}, ]
     const response = await SendNotification.sendNotification(title, content, receivers)
     
     //console.log("Notification APi response:", response)
