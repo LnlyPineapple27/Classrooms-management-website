@@ -135,7 +135,7 @@ export default function ItemAssignment({ isManager, assignment, toggleChangeItem
                             <IconButton onClick={() => setRequestOpen(true)}>
                                 <InfoIcon />
                             </IconButton>
-                            <ReviewRequestCreateDialog max={assignment.maxPoint} id={assignment.id} open={requestOpen} handleClose={() => setRequestOpen(false)}  />
+                            <ReviewRequestCreateDialog assignmentName={assignment.name} max={assignment.maxPoint} id={assignment.id} open={requestOpen} handleClose={() => setRequestOpen(false)}  />
                         </Box>
                     }
                     <ListItemText primary={`Deadline: ${deadline.time}, ${deadline.date}`} className='item__item-button__item-text item-text--deadline' />
