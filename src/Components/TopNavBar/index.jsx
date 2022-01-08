@@ -75,7 +75,7 @@ export default function TopNavBar() {
           <Link to='/'>
             <img className='brand-logo' src='/brand_logo.png' alt="logo" style={{maxWidth:60}}/>
           </Link>
-          <Box className='nav-bar__tabs-container' sx={{ flexGrow: 1 }} >
+          <Box className='nav-bar__tabs-container' sx={{ mx: "auto" }} >
             {navbarEl.classroomTabs}
           </Box>
            {/* {auth ? (<MagicBell
