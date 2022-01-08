@@ -44,7 +44,7 @@ export default function ClassroomDetail() {
     useEffect(() => {
         let fetchData = async () => {
             let result = await classroomAPI.getClassroomDetail(params.classroomId)
-            console.log("AAAA")
+            //console.log("AAAA")
             let fDetail = result.data.classroomDetail ? result.data.classroomDetail : {}
             let fRows = result.data.userList ? result.data.userList : []
             
