@@ -177,6 +177,34 @@ let classroomAPI = {
             body: fetchBody
         }
         return fetch(fetchURL, fetchOption)
+    },
+    getComments: ({ requestID, classroomID }) => {
+        const fetchURL = API_URL + `/${classroomID}/gradereview/${requestID}/comments`
+        const fetchOption = {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+        }
+        return fetch(fetchURL, fetchOption)
+    },
+    giveComment: ({ classroomID, requestID, content, author }) => {
+        const fetchURL = API_URL + `/${classroomID}/gradereview/${requestID}/comments`
+        const fetchBody = JSON.stringify({
+            gradeReviewID: requestID,
+            authorID: author,
+            content: content
+        })
+        const fetchOption = {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+            body: fetchBody
+        }
+        return fetch(fetchURL, fetchOption)
     }
 }
 

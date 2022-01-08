@@ -45,8 +45,10 @@ const mockComments = [
 ]
 
 
-export default function ReviewRequestCard({ refreshToggle, reviewReq, comments, snackbar }) {
+export default function ReviewRequestCard({ refreshToggle, reviewReq, snackbar }) {
     const [showComment, setShowComment] = useState(false)
+    const [comments, setComments] = useState([])
+    const [giveCommentValue, setGiveCommentValue] = useState("")
     const params = useParams();
 
     const handleUpdateGrade = value => async e => {
@@ -70,8 +72,55 @@ export default function ReviewRequestCard({ refreshToggle, reviewReq, comments, 
         else snackbar.error()
     }
 
+    const fetchComments = async () => {
+        snackbar.loading()
+        const submitData = {
+            classroomID: params.classroomId,
+            requestID: reviewReq.id
+        }
+        console.log(submitData)
+        const response = await classroomAPI.getComments(submitData)
+        if(response.ok) {
+            snackbar.success()
+            const responseData = await response.json()
+            setComments({...comments, [reviewReq.id]: responseData})
+            console.log(responseData)
+        }
+        else {
+            snackbar.error(response)
+        }
+    }
+
     const toggleShowComment = () => {
-        setShowComment(!showComment)
+        const currentToggle = !showComment
+        setShowComment(currentToggle)
+
+        currentToggle && fetchComments()
+        
+    }
+
+    const handleGiveComment = async () => {
+        snackbar.loading()
+        const currentAccount = JSON.parse(localStorage.getItem('account')) ?? {}
+        const submitData = {
+            author: currentAccount.userID,
+            content: giveCommentValue,
+            classroomID: params.classroomId,
+            requestID: reviewReq.id
+        }
+        console.log("Submit data of comment: ", submitData)
+        const response = await classroomAPI.giveComment(submitData)
+        if(response.ok) {
+            snackbar.success()
+            fetchComments()
+        }
+        else {
+            snackbar.error(response)
+        }
+    }
+
+    const handleGiveCommentValueChange = e => {
+        setGiveCommentValue(e.target.value)
     }
 
     return (
@@ -122,13 +171,6 @@ export default function ReviewRequestCard({ refreshToggle, reviewReq, comments, 
                 </Box>
             </CardContent>
             <CardActions>
-                {/* <Tooltip title="Finalize" placement='top'>
-                    <Checkbox
-                        icon={<FactCheckOutlinedIcon fontSize='medium' />}
-                        checkedIcon={<FactCheckIcon fontSize='medium' />}
-                        onClick={() => {}}
-                    />
-                </Tooltip> */}
                 <Stack direction={"row"} spacing={0} alignItems={"center"}>
                     <IconButton aria-label="share" onClick={toggleShowComment}>
                         <ChatBubbleOutlineIcon />
@@ -147,7 +189,7 @@ export default function ReviewRequestCard({ refreshToggle, reviewReq, comments, 
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="start">
-                                        <IconButton>
+                                        <IconButton onClick={handleGiveComment}>
                                             <SendIcon color="primary"/>
                                         </IconButton>
                                     </InputAdornment>
@@ -155,13 +197,20 @@ export default function ReviewRequestCard({ refreshToggle, reviewReq, comments, 
                             }}
                             fullWidth
                             variant="outlined"
+                            value={giveCommentValue}
+                            onChange={handleGiveCommentValueChange}
                         />
                     </Box>
                     <Typography margin="2.5rem 0 1rem 0" fontSize={20} variant="button" display="block" gutterBottom>
                         Comments
                     </Typography>
-                    <Stack direction={"column"} spacing={1}>
-                        {mockComments.map(item => <ReviewRequestComment key={`cmt_${item.id}`} comment={item} />)}
+                    <Stack direction={"column"} spacing={1} alignItems={"center"}>
+                        {
+                            comments.length > 0 ? 
+                            comments.map(item => <ReviewRequestComment key={`cmt_${item.id}`} comment={item} />)
+                            :
+                            <Typography> No comments found. </Typography>
+                        }
                     </Stack>
                 </Stack>
             </Collapse>

@@ -7,7 +7,7 @@ export default function ClassroomTabs({ value, classroomId }) {
             <LinkTab label="detail" href={`/classrooms/${classroomId ?? ''}`} />
             <LinkTab label="assignments" href={`/classrooms/${classroomId ?? ''}/assignments`} />
             <LinkTab label="scoreboard" href={`/classrooms/${classroomId ?? ''}/scoreboard`} />
-            <LinkTab label="request" href={`/classrooms/${classroomId ?? ''}/gradereviewrequest`} />
+            <LinkTab label="requests" href={`/classrooms/${classroomId ?? ''}/gradereviewrequest`} />
         </Tabs>
     )
 }
