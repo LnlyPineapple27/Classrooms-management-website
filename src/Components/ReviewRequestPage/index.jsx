@@ -70,7 +70,7 @@ export default function ReviewRequestPage() {
     const [,setNavbarEl] = useContext(NavbarElContext)
     const [requests, setRequests] = useState([])
     const [loading, setLoading] = useState(false)
-    const [snackbarState, setSnackbarState] = useState({severity:"", content:"", open:""})
+    const [snackbarState, setSnackbarState] = useState({severity:"", content:"", open:false})
     const [refresh, setRefresh] = useState(false)
     const params = useParams()
 
@@ -136,7 +136,7 @@ export default function ReviewRequestPage() {
                 </Box>
             </Backdrop>
             <Snackbar anchorOrigin={{vertical: "top", horizontal: "right"}} open={snackbarState.open} autoHideDuration={6000} onClose={handleSnackbarClose}>
-                <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
+                <Alert onClose={handleSnackbarClose} severity={snackbarState.severity} sx={{ width: '100%' }}>
                     {snackbarState.content}
                 </Alert>
             </Snackbar>

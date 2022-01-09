@@ -14,9 +14,14 @@ import Paper from '@mui/material/Paper';
 import * as React from 'react';
 import classroomAPI from '../../APIs/classroomAPI'
 import { TextField } from "@mui/material";
+import { Stack, Box, Button, Typography } from "@mui/material";
 import accountAPI from "../../APIs/accountAPI";
 import userAPI from "../../APIs/userAPI";
+import * as XLSX from 'xlsx';
 import './index.scss'
+
+
+
 export default function GradeBoard() {
     const [,setNavbarEl] = useContext(NavbarElContext)
     let theme = createTheme();
@@ -171,6 +176,25 @@ export default function GradeBoard() {
       }
     }
 
+    const s2ab = s => {
+      let buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
+      let view = new Uint8Array(buf);  //create uint8array as viewer
+      for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
+      return buf;   
+    }
+
+    const handleExport = () => {
+      let wb = XLSX.utils.book_new()
+      const ws = XLSX.utils.json_to_sheet(data)
+      XLSX.utils.book_append_sheet(wb, ws, "score")
+      const wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'})
+      const fileURL = window.URL.createObjectURL(new Blob([s2ab(wbout)],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}))
+      let fileLink = document.createElement("a")
+      fileLink.href = fileURL
+      fileLink.download = `${new Date().toISOString().split('T')[0].split('-').join("")}_class${params.classroomId}_gradeboard`
+      fileLink.click()
+    }
+
     const row_cells = (data_row) => {
       let result = []   
       let h = Object.keys(data_row)
@@ -196,34 +220,46 @@ export default function GradeBoard() {
     }
     
     return (
+      <Box sx={{p:2}}>
+        {(data.length > 0) ?
+          (<Stack direction="column" spacing={2}>
+            <Stack direction="row" alignItems={"center"} justifyContent='space-between' spacing={2}>
+              <Typography variant="button" fontSize={24}>
+                Grade Board
+              </Typography>
+              <Button variant='contained' color='primary' onClick={handleExport}>
+                Export
+              </Button>
+            </Stack>
+            <TableContainer component={Paper} >
+              <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+                <TableHead>
+                  <TableRow>
+                    {header_list(data)}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {
+                    data.map((row) => (
+                      <TableRow
+                        key={row.id}
+                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                      >
+                        {row_cells(row)}
+                      </TableRow>
+                    ))
+                }
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Stack>)
+          :
+          <div>
+              <h2>{'Seems like no grade data was found for this class :('}</h2>
+              <div class="loader"></div>
+          </div>}
+      </Box>
       //console.log("data", data),
       //console.log("rows: ", data.length),
-        (data.length > 0)?
-          (<TableContainer component={Paper} >
-            <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-              <TableHead>
-                <TableRow>
-                  {header_list(data)}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {
-                  data.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      {row_cells(row)}
-                    </TableRow>
-                  ))
-              }
-              </TableBody>
-            </Table>
-          </TableContainer>)
-          :
-          (<div>
-              <h2>Seems like no grade data was found for this class :(</h2>
-              <div class="loader"></div>
-            </div> )
-    );
+    )
 }
