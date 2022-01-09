@@ -42,7 +42,7 @@ export default function ReviewRequestCreateDialog({ max, id, open, handleClose, 
         let teacher_list_id = await data_0.json();
         let id_list = teacher_list_id.map(item => item.id);
         console.log("id_list: ",id_list);
-        //sendNoti(id_list, assignmentName, formData.explaination)
+        sendNoti(id_list, assignmentName, formData.explaination)
       }
       else if(response.status === 500) {
         console.log("You have create a grade review for this assignment already")

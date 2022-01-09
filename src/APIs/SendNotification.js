@@ -1,7 +1,7 @@
 /*
 const _headers = {
-    'X-MAGICBELL-API-SECRET': 'c6493f64570222c3cb2c67f739946cb574876fe5',
-    'X-MAGICBELL-API-KEY': '95cd7bd4a5452bd5ee1f798615475395c4d4d935',
+  'X-MAGICBELL-API-SECRET': process.env.REACT_APP_X_MAGICBELL_API_SECRET,
+  'X-MAGICBELL-API-KEY': process.env.REACT_APP_X_MAGICBELL_API_KEY,
   };
 
 const notificationAPI = {
@@ -31,8 +31,8 @@ export default notificationAPI;
 import axios from 'axios';
 
 const headers = {
-  'X-MAGICBELL-API-SECRET': 'c6493f64570222c3cb2c67f739946cb574876fe5',
-  'X-MAGICBELL-API-KEY': '95cd7bd4a5452bd5ee1f798615475395c4d4d935',
+  'X-MAGICBELL-API-SECRET': process.env.REACT_APP_X_MAGICBELL_API_SECRET,
+  'X-MAGICBELL-API-KEY': process.env.REACT_APP_X_MAGICBELL_API_KEY,
 };
 
 const notificationAPI = {

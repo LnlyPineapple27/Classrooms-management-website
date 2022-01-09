@@ -98,7 +98,7 @@ export default function TopNavBar() {
           
           {auth ? (
               <MagicBellProvider
-                apiKey="95cd7bd4a5452bd5ee1f798615475395c4d4d935"
+                apiKey={process.env.REACT_APP_X_MAGICBELL_API_KEY}
                 userExternalId={JSON.parse(localStorage.getItem("account")).userID}
               >
                 <NotificationsBell/>
@@ -108,7 +108,7 @@ export default function TopNavBar() {
           {auth ? (
             
               <div>
-                <IconButton
+                {/* <IconButton
                   size="large"
                   aria-label="More features"
                   aria-controls="menu-appbar"
@@ -117,7 +117,7 @@ export default function TopNavBar() {
                   color="inherit"
                 >
                   <SendIcon />
-                </IconButton>
+                </IconButton> */}
                 
                 <IconButton
                   size="large"
