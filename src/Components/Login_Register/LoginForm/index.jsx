@@ -99,6 +99,9 @@ export default function LoginForm() {
                     <p className="login-form__register-text">
                         No account? <Link to='/register'>Register</Link>
                     </p>
+                    <p className="login-form__register-text">
+                        Forgot password? <Link to='/forgot'>Register</Link>
+                    </p>
                 </div>
                 <Button startIcon={<LoginIcon />} className='login-form__element login-form__button' type="button" onClick={handleClick}>Login</Button>
                 <GoogleLogin />

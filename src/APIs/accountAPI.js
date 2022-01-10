@@ -137,14 +137,13 @@ let accountAPI = {
             role: parseInt(inviteLink[0]),
             inviteLink: inviteLink.slice(1),
             userID: localStorage.getItem('account') ? JSON.parse(localStorage.getItem('account')).userID : 'a',
-            classroomID: classroomId
         }
         console.log('data', data)
         let fetchURL = process.env.REACT_APP_API_URL + '/classrooms/invite/join'
         const response = await fetch(fetchURL, {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer '+localStorage.getItem('token'),
+                'Authorization': 'Bearer '+ localStorage.getItem('token'),
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data) // body data type must match "Content-Type" header

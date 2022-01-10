@@ -46,7 +46,9 @@ export default function InvitedPage(props) {
 
     const handleJoin = async () => {
         if(auth) {
-            let result = await accountAPI.joinClassroom(params.inviteCode, detail.id)
+            const localAccount = JSON.parse(localStorage.getItem('account'))
+            const userID = localAccount.userID
+            const result = await accountAPI.joinClassroom(params.inviteCode, userID)
             console.log(result)
             navigate('/',{replace:true})
         }

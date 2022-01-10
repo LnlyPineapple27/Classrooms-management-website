@@ -15,11 +15,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import FormModal from '../FormModal';
 import accountAPI from '../../../APIs/accountAPI';
 import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
+import Alert from '@mui/material/Alert'
 
-const Alert = forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 
 
 export default function ClassroomsList () {
@@ -32,6 +29,7 @@ export default function ClassroomsList () {
     const [openJoinModal, setOpenJoinModal] = useState(false)
     const [inviteCode, setInviteCode] = useState("")
     const [snackbarState, setSnackbarState] = useState({severity:"", content:"", open:false})
+    const [refresh, setRefresh] = useState(false) 
 
 
     useEffect(() => {
@@ -54,7 +52,9 @@ export default function ClassroomsList () {
         setNavbarEl({addButton: (<NavbarAddButton ariaLabel='Add Classroom' onClick={() => setOpenAddModal(true)} />)})
         fetchData()
         
-    }, [add, setNavbarEl])
+    }, [add, setNavbarEl, refresh])
+
+    const toggleRefresh = () => setRefresh(!refresh)
 
     const handleCloseSnackbar = () => {
         setSnackbarState({...snackbarState, open: false})
@@ -66,10 +66,13 @@ export default function ClassroomsList () {
             content: "Loading ...",
             open: true
         })
-        const response = await accountAPI.joinClassroom(inviteCode)
+        const localAccount = JSON.parse(localStorage.getItem('account'))
+        const userID = localAccount.userID
+        const response = await accountAPI.joinClassroom(inviteCode, userID)
+        response.isOk && toggleRefresh()
         setSnackbarState({
-            severity: response.ok ? 'success' : 'error',
-            content: response.ok ? "OK" : `Error ${response.status}: ${response.statusText}`,
+            severity: response.isOk ? 'success' : 'error',
+            content: response.isOk ? "OK" : `${response.message}`,
             open: true
         })
     }
