@@ -39,6 +39,13 @@ export default function LoginForm() {
                 localStorage.setItem('token', resultAttempt.data.token);
                 localStorage.setItem('account', JSON.stringify(resultAttempt.data.account));
                 setAuth(true)
+                const response = await accountAPI.getRole(resultAttempt.data.account.userID)
+                console.log(response)
+                if(!response.ok) return;
+                const role = await response.json()
+                console.log(role)
+                if(role === 0) return navigate('/admin/dashboard', { replace: true })
+
                 navigate("../classrooms", { replace: true });
             }
             else if(resultAttempt.status === 401) {
@@ -100,7 +107,7 @@ export default function LoginForm() {
                         No account? <Link to='/register'>Register</Link>
                     </p>
                     <p className="login-form__register-text">
-                        Forgot password? <Link to='/forgot'>Register</Link>
+                        Forgot password? <Link to='/forgot'>Send email</Link>
                     </p>
                 </div>
                 <Button startIcon={<LoginIcon />} className='login-form__element login-form__button' type="button" onClick={handleClick}>Login</Button>
