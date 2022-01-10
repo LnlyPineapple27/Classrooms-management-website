@@ -1,3 +1,4 @@
+const API_ORIGIN_URL = process.env.REACT_APP_API_URL 
 const API_URL = process.env.REACT_APP_API_URL + '/accounts'
 const queryHelpers = require("./queryHelpers")
 
@@ -196,6 +197,18 @@ let accountAPI = {
                 'Content-Type': 'application/json'
             },
         })
+    },
+    unMapSID: sid => {
+        const fetchURL = API_ORIGIN_URL + '/sids/'
+        const fetchOption = {
+            method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ SID: sid })
+        }
+        return fetch(fetchURL, fetchOption)
     }
 }
 export default accountAPI

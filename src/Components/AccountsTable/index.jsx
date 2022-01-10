@@ -8,8 +8,9 @@ import Typography from "@mui/material/Typography"
 import Snackbar from '@mui/material/Snackbar'
 import MuiAlert from '@mui/material/Alert'
 import InputBase from '@mui/material/InputBase'
-import { Box, Tooltip } from '@mui/material'
+import { Box, Tooltip, IconButton } from '@mui/material'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
+import ClearIcon from '@mui/icons-material/Clear'
 import * as sIdAPI from '../../APIs/sidAPI'
 
 
@@ -43,6 +44,7 @@ export default function AccountsTable({ roles, sortProps, enableBan }) {
     const [backdropState, setBAckDropState] = useState({ content:"Fetching data from server ...", open: true })
     const [snackbarState, setSnackbarState] = useState({ severity:"info", open: false, content:"Loading data ..." })
     const [sIdList, setSIdList] = useState({})
+    const [refresh, setRefresh] = useState(false)
 
     useEffect(() => {
         const codeToRole = ["Admin", "Lecturer", "Student"]
@@ -79,20 +81,46 @@ export default function AccountsTable({ roles, sortProps, enableBan }) {
             }
         }
         
+        const handleUnMapSID = async sid => {
+            setSnackbarState({
+                severity: "info",
+                content: "UnMapping ...",
+                open: true
+            })
+            const response = await accountAPI.unMapSID(sid)
+            if(response.ok) {
+                setSnackbarState({
+                    severity: "success",
+                    content: "Success.",
+                    open: true
+                })
+                setRefresh(!refresh)
+            }
+            else {
+                setSnackbarState({
+                    severity: "error",
+                    content: `Error ${response.status}: ${response.statusText}`,
+                    open: true
+                })
+            }
+        }
+
         const cookData = rawData => rawData.map(({accountID, userID, role, SID, ...item}) => ({
             id: accountID,
             SID: (
-                <Tooltip placement='top' title="Click to edit. Auto save after out.">
-                    <MySIDBox>
-                        <InputBase 
-                            placeholder={SID ?? "UNK"} 
-                            inputProps={{ 'aria-label': 'change SID' }}
-                            sx={{ mx: 1, flex: 1 }}
-                            onBlur={e => handleSaveSID(userID, e)}
-                        />
-                        <InfoOutlinedIcon />
-                    </MySIDBox>
-                </Tooltip>
+                role === 2 ? 
+                <MySIDBox>
+                    <InputBase
+                        placeholder={SID ?? "<NULL>"}
+                        inputProps={{ 'aria-label': 'change SID' }}
+                        sx={{ mx: 1, flex: 1 }}
+                        onBlur={e => handleSaveSID(userID, e)}
+                    />
+                    <IconButton onClick={() => handleUnMapSID(SID)}>
+                        <ClearIcon />
+                    </IconButton>
+                </MySIDBox>
+                : "UnMappable"
             ),
             ...item,
             role: codeToRole[role],
@@ -102,11 +130,11 @@ export default function AccountsTable({ roles, sortProps, enableBan }) {
 
         const fetchData = async () => {
             setBAckDropState({ ...backdropState, open: true })
-            let response = await accountAPI.getAll(roles)
+            const response = await accountAPI.getAll(roles)
             setBAckDropState({ ...backdropState, open: false })
             if(response.ok) {
-                let rawData = await response.json()
-                let cookedData = cookData(rawData)
+                const rawData = await response.json()
+                const cookedData = cookData(rawData)
                 setSIdList(rawData.reduce((acc, curr) => ({...acc, [curr.accountID]: curr.SID}), {}))
                 setData(cookedData)
                 setSnackbarState({ severity: "success", content: "Data loaded.", open:true })
@@ -121,7 +149,7 @@ export default function AccountsTable({ roles, sortProps, enableBan }) {
         }
         fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [refresh])
 
     const handleCloseSnackbar = (event, reason) => {
         if (reason === 'clickaway') {
