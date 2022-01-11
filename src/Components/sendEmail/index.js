@@ -16,6 +16,7 @@ const sendEmail = async (param) => {
     if (response.status === 200) {
       console.log("Successfully sent message.");
     }
+    return response
   } catch (error) {
     console.error("Failed to send email. Error: ", error);
   }

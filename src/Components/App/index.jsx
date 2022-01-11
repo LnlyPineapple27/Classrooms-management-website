@@ -18,7 +18,7 @@ import ListAssignment from '../Assignment/ListAssignment'
 import Dashboard from '../Dashboard'
 import InvitedPage from '../InvitedPage'
 import ReviewRequestPage from '../ReviewRequestPage'
-
+import ForgotPasswordPage from '../ForgotPasswordPage'
 
 export default function App() {
     const [auth,] = useContext(AuthContext)
@@ -33,6 +33,7 @@ export default function App() {
                                 <TopNavBar />
                             </AddClassroomModalProvider>
                             <Routes>
+                                <Route path='/forgot/password' element={<ForgotPasswordPage />} />
                                 <Route path='/admin/dashboard' element={<Dashboard />} />
                                 <Route path='/classrooms/:classroomId/assignments' element={<ListAssignment />}/>
                                 <Route path='/classrooms/:classroomId/scoreboard' element={<GradeBoard />}/>
