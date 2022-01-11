@@ -209,6 +209,17 @@ let accountAPI = {
             body: JSON.stringify({ SID: sid })
         }
         return fetch(fetchURL, fetchOption)
+    },
+    changePasswordByEmail: (email, vCode, newPwd) => {
+        const fetchURL = API_ORIGIN_URL + '/sids/'
+        const fetchOption = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email, code: vCode, newPassword: newPwd })
+        }
+        return fetch(fetchURL, fetchOption) 
     }
 }
 export default accountAPI

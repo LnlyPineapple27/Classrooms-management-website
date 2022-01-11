@@ -6,9 +6,9 @@ import VerifyEmailForm from './VerifyEmailForm'
 
 
 export default function ForgotPasswordPage() {
-    const [alert, setAlert] = useState({ status: true, severity: "error", content: "Sample content."})
-    const [showChangePassword, setShowChangePassword] = useState(false)
-    const [showSendEmail, setShowSendEmail] = useState(true)
+    const [alert, setAlert] = useState({ status: false, severity: "error", content: "Sample content."})
+    const [verified, setVerified] = useState(false)
+    const [vCode, setVCode] = useState("")
 
     return (
         <Box flexGrow={1} p={5}>
@@ -35,11 +35,11 @@ export default function ForgotPasswordPage() {
                             {alert.content}
                         </Alert>
                     </Collapse>
-                    <Collapse in={showSendEmail}>
-                        <VerifyEmailForm />
+                    <Collapse in={!verified}>
+                        <VerifyEmailForm setAlert={setAlert} setVerified={setVerified} setVCode={setVCode}/>
                     </Collapse>
-                    <Collapse in={showChangePassword}>
-                        <ChangePasswordForm />
+                    <Collapse in={verified}>
+                        <ChangePasswordForm setAlert={setAlert} vCode={vCode}/>
                     </Collapse>
                 </Stack>
             </Paper>

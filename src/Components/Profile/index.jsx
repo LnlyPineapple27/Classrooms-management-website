@@ -109,6 +109,10 @@ export default function Profile() {
         setIsSaved(true)
     }
 
+    const handleVerifyEmail = async () => {
+        
+    }
+
     return (
         <Box
             className='page-container'
@@ -247,6 +251,7 @@ export default function Profile() {
                             variant="contained" 
                             color="info"
                             disabled={!isOwner && profileInfo['validate']}
+                            onClick={handleVerifyEmail}
                         >
                             Verify 
                         </Button>
