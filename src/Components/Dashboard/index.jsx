@@ -48,7 +48,7 @@ export default function Dashboard() {
     
     useEffect(() => {
         setNavbarEl({})
-    })
+    }, [])
 
     const handleChange = (event, newValue) => {
         setValue(newValue)

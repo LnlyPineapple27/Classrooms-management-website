@@ -71,7 +71,7 @@ export default function ClassroomsTable() {
                 onClick={handleCloseBackdrop}
                 style={{ display: "flex", flexDirection: "column" }}
             >
-                <Typography>{backdropState.content}</Typography>
+                <Typography component='span'>{backdropState.content}</Typography>
                 <CircularProgress color="inherit" />
             </Backdrop>
             <Snackbar open={snackbarState.open} autoHideDuration={6000} onClose={handleCloseSnackbar}>

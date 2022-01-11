@@ -1,4 +1,4 @@
-import { React, useContext, useState } from 'react'
+import { React, useContext, useState, useEffect } from 'react'
 import Button from '@mui/material/Button';
 import { TextField } from '@mui/material';
 import { FormControl } from '@mui/material';
@@ -14,6 +14,8 @@ import { AuthContext } from '../../../Context/GlobalContext';
 
 
 export default function LoginForm() {
+
+
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -95,6 +97,31 @@ export default function LoginForm() {
             
         }
     }
+
+    useEffect(() => {
+        console.log("login useEffect")
+        const account = JSON.parse(localStorage.getItem('account'))
+        if(!account) return
+        console.log("logged in", account)
+        
+        const navigateUser = async account => {
+            console.log("findRole ...")
+            const accountID = account['id']
+            console.log("account", accountID)
+            const response = await accountAPI.getRole(accountID)
+            console.log("response:", response)
+            if(response.ok) {
+                const role = await response.json()
+                console.log("Role:",role)
+                const desOf = ['/admin/dashboard', '/classrooms', '/classrooms']
+                navigate(desOf[desOf.includes(desOf[Number(role)]) ? role : 2], { replace: true })
+            }
+        }
+
+        navigateUser(account)
+
+    }, [])
+
     return (
         <div className="form-container">
             <FormControl className='login-form'>
@@ -107,7 +134,7 @@ export default function LoginForm() {
                         No account? <Link to='/register'>Register</Link>
                     </p>
                     <p className="login-form__register-text">
-                        Forgot password? <Link to='/forgot'>Send email</Link>
+                        Forgot password? <Link to='/forgot/password'>Send email</Link>
                     </p>
                 </div>
                 <Button startIcon={<LoginIcon />} className='login-form__element login-form__button' type="button" onClick={handleClick}>Login</Button>
