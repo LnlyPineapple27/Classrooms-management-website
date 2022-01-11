@@ -11,17 +11,17 @@ export default function VerifyEmailForm() {
 
     }
 
-    const handleSendVerificationEmail = (submited_email, verification_code) => {
+    const handleSendVerificationEmail = (submited_email, verification_code, purpose_type_string) => {
 
         console.log('Submitted email: ' + submited_email)
         let templatedEmail = {
-            to_email: email,
+            to_email: submited_email,
             verify_code: verification_code,
-            purpose_type: "Change Password",
+            purpose_type: purpose_type_string, //"Change Password"
         }
         sendEmail.verification(templatedEmail);
     }
-    
+
     return (
         <Stack direction='column' spacing={2}>
             <TextField
