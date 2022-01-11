@@ -19,6 +19,7 @@ import Dashboard from '../Dashboard'
 import InvitedPage from '../InvitedPage'
 import ReviewRequestPage from '../ReviewRequestPage'
 import ForgotPasswordPage from '../ForgotPasswordPage'
+import VerifyPage from '../VerifyPage'
 
 export default function App() {
     const [auth,] = useContext(AuthContext)
@@ -34,6 +35,7 @@ export default function App() {
                             </AddClassroomModalProvider>
                             <Routes>
                                 <Route path='/forgot/password' element={<ForgotPasswordPage />} />
+                                <Route path='/verify/email' element={<VerifyPage />} />
                                 <Route path='/admin/dashboard' element={<Dashboard />} />
                                 <Route path='/classrooms/:classroomId/assignments' element={<ListAssignment />}/>
                                 <Route path='/classrooms/:classroomId/scoreboard' element={<GradeBoard />}/>

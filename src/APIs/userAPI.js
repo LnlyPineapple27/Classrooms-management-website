@@ -82,5 +82,17 @@ let userAPI = {
 
         return response
     },
+    verifyEmail: ({ email, vCode }) => {
+        const fetchURL = API_URL + '/email/verify'
+        const fetchOption = {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer '+ localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email, code: vCode })
+        }
+        return fetch(fetchURL, fetchOption)
+    }
 }
 export default userAPI

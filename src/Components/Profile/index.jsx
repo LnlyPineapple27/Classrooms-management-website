@@ -54,6 +54,7 @@ export default function Profile() {
             setProfileInfo(originData)
             setVisibleInfo(visibleDataKeys.reduce((acc, curr) => ({...acc, [curr]: originData[curr]}), {}))
             // console.log(visibleDataKeys.reduce((acc, curr) => ({...acc, [curr]: originData[curr]}), {}))
+
             setNavbarEl({})
         }
         fetchData()
@@ -136,7 +137,8 @@ export default function Profile() {
                     <AlertTitle>Update Information Successfully</AlertTitle>
                     {success}
                 </Alert>}
-                {roleToCode[profileInfo.role] === 2 && <Stack direction="row" sx={{ display:"flex", width:1, ".MuiTextField-root": {m:0} }} space={2}>
+                {roleToCode[profileInfo.role] === 2 && (
+                <Stack direction="row" sx={{ display:"flex", width:1, ".MuiTextField-root": {m:0} }} space={2}>
                     <TextField
                         id="tf_sid"
                         value={visibleInfo.SID}
@@ -156,7 +158,7 @@ export default function Profile() {
                             Map
                         </Button>
                     )}
-                </Stack>}
+                </Stack>)}
                 {Object.keys(visibleInfo).map((key, index) => {
                     switch(key) {
                         default:
@@ -170,6 +172,7 @@ export default function Profile() {
                                     className='info-container__element'
                                     onChange={handleChange(key)}
                                     disabled={!isOwner}
+                                    mt={1}
                                 />
                             )
                             case 'dob':
@@ -193,6 +196,7 @@ export default function Profile() {
                                                 id="tf_dob"
                                                 onChange={handleChangeDate}
                                                 {...params} 
+                                                mt={1}
                                                 disabled={!isOwner}
                                             />
                                         )}
@@ -201,7 +205,7 @@ export default function Profile() {
                                 )
                             case 'sex':
                                 return (
-                                    <FormControl key={index} className='info-container__element'>
+                                    <FormControl mt={1}  key={index} className='info-container__element'>
                                         <InputLabel >SEX</InputLabel>
                                         <Select 
                                             className='info-container__element'
@@ -217,12 +221,36 @@ export default function Profile() {
                                         </Select>
                                     </FormControl>
                                 )
+                            case 'email':
                             case 'SID': 
                             case 'role':
                                 break
 
                     }})
                 }
+                <Stack direction="row" sx={{ display:"flex", width:1, ".MuiTextField-root": {m:0} }} space={2}>
+                        <TextField
+                            id={`tf_email`}
+                            value={visibleInfo['email']}
+                            label={'Email'}
+                            margin="normal"
+                            className='info-container__element'
+                            onChange={handleChange('email')}
+                            disabled={!isOwner}
+                            type='email'
+                            sx={{
+                                flexGrow:1,
+                            }}
+                        />
+                        <Button 
+                            sx={{ml: 1}} 
+                            variant="contained" 
+                            color="info"
+                            disabled={!isOwner && profileInfo['validate']}
+                        >
+                            Verify 
+                        </Button>
+                </Stack>
                 {isOwner && (<div className="info-container__element button-group">
                     <Button
                         className='info-container__element button-group__button'
