@@ -1,11 +1,11 @@
-import { React, useState } from 'react'
-import LinkTab from '../LinkTab'
+import { React, useState, useContext, useEffect } from 'react'
 import AccountsTable from '../AccountsTable'
 import ClassroomsTable from '../ClassroomsTable'
 import PropTypes from 'prop-types'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Typography from '@mui/material/Typography'
+import { NavbarElContext } from '../../Context/GlobalContext'
 import Box from '@mui/material/Box'
 
 function TabPanel(props) {
@@ -44,6 +44,11 @@ function a11yProps(index) {
 
 export default function Dashboard() {
     const [value, setValue] = useState(0)
+    const [,setNavbarEl] = useContext(NavbarElContext)
+    
+    useEffect(() => {
+        setNavbarEl({})
+    })
 
     const handleChange = (event, newValue) => {
         setValue(newValue)
