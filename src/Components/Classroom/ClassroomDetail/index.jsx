@@ -103,7 +103,6 @@ export default function ClassroomDetail() {
     const handleCloseInviteLink = () => {
         setOpenInviteLink(false)
     }
-
     const handleSendEmail = () => {
 
         console.log('Submitted email: ' + email)
@@ -114,9 +113,9 @@ export default function ClassroomDetail() {
 
             message: "Cheer! :>",
         }
-        sendEmail(templatedEmail)
+        sendEmail.invitation_email(templatedEmail);
     }
-
+    
     const handleChangeSI = async () => {
         const profile = JSON.parse(localStorage.getItem('account'))
         const data = {
