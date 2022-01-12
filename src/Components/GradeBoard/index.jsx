@@ -148,7 +148,7 @@ export default function GradeBoard() {
 
     const handleGradeUpdate = async (e, rowIndex, field) => {
       if((data.length > 0) && (data[rowIndex][field] !== null)) {
-        // console.log(data)
+        console.log(data[rowIndex])
         // console.log("Row number: ", rowIndex)
         // console.log("Assignment name: ", field)
         // console.log("Assignment id: ", headerSave[field])
@@ -157,7 +157,7 @@ export default function GradeBoard() {
         // console.log("Classroom id: ", params.classroomId)
 
         let _classroomId = params.classroomId
-        let _studentId = data[rowIndex].userID
+        let _studentId = data[rowIndex].id
         let _assignmentId = headerSave[field]
         let _score = e.target.value
 
