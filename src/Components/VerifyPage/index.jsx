@@ -11,12 +11,14 @@ export default function VerifyPage() {
 
     useEffect(() => {
         const email = query.get('email')
-        const vCode = query.get('v-code')
+        const vCode = query.get('code')
         const requestVerify = async () => {
             const response = await userAPI.verifyEmail({ email: email, vCode: vCode })
             setContent("")
             if(!response.ok) return setError(`Error ${response.status}: ${response.statusText}.`)
-            setContent(await response.json())
+            console.log()
+            const responseData = await response.json()
+            setContent(responseData.msg)
         }
         requestVerify()
     }, [])

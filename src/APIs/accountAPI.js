@@ -211,7 +211,7 @@ let accountAPI = {
         return fetch(fetchURL, fetchOption)
     },
     changePasswordByEmail: (email, vCode, newPwd) => {
-        const fetchURL = API_ORIGIN_URL + '/sids/'
+        const fetchURL = API_URL + '/password/forgot'
         const fetchOption = {
             method: 'PUT',
             headers: {

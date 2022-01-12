@@ -50,6 +50,7 @@ export default function Profile() {
                 dob:profileInfoResult.dob.split('T')[0]},
                 SID: profileInfoResult.SID ?? "Not mapped yet."
             }
+            console.log(originData)
             setIsOwner(profileInfoResult.isOwner)
             setProfileInfo(originData)
             setVisibleInfo(visibleDataKeys.reduce((acc, curr) => ({...acc, [curr]: originData[curr]}), {}))
@@ -110,7 +111,10 @@ export default function Profile() {
     }
 
     const handleVerifyEmail = async () => {
-        
+        const response = await userAPI.sendOTP(profileInfo.email)
+        console.log(response)
+        if(response.ok) setSuccess(true)
+        else setSuccess(false)
     }
 
     return (
@@ -246,15 +250,15 @@ export default function Profile() {
                                 flexGrow:1,
                             }}
                         />
-                        <Button 
+                        {isOwner && <Button 
                             sx={{ml: 1}} 
                             variant="contained" 
                             color="info"
-                            disabled={!isOwner && profileInfo['validate']}
+                            disabled={profileInfo.validate === 1}
                             onClick={handleVerifyEmail}
                         >
                             Verify 
-                        </Button>
+                        </Button>}
                 </Stack>
                 {isOwner && (<div className="info-container__element button-group">
                     <Button
