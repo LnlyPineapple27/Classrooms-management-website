@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 import assignmentAPI from '../../APIs/assignmentAPI'
 import { useState, useEffect, useContext } from 'react'
@@ -44,7 +44,7 @@ export default function GradeBoard() {
             let row = {
                 id: user_data[0].sid,
                 name: user_data[0].studentName,
-                userID: user_data[0].userID,
+                userID: (<Link to={`/profile/${user_data[0].userID}`}>Detail</Link>),
             }
             
             let sum = 0;
