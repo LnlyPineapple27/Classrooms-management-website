@@ -109,7 +109,7 @@ export default function ReviewRequestPage() {
             if(response.ok) {
                 snackbarSuccess()
                 const rawData = await response.json()
-                console.log(rawData)
+                console.log("a",rawData)
                 setRequests(rawData)
             }
             else {
@@ -147,7 +147,8 @@ export default function ReviewRequestPage() {
                             error: snackbarError,
                             success: snackbarSuccess,
                             loading: snackbarLoading
-                        }} 
+                        }}
+                        sid={req.senderSID}
                         key={`rrc_${req.id}`} 
                         reviewReq={req}
                         refreshToggle={() => setRefresh(!refresh)}

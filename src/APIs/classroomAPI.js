@@ -147,15 +147,15 @@ let classroomAPI = {
         }
         return await fetch(fetchURL, fetchOption)
     },
-    updateScore: async(classroomId, assignmentId, score, userid) => {
-        const fetchURL = `${originURL}/classrooms/${classroomId}/assignments/${assignmentId}/scores/${userid}`
+    updateScore: async(classroomId, assignmentId, score, sid) => {
+        const fetchURL = `${originURL}/classrooms/${classroomId}/assignments/${assignmentId}/scores/`
         const fetchOption = {
             method: 'PUT',
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({score: score})
+            body: JSON.stringify({score: score, SID: sid})
         }
         return await fetch(fetchURL, fetchOption)
     },

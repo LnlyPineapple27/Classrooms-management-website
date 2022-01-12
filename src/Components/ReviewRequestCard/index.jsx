@@ -46,7 +46,7 @@ const mockComments = [
 ]
 
 
-export default function ReviewRequestCard({ refreshToggle, reviewReq, snackbar }) {
+export default function ReviewRequestCard({ refreshToggle, reviewReq, snackbar, sid }) {
     const [showComment, setShowComment] = useState(false)
     const [comments, setComments] = useState([])
     const [giveCommentValue, setGiveCommentValue] = useState("")
@@ -104,7 +104,7 @@ export default function ReviewRequestCard({ refreshToggle, reviewReq, snackbar }
         let _score = value
         //console.log(_score)
 
-        const response = await classroomAPI.updateScore(_classroomId, _assignmentId, _score, _studentId);
+        const response = await classroomAPI.updateScore(_classroomId, _assignmentId, _score, sid);
         
         if(response.ok) {
             snackbar.success()
