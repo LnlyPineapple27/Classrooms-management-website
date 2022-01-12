@@ -217,7 +217,7 @@ let accountAPI = {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email: email, code: vCode, newPassword: newPwd })
+            body: JSON.stringify({ email: email, vCode: vCode, newPassword: newPwd })
         }
         return fetch(fetchURL, fetchOption) 
     }
