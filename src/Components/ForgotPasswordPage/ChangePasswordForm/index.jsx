@@ -1,17 +1,23 @@
 import { Stack, TextField, Button, Box } from '@mui/material'
 import { React, useState } from 'react'
+import accountAPI from '../../../APIs/accountAPI'
 
 
-export default function ChangePasswordForm({ setAlert, vCode }) {
+export default function ChangePasswordForm({ setAlert, vCode, email }) {
     const [formData, setFormData] = useState({pwd: "", cPwd: ""})
 
     const handleTFChange = name => e => setFormData({...formData, [name]: e.target.value})
 
-    const handleChangePassword = () => {
+    const handleChangePassword = async () => {
         if(formData['pwd'] !== formData['cPwd'])
             return setAlert && setAlert({ severity:"error", content: "Password and Confirm Password are not the same", status: true })
 
-        
+        const response = await accountAPI.changePasswordByEmail(email, vCode, formData['pwd'])
+
+        if(!response.ok)
+            return setAlert && setAlert({ severity:"error", content: `Error ${response.status}: ${response.statusText}`, status: true })
+    
+        setAlert && setAlert({ severity:"success", content: "change password okla.", status: true })
     }
 
     return (

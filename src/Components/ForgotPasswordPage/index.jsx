@@ -9,6 +9,7 @@ export default function ForgotPasswordPage() {
     const [alert, setAlert] = useState({ status: false, severity: "error", content: "Sample content."})
     const [verified, setVerified] = useState(false)
     const [vCode, setVCode] = useState("")
+    const [email, setEmail] = useState("")
 
     return (
         <Box flexGrow={1} p={5}>
@@ -36,10 +37,10 @@ export default function ForgotPasswordPage() {
                         </Alert>
                     </Collapse>
                     <Collapse in={!verified}>
-                        <VerifyEmailForm setAlert={setAlert} setVerified={setVerified} setVCode={setVCode}/>
+                        <VerifyEmailForm setAlert={setAlert} setVerified={setVerified} setVCode={setVCode} setEmail={setEmail}/>
                     </Collapse>
                     <Collapse in={verified}>
-                        <ChangePasswordForm setAlert={setAlert} vCode={vCode}/>
+                        <ChangePasswordForm setAlert={setAlert} vCode={vCode} email={email}/>
                     </Collapse>
                 </Stack>
             </Paper>

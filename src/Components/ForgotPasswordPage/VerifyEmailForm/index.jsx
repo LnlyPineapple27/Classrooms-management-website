@@ -3,7 +3,7 @@ import { React, useState } from 'react'
 import userAPI from '../../../APIs/userAPI'
 import { validateEmail } from '../../../APIs/validateInput'
 
-export default function VerifyEmailForm({ setAlert, setVerified, setVCode}) {
+export default function VerifyEmailForm({ setAlert, setVerified, setVCode, setEmail}) {
     const [formData, setFormData] = useState({email:"", otp: ""})
 
     const handleTFChange = name => e => setFormData({...formData, [name]: e.target.value})
@@ -20,8 +20,8 @@ export default function VerifyEmailForm({ setAlert, setVerified, setVCode}) {
 
         if(!response.ok)
             return setAlert && setAlert({ severity: "error", status: true, content: `Error ${response.status}: ${response.statusText}` })
-        
-        setAlert && setAlert({ severity: "success", status: true, content: await response.json() })
+        const responseJson = await response.json()
+        setAlert && setAlert({ severity: "success", status: true, content: responseJson.msg })
     }
 
     const handleVerify = async () => {
@@ -31,14 +31,16 @@ export default function VerifyEmailForm({ setAlert, setVerified, setVCode}) {
         if(!validateEmail(inputEmail)) 
             return setAlert && setAlert({ severity: "error", status: true, content: "Invalid Email" })
 
-        const response = await userAPI.verifyEmail({ mail: inputEmail, vCode: inputOTP })
+        const response = await userAPI.verifyEmail({ email: inputEmail, vCode: inputOTP })
 
         if(!response.ok)
             return setAlert && setAlert({ severity: "error", status: true, content: `Error ${response.status}: ${response.statusText}` })
 
+        const responseJson =  await response.json()
+        setEmail && setEmail(formData['email'])
         setVCode && setVCode(formData['otp'])
         setVerified && setVerified(true)
-        setAlert && setAlert({ severity: "success", status: true, content: await response.json() })
+        setAlert && setAlert({ severity: "success", status: true, content: responseJson.msg })
     }
 
     return (
